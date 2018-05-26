@@ -20,13 +20,31 @@ import javax.swing.JRadioButton;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.border.LineBorder;
-import java.awt.Color;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
-public class NewJFrame extends JFrame {
+import java.awt.Color;
+import javax.swing.JTextPane;
+
+public class Gui extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField_1;
 	private ArrayList<String> schools;
+	
+	private JButton btnNew = new JButton("New");
+	private JButton btnTimezone = new JButton("Timezone 1");
+	private JButton btnTimezone_1 = new JButton("Timezone 2");
+	private JButton btnTimezone_2 = new JButton("Timezone 3");
+	private JButton btnCreate = new JButton("Create");
+	
+	private JCheckBox chckbxIstsenior = new JCheckBox("has Senior-Team");
+	private JCheckBox chckbxHatJuniorteam = new JCheckBox("has Junior-Team");
+	
+	private JPanel panel = new JPanel();
+	private JPanel panel_1 = new JPanel();
+	private JPanel panel_2 = new JPanel();
 
 	/**
 	 * Launch the application.
@@ -35,7 +53,7 @@ public class NewJFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NewJFrame frame = new NewJFrame();
+					Gui frame = new Gui();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,7 +65,7 @@ public class NewJFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NewJFrame() {
+	public Gui() {
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -64,65 +82,64 @@ public class NewJFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnTimezone = new JButton("Timezone 1");
+		//Timezone 1-Button impl.
 		btnTimezone.setEnabled(false);
 		btnTimezone.setBounds(42, 180, 137, 52);
 		contentPane.add(btnTimezone);
 		
-		JButton btnTimezone_1 = new JButton("Timezone 2");
+		//Timezone 2-Button impl.
 		btnTimezone_1.setEnabled(false);
 		btnTimezone_1.setBounds(42, 337, 137, 52);
 		contentPane.add(btnTimezone_1);
 		
-		JButton btnTimezone_2 = new JButton("Timezone 3");
+		//Timezone 3-Button impl.
 		btnTimezone_2.setEnabled(false);
 		btnTimezone_2.setBounds(42, 492, 137, 52);
 		contentPane.add(btnTimezone_2);
 		
+		
+		//anzupassen (
+		JButton btnAddSchool = new JButton("Add School");
+		btnAddSchool.setEnabled(false);
+		btnAddSchool.setBounds(642, 32, 140, 54);
+		contentPane.add(btnAddSchool);
 		
 		JButton btnAddSpeaker = new JButton("Add Speaker");
 		btnAddSpeaker.setBounds(42, 616, 104, 23);
 		contentPane.add(btnAddSpeaker);
 		
 		JButton btnAddJudge = new JButton("Add Judge");
-		btnAddJudge.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		btnAddJudge.setBounds(42, 650, 104, 23);
 		contentPane.add(btnAddJudge);
+		// )
 		
-		JCheckBox chckbxIstsenior = new JCheckBox("has Senior-Team");
+		//checkBoxes impl.
 		chckbxIstsenior.setBounds(793, 32, 165, 23);
 		chckbxIstsenior.setEnabled(false);
 		contentPane.add(chckbxIstsenior);
 		
-		JCheckBox chckbxHatJuniorteam = new JCheckBox("has Junior-Team");
+		
 		chckbxHatJuniorteam.setBounds(793, 63, 165, 23);
 		chckbxHatJuniorteam.setEnabled(false);
 		contentPane.add(chckbxHatJuniorteam);
 		
-		JPanel panel_2 = new JPanel();
+		//Implementierung der 3 Panels ohne Border
 		panel_2.setBorder(null);
 		panel_2.setBounds(194, 449, 734, 138);
 		contentPane.add(panel_2);
 		
-		JPanel panel_1 = new JPanel();
+		
 		panel_1.setBorder(null);
 		panel_1.setBounds(194, 295, 734, 138);
 		contentPane.add(panel_1);
 		
-		JPanel panel = new JPanel();
+		
 		panel.setBorder(null);
 		panel.setBounds(194, 139, 734, 138);
 		contentPane.add(panel);
 		
-		JButton btnAddSchool = new JButton("Add School");
 		
-		btnAddSchool.setEnabled(false);
-		btnAddSchool.setBounds(642, 32, 140, 54);
-		contentPane.add(btnAddSchool);
-		
+		//Eingabe-Feld für Schulen
 		textField_1 = new JTextField();
 		textField_1.setBounds(191, 32, 435, 54);
 		textField_1.setEnabled(false);
@@ -130,7 +147,7 @@ public class NewJFrame extends JFrame {
 		textField_1.setColumns(10);
 		
 		
-		JButton btnNew = new JButton("New");
+		//New-Button macht den Rest der contentPane sichtbar
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//zu füllen
@@ -146,29 +163,25 @@ public class NewJFrame extends JFrame {
 				panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
 			}
 		});
+		
 		btnNew.setBounds(10, 11, 140, 88);
 		contentPane.add(btnNew);
 		
-		JButton btnCreate = new JButton("Create");
-		btnCreate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
 		btnCreate.setBounds(964, 32, 157, 54);
 		contentPane.add(btnCreate);
-		
-		btnAddSchool.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				schools.add(textField_1.getText());
-			}
-		});
-
-		panel.setLayout(new GridLayout(0, 10, 0, 0));
-		panel_1.setLayout(new GridLayout(0, 10, 0, 0));
-		panel_2.setLayout(new GridLayout(0, 10, 0, 0));
+		cutPanels(10);
+	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
+	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
+	
+	public void cutPanels(int pieces) {
+		panel.setLayout(new GridLayout(0, pieces, 0, 0));
+		panel_1.setLayout(new GridLayout(0, pieces, 0, 0));
+		panel_2.setLayout(new GridLayout(0, pieces, 0, 0));
 	}
-	public void seperatePanel() {
-		
+	public void centerText(JTextPane tp) {
+		StyledDocument doc = tp.getStyledDocument();
+		SimpleAttributeSet center = new SimpleAttributeSet();
+		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 	}
 }
