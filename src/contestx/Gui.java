@@ -25,6 +25,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JTextPane;
 
 public class Gui extends JFrame {
@@ -32,6 +34,7 @@ public class Gui extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField_1;
 	private ArrayList<String> schools;
+	private ArrayList<JPanel> debates;
 	
 	private JButton btnNew = new JButton("New");
 	private JButton btnTimezone = new JButton("Timezone 1");
@@ -75,6 +78,19 @@ public class Gui extends JFrame {
 		}
 		
 		schools = new ArrayList<String>();
+		debates = new ArrayList<JPanel>();
+//		debates.add(new JPanel());
+	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
+	//	debates.get(0).setLayout(new BorderLayout(2, 2));;
+	//	debates.get(0).setPreferredSize(new Dimension(100, 100));
+	//	debates.get(0).add(new JButton("Hi"), BorderLayout.NORTH);
+	//	JButton testbtn = new JButton();
+	//	testbtn.setPreferredSize(new Dimension(10, 10));
+	//	debates.get(0).add(testbtn, BorderLayout.LINE_END);
+	//	debates.get(0).add(new JButton("Hi"), BorderLayout.LINE_START);
+	//	//debates.get(0).add(new JButton("Hi"), BorderLayout.CENTER);
+	//	debates.get(0).add(new JButton("Hi"), BorderLayout.SOUTH);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 800);
 		contentPane = new JPanel();
@@ -84,17 +100,17 @@ public class Gui extends JFrame {
 		
 		//Timezone 1-Button impl.
 		btnTimezone.setEnabled(false);
-		btnTimezone.setBounds(42, 180, 137, 52);
+		btnTimezone.setBounds(42, 186, 137, 52);
 		contentPane.add(btnTimezone);
 		
 		//Timezone 2-Button impl.
 		btnTimezone_1.setEnabled(false);
-		btnTimezone_1.setBounds(42, 337, 137, 52);
+		btnTimezone_1.setBounds(42, 343, 137, 52);
 		contentPane.add(btnTimezone_1);
 		
 		//Timezone 3-Button impl.
 		btnTimezone_2.setEnabled(false);
-		btnTimezone_2.setBounds(42, 492, 137, 52);
+		btnTimezone_2.setBounds(42, 497, 137, 52);
 		contentPane.add(btnTimezone_2);
 		
 		
@@ -125,17 +141,17 @@ public class Gui extends JFrame {
 		
 		//Implementierung der 3 Panels ohne Border
 		panel_2.setBorder(null);
-		panel_2.setBounds(194, 449, 734, 138);
+		panel_2.setBounds(194, 449, 734, 150);
 		contentPane.add(panel_2);
 		
 		
 		panel_1.setBorder(null);
-		panel_1.setBounds(194, 295, 734, 138);
+		panel_1.setBounds(194, 295, 734, 150);
 		contentPane.add(panel_1);
 		
 		
 		panel.setBorder(null);
-		panel.setBounds(194, 139, 734, 138);
+		panel.setBounds(194, 139, 734, 150);
 		contentPane.add(panel);
 		
 		
@@ -161,6 +177,7 @@ public class Gui extends JFrame {
 				panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 				panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 				panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+				createRelativeSubpanels(5);
 			}
 		});
 		
@@ -169,7 +186,7 @@ public class Gui extends JFrame {
 		
 		btnCreate.setBounds(964, 32, 157, 54);
 		contentPane.add(btnCreate);
-		cutPanels(10);
+		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
 	
@@ -184,4 +201,25 @@ public class Gui extends JFrame {
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 	}
+	public void createRelativeSubpanels(int debatesPerTime) {
+		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*225, panel.getHeight());
+		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*225, panel_1.getHeight());
+		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*225, panel_2.getHeight());
+		cutPanels(debatesPerTime);
+		for(int i = 0; i < debatesPerTime*3; i++) {
+			debates.add(new JPanel());
+			debates.get(i).setBorder(new LineBorder(new Color(0, 0, 0)));
+			debates.get(i).setLayout(new BorderLayout(1, 1));;
+			debates.get(i).add(new JButton("Room Nr."), BorderLayout.NORTH);
+			debates.get(i).add(new JButton("<html>Pro<br/>Leibniz</html>"), BorderLayout.WEST);
+			debates.get(i).add(new JButton("<html>Con<br/>Schiller</html>"), BorderLayout.EAST);
+			debates.get(i).add(new JButton("Judges"), BorderLayout.SOUTH);
+		}
+		for(int i = 0; i < debatesPerTime; i++) {
+			panel.add(debates.get(i));
+			panel_1.add(debates.get(i+debatesPerTime));
+			panel_2.add(debates.get(i+debatesPerTime+debatesPerTime));
+		}
+	}
+	
 }
