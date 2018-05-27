@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
@@ -33,7 +34,8 @@ public class Gui extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField_1;
-	private ArrayList<String> schools;
+	private ArrayList<String> teams_junior;
+	private ArrayList<String> teams_senior;
 	private ArrayList<JPanel> debates;
 	
 	private JButton btnNew = new JButton("New");
@@ -48,6 +50,8 @@ public class Gui extends JFrame {
 	private JPanel panel = new JPanel();
 	private JPanel panel_1 = new JPanel();
 	private JPanel panel_2 = new JPanel();
+	
+	private JFrame subFrame;
 
 	/**
 	 * Launch the application.
@@ -77,7 +81,9 @@ public class Gui extends JFrame {
 			e1.printStackTrace();
 		}
 		
-		schools = new ArrayList<String>();
+		subFrame = new JFrame();
+		teams_junior = new ArrayList<String>();
+		teams_senior = new ArrayList<String>();
 		debates = new ArrayList<JPanel>();
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -115,7 +121,12 @@ public class Gui extends JFrame {
 		
 		
 		//anzupassen (
-		JButton btnAddSchool = new JButton("Add School");
+		JButton btnAddSchool = new JButton("Add");
+		btnAddSchool.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showEnterSchoolDialog();
+			}
+		});
 		btnAddSchool.setEnabled(false);
 		btnAddSchool.setBounds(642, 32, 140, 54);
 		contentPane.add(btnAddSchool);
@@ -178,6 +189,7 @@ public class Gui extends JFrame {
 				panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 				panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
 				createRelativeSubpanels(5);
+				
 			}
 		});
 		
@@ -221,5 +233,20 @@ public class Gui extends JFrame {
 			panel_2.add(debates.get(i+debatesPerTime+debatesPerTime));
 		}
 	}
-	
+	public void showEnterSchoolDialog() {
+		JCheckBox[] chckbxs = {new JCheckBox("has junior team"), new JCheckBox("has senior team")};
+		Object[] options = {"Enter school name:", chckbxs};
+		String s = (String)JOptionPane.showInputDialog(subFrame, options);
+		if(s != null && s.length() > 0) {
+			if(chckbxs[0].isSelected() && chckbxs[1].isSelected()) {
+				teams_junior.add(s);
+				teams_senior.add(s);
+			}
+			else if(chckbxs[0].isSelected()) teams_junior.add(s);
+			else if(chckbxs[1].isSelected()) teams_senior.add(s);
+			else {
+				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior or a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
 }
