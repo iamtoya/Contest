@@ -52,6 +52,10 @@ public class Gui extends JFrame {
 	private JPanel panel_2 = new JPanel();
 	
 	private JFrame subFrame;
+	private final JButton button = new JButton("Start");
+	private final JButton button_1 = new JButton("Start");
+	private final JButton button_2 = new JButton("End");
+	private final JButton button_3 = new JButton("End");
 
 	/**
 	 * Launch the application.
@@ -199,6 +203,31 @@ public class Gui extends JFrame {
 		btnCreate.setBounds(964, 32, 157, 54);
 		contentPane.add(btnCreate);
 		
+		JButton btnStarttime = new JButton("Start");
+		btnStarttime.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i=(int)JOptionPane.ShowInputDialog(subFrame, options);
+			}
+		});
+		btnStarttime.setBounds(37, 249, 66, 23);
+		contentPane.add(btnStarttime);
+		
+		JButton btnNewButton = new JButton("End");
+		btnNewButton.setBounds(113, 249, 66, 23);
+		contentPane.add(btnNewButton);
+		button.setBounds(37, 406, 66, 23);
+		
+		contentPane.add(button);
+		button_1.setBounds(37, 560, 66, 23);
+		
+		contentPane.add(button_1);
+		button_2.setBounds(113, 406, 66, 23);
+		
+		contentPane.add(button_2);
+		button_3.setBounds(113, 560, 66, 23);
+		
+		contentPane.add(button_3);
+		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
 	
@@ -245,7 +274,7 @@ public class Gui extends JFrame {
 			else if(chckbxs[0].isSelected()) teams_junior.add(s);
 			else if(chckbxs[1].isSelected()) teams_senior.add(s);
 			else {
-				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior or a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
