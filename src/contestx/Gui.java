@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -206,7 +207,14 @@ public class Gui extends JFrame {
 		JButton btnStarttime = new JButton("Start");
 		btnStarttime.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int i=(int)JOptionPane.ShowInputDialog(subFrame, options);
+				JTextField tfh = new JTextField();
+				
+				JTextField tfm = new JTextField();
+				JLabel labelh = new JLabel("Enter hour:");
+				JLabel labelm = new JLabel("Enter minute:");
+				Object[] options={labelh,tfh, labelm, tfm };
+				JOptionPane.showOptionDialog(subFrame, "Enter Timezone:", "Enter Timezone", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+				
 			}
 		});
 		btnStarttime.setBounds(37, 249, 66, 23);
@@ -215,6 +223,10 @@ public class Gui extends JFrame {
 		JButton btnNewButton = new JButton("End");
 		btnNewButton.setBounds(113, 249, 66, 23);
 		contentPane.add(btnNewButton);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		button.setBounds(37, 406, 66, 23);
 		
 		contentPane.add(button);
