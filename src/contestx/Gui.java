@@ -37,6 +37,8 @@ public class Gui extends JFrame {
 	private JTextField textField_1;
 	private ArrayList<String> teams_junior;
 	private ArrayList<String> teams_senior;
+	private ArrayList<String> judge_experienced;
+	private ArrayList<String> judge_unexperienced;
 	private ArrayList<JPanel> debates;
 	
 	private JButton btnNew = new JButton("New");
@@ -105,6 +107,8 @@ public class Gui extends JFrame {
 		subFrame = new JFrame();
 		teams_junior = new ArrayList<String>();
 		teams_senior = new ArrayList<String>();
+		judge_experienced = new ArrayList<String>();
+		judge_unexperienced = new ArrayList<String>();
 		debates = new ArrayList<JPanel>();
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -141,13 +145,22 @@ public class Gui extends JFrame {
 		contentPane.add(btnTimezone_2);
 		
 		
-		//anzupassen (
+		//Add-SchoolButton
 		JButton btnAddSchool = new JButton("Add");
 		btnAddSchool.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showEnterSchoolDialog();
 			}
 		});
+		
+		//Add-Judge Button
+		JButton btnAddJudge = new JButton("Add Judge");
+				btnAddJudge.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						showEnterJudgeDialog();
+					}
+		});
+				
 		btnAddSchool.setEnabled(false);
 		btnAddSchool.setBounds(642, 32, 140, 54);
 		contentPane.add(btnAddSchool);
@@ -156,7 +169,6 @@ public class Gui extends JFrame {
 		btnAddSpeaker.setBounds(42, 616, 104, 23);
 		contentPane.add(btnAddSpeaker);
 		
-		JButton btnAddJudge = new JButton("Add Judge");
 		btnAddJudge.setBounds(42, 650, 104, 23);
 		contentPane.add(btnAddJudge);
 		
@@ -192,6 +204,7 @@ public class Gui extends JFrame {
 				btnTimezone_1.setEnabled(true);
 				btnTimezone_2.setEnabled(true);
 				btnAddSchool.setEnabled(true);
+				btnAddJudge.setEnabled(true);
 				textField_1.setEnabled(true);
 				//chckbxHatJuniorteam.setEnabled(true);
 				//chckbxHatJuniorteam.setEnabled(true);
@@ -350,6 +363,26 @@ public class Gui extends JFrame {
 			else {
 				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
+		}
+	}
+	
+
+	
+	public void showEnterJudgeDialog() {
+		JCheckBox[] chckbx = {new JCheckBox("is experienced")};
+		JTextField[] judgeName = {new JTextField()};
+		Object[] options = {"Enter judge name:", chckbx,judgeName};
+		String s = (String)JOptionPane.showInputDialog(subFrame, options);
+		if(s != null && s.length() > 0) {
+			if(chckbx[0].isSelected()) {
+				judge_experienced.add(s);
+			}
+			else {
+				judge_unexperienced.add(s);
+			}			
+		}
+		else {
+			JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
