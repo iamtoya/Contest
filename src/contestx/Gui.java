@@ -103,7 +103,7 @@ public class Gui extends JFrame {
 	//	debates.get(0).add(new JButton("Hi"), BorderLayout.SOUTH);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1200, 800);
+		setBounds(100, 100, 1390, 817);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
