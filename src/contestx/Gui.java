@@ -34,6 +34,7 @@ import javax.swing.JTextPane;
 public class Gui extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField textField_1;
 	private ArrayList<String> teams_junior;
 	private ArrayList<String> teams_senior;
 	private ArrayList<String> judge_experienced;
@@ -44,16 +45,36 @@ public class Gui extends JFrame {
 	private JButton btnTimezone = new JButton("Timezone 1");
 	private JButton btnTimezone_1 = new JButton("Timezone 2");
 	private JButton btnTimezone_2 = new JButton("Timezone 3");
+	private JButton btnCreate = new JButton("Create");
 	
 	private JPanel panel = new JPanel();
 	private JPanel panel_1 = new JPanel();
 	private JPanel panel_2 = new JPanel();
 	
 	private JFrame subFrame;
-	private final JButton button = new JButton("Start");
-	private final JButton button_1 = new JButton("Start");
-	private final JButton button_2 = new JButton("End");
-	private final JButton button_3 = new JButton("End");
+	private JTextField txtVon;
+	private JTextField textField;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private final JLabel label = new JLabel(":");
+	private final JLabel label_1 = new JLabel(":");
+	private final JLabel label_2 = new JLabel(":");
+	private final JTextField textField_4 = new JTextField();
+	private final JLabel label_3 = new JLabel(":");
+	private final JTextField textField_5 = new JTextField();
+	private final JTextField textField_6 = new JTextField();
+	private final JTextField textField_7 = new JTextField();
+	private final JLabel label_4 = new JLabel(":");
+	private final JLabel label_5 = new JLabel("von:");
+	private final JLabel label_6 = new JLabel("bis:");
+	private final JTextField textField_8 = new JTextField();
+	private final JLabel label_7 = new JLabel(":");
+	private final JTextField textField_9 = new JTextField();
+	private final JTextField textField_10 = new JTextField();
+	private final JTextField textField_11 = new JTextField();
+	private final JLabel label_8 = new JLabel(":");
+	private final JLabel label_9 = new JLabel("von:");
+	private final JLabel label_10 = new JLabel("bis:");
 
 	/**
 	 * Launch the application.
@@ -124,8 +145,8 @@ public class Gui extends JFrame {
 		contentPane.add(btnTimezone_2);
 		
 		
-		//Add-School Button
-		JButton btnAddSchool = new JButton("Add School");
+		//Add-SchoolButton
+		JButton btnAddSchool = new JButton("Add");
 		btnAddSchool.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showEnterSchoolDialog();
@@ -134,15 +155,22 @@ public class Gui extends JFrame {
 		
 		//Add-Judge Button
 		JButton btnAddJudge = new JButton("Add Judge");
-		btnAddJudge.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showEnterJudgeDialog();
-			}
+				btnAddJudge.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						showEnterJudgeDialog();
+					}
 		});
-		
+				
 		btnAddSchool.setEnabled(false);
-		btnAddSchool.setBounds(269, 28, 99, 43);
+		btnAddSchool.setBounds(642, 32, 140, 54);
 		contentPane.add(btnAddSchool);
+		
+		JButton btnAddSpeaker = new JButton("Add Speaker");
+		btnAddSpeaker.setBounds(42, 616, 104, 23);
+		contentPane.add(btnAddSpeaker);
+		
+		btnAddJudge.setBounds(42, 650, 104, 23);
+		contentPane.add(btnAddJudge);
 		
 		//Implementierung der 3 Panels ohne Border
 		panel_2.setBorder(null);
@@ -160,6 +188,14 @@ public class Gui extends JFrame {
 		contentPane.add(panel);
 		
 		
+		//Eingabe-Feld für Schulen
+		textField_1 = new JTextField();
+		textField_1.setBounds(191, 32, 435, 54);
+		textField_1.setEnabled(false);
+		contentPane.add(textField_1);
+		textField_1.setColumns(10);
+		
+		
 		//New-Button macht den Rest der contentPane sichtbar
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -169,6 +205,9 @@ public class Gui extends JFrame {
 				btnTimezone_2.setEnabled(true);
 				btnAddSchool.setEnabled(true);
 				btnAddJudge.setEnabled(true);
+				textField_1.setEnabled(true);
+				//chckbxHatJuniorteam.setEnabled(true);
+				//chckbxHatJuniorteam.setEnabled(true);
 				panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 				panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 				panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -180,46 +219,101 @@ public class Gui extends JFrame {
 		btnNew.setBounds(10, 11, 140, 88);
 		contentPane.add(btnNew);
 		
-		JButton btnStarttime = new JButton("Start");
-		btnStarttime.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JTextField tfh = new JTextField();
-				
-				JTextField tfm = new JTextField();
-				JLabel labelh = new JLabel("Enter hour:");
-				JLabel labelm = new JLabel("Enter minute:");
-				Object[] options={labelh,tfh, labelm, tfm };
-				JOptionPane.showOptionDialog(subFrame, "Enter Timezone:", "Enter Timezone", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-				
-			}
-		});
-		btnStarttime.setBounds(37, 249, 66, 23);
-		contentPane.add(btnStarttime);
+		btnCreate.setBounds(964, 32, 157, 54);
+		contentPane.add(btnCreate);
 		
-		JButton btnNewButton = new JButton("End");
-		btnNewButton.setBounds(113, 249, 66, 23);
-		contentPane.add(btnNewButton);
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		button.setBounds(37, 406, 66, 23);
+		txtVon = new JTextField();
+		txtVon.setBounds(67, 241, 36, 20);
+		contentPane.add(txtVon);
+		txtVon.setColumns(10);
 		
-		contentPane.add(button);
-		button_1.setBounds(37, 560, 66, 23);
+		JLabel lblVon = new JLabel("von:");
+		lblVon.setBounds(42, 241, 46, 14);
+		contentPane.add(lblVon);
 		
-		contentPane.add(button_1);
-		button_2.setBounds(113, 406, 66, 23);
+		JLabel lblBis = new JLabel("bis:");
+		lblBis.setBounds(46, 269, 46, 14);
+		contentPane.add(lblBis);
 		
-		contentPane.add(button_2);
-		button_3.setBounds(113, 560, 66, 23);
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBounds(67, 269, 36, 20);
+		contentPane.add(textField);
 		
-		contentPane.add(button_3);
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(114, 269, 36, 20);
+		contentPane.add(textField_2);
 		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBounds(114, 241, 36, 20);
+		contentPane.add(textField_3);
+		label.setBounds(123, 244, -13, 14);
 		
-		btnAddJudge.setEnabled(false);
-		btnAddJudge.setBounds(378, 28, 99, 43);
-		contentPane.add(btnAddJudge);
+		contentPane.add(label);
+		label_1.setBounds(107, 244, 46, 14);
+		
+		contentPane.add(label_1);
+		label_2.setBounds(107, 272, 46, 14);
+		
+		contentPane.add(label_2);
+		textField_4.setColumns(10);
+		textField_4.setBounds(114, 425, 36, 20);
+		
+		contentPane.add(textField_4);
+		label_3.setBounds(107, 428, 46, 14);
+		
+		contentPane.add(label_3);
+		textField_5.setColumns(10);
+		textField_5.setBounds(67, 425, 36, 20);
+		
+		contentPane.add(textField_5);
+		textField_6.setColumns(10);
+		textField_6.setBounds(67, 397, 36, 20);
+		
+		contentPane.add(textField_6);
+		textField_7.setColumns(10);
+		textField_7.setBounds(114, 397, 36, 20);
+		
+		contentPane.add(textField_7);
+		label_4.setBounds(107, 400, 46, 14);
+		
+		contentPane.add(label_4);
+		label_5.setBounds(42, 397, 46, 14);
+		
+		contentPane.add(label_5);
+		label_6.setBounds(46, 425, 46, 14);
+		
+		contentPane.add(label_6);
+		textField_8.setColumns(10);
+		textField_8.setBounds(114, 579, 36, 20);
+		
+		contentPane.add(textField_8);
+		label_7.setBounds(107, 582, 46, 14);
+		
+		contentPane.add(label_7);
+		textField_9.setColumns(10);
+		textField_9.setBounds(67, 579, 36, 20);
+		
+		contentPane.add(textField_9);
+		textField_10.setColumns(10);
+		textField_10.setBounds(67, 551, 36, 20);
+		
+		contentPane.add(textField_10);
+		textField_11.setColumns(10);
+		textField_11.setBounds(114, 551, 36, 20);
+		
+		contentPane.add(textField_11);
+		label_8.setBounds(107, 554, 46, 14);
+		
+		contentPane.add(label_8);
+		label_9.setBounds(42, 551, 46, 14);
+		
+		contentPane.add(label_9);
+		label_10.setBounds(46, 579, 46, 14);
+		
+		contentPane.add(label_10);
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
@@ -271,6 +365,8 @@ public class Gui extends JFrame {
 			}
 		}
 	}
+	
+
 	
 	public void showEnterJudgeDialog() {
 		JCheckBox[] chckbx = {new JCheckBox("is experienced")};
