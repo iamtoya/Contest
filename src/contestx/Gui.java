@@ -34,7 +34,6 @@ import javax.swing.JTextPane;
 public class Gui extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField_1;
 	private ArrayList<String> teams_junior;
 	private ArrayList<String> teams_senior;
 	private ArrayList<String> judge_experienced;
@@ -45,7 +44,6 @@ public class Gui extends JFrame {
 	private JButton btnTimezone = new JButton("Timezone 1");
 	private JButton btnTimezone_1 = new JButton("Timezone 2");
 	private JButton btnTimezone_2 = new JButton("Timezone 3");
-	private JButton btnCreate = new JButton("Create");
 	
 	private JPanel panel = new JPanel();
 	private JPanel panel_1 = new JPanel();
@@ -146,7 +144,7 @@ public class Gui extends JFrame {
 		
 		
 		//Add-SchoolButton
-		JButton btnAddSchool = new JButton("Add");
+		JButton btnAddSchool = new JButton("AddSchool");
 		btnAddSchool.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showEnterSchoolDialog();
@@ -155,6 +153,7 @@ public class Gui extends JFrame {
 		
 		//Add-Judge Button
 		JButton btnAddJudge = new JButton("Add Judge");
+		btnAddJudge.setEnabled(false);
 				btnAddJudge.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						showEnterJudgeDialog();
@@ -162,14 +161,10 @@ public class Gui extends JFrame {
 		});
 				
 		btnAddSchool.setEnabled(false);
-		btnAddSchool.setBounds(642, 32, 140, 54);
+		btnAddSchool.setBounds(368, 28, 140, 54);
 		contentPane.add(btnAddSchool);
 		
-		JButton btnAddSpeaker = new JButton("Add Speaker");
-		btnAddSpeaker.setBounds(42, 616, 104, 23);
-		contentPane.add(btnAddSpeaker);
-		
-		btnAddJudge.setBounds(42, 650, 104, 23);
+		btnAddJudge.setBounds(526, 29, 140, 52);
 		contentPane.add(btnAddJudge);
 		
 		//Implementierung der 3 Panels ohne Border
@@ -188,14 +183,6 @@ public class Gui extends JFrame {
 		contentPane.add(panel);
 		
 		
-		//Eingabe-Feld für Schulen
-		textField_1 = new JTextField();
-		textField_1.setBounds(191, 32, 435, 54);
-		textField_1.setEnabled(false);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
-		
-		
 		//New-Button macht den Rest der contentPane sichtbar
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -205,7 +192,6 @@ public class Gui extends JFrame {
 				btnTimezone_2.setEnabled(true);
 				btnAddSchool.setEnabled(true);
 				btnAddJudge.setEnabled(true);
-				textField_1.setEnabled(true);
 				//chckbxHatJuniorteam.setEnabled(true);
 				//chckbxHatJuniorteam.setEnabled(true);
 				panel.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -218,9 +204,6 @@ public class Gui extends JFrame {
 		
 		btnNew.setBounds(10, 11, 140, 88);
 		contentPane.add(btnNew);
-		
-		btnCreate.setBounds(964, 32, 157, 54);
-		contentPane.add(btnCreate);
 		
 		txtVon = new JTextField();
 		txtVon.setBounds(67, 241, 36, 20);
@@ -370,8 +353,7 @@ public class Gui extends JFrame {
 	
 	public void showEnterJudgeDialog() {
 		JCheckBox[] chckbx = {new JCheckBox("is experienced")};
-		JTextField[] judgeName = {new JTextField()};
-		Object[] options = {"Enter judge name:", chckbx,judgeName};
+		Object[] options = {"Enter judge name:", chckbx};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options);
 		if(s != null && s.length() > 0) {
 			if(chckbx[0].isSelected()) {
