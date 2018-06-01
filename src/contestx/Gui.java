@@ -347,6 +347,9 @@ public class Gui extends JFrame {
 				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
 		}
+		else {
+			JOptionPane.showMessageDialog(subFrame, "No school name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 
