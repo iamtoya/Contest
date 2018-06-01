@@ -1,33 +1,58 @@
+
 package contestx;
 
 public class Zeitzone {
-private int tz1StartHrs;
-private int tz1StartMin;
-private int tz1EndHrs;
-private int tz1EndMin;
-private int tz2StartHrs;
-private int tz2StartMin;
-private int tz2EndHrs;
-private int tz2EndMin;
-private int tz3StartHrs;
-private int tz3StartMin;
-private int tz3EndHrs;
-private int tz3EndMin;
-
-
-
-public void setTz1StartHrs()
-{
+	private int startHours;
+	private int startMins;
+	private int endHours;
+	private int endMins;
 	
-}
-
-public void setTz2StartHrs()
-{
+	public Zeitzone(int h, int m, int hh, int mm)
+	{
+		startHours=h;
+		startMins=m;
+		endHours=hh;
+		endMins=mm;
+	}
 	
-}
-
-public void setTz3StartHrs()
-{
+	public void setStartHours(int h)
+	{
+		startHours=h;
+	}
 	
-}
+	public void setStartMins(int m)
+	{
+		startMins=m;
+	}
+	
+	public void setEndHours(int h)
+	{
+		endHours=h;
+	}
+	
+	public void setEndMins(int m)
+	{
+		endMins=m;
+	}
+	
+	
+	public int getStartHours()
+	{
+		return startHours;
+	}
+	
+	public int getStartMins()
+	{
+		return startMins;
+	}
+	
+	public int getEndHours()
+	{
+		return endHours;
+	}
+	
+	public int getEndMins()
+	{
+		return endMins;
+	}
 }
