@@ -323,6 +323,7 @@ public class Gui extends JFrame {
 			debates.get(i).setLayout(new BorderLayout(1, 1));;
 			debates.get(i).add(new JButton("Room Nr."), BorderLayout.NORTH);
 			debates.get(i).add(new JButton("<html>Pro<br/>Leibniz</html>"), BorderLayout.WEST);
+			debates.get(i).add(new JButton("Motion"), BorderLayout.CENTER);
 			debates.get(i).add(new JButton("<html>Con<br/>Schiller</html>"), BorderLayout.EAST);
 			debates.get(i).add(new JButton("Judges"), BorderLayout.SOUTH);
 		}
