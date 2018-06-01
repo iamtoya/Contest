@@ -129,17 +129,17 @@ public class Gui extends JFrame {
 		
 		//Timezone 1-Button impl.
 		btnTimezone.setEnabled(false);
-		btnTimezone.setBounds(42, 186, 137, 52);
+		btnTimezone.setBounds(47, 152, 137, 52);
 		contentPane.add(btnTimezone);
 		
 		//Timezone 2-Button impl.
 		btnTimezone_1.setEnabled(false);
-		btnTimezone_1.setBounds(42, 343, 137, 52);
+		btnTimezone_1.setBounds(47, 309, 137, 52);
 		contentPane.add(btnTimezone_1);
 		
 		//Timezone 3-Button impl.
 		btnTimezone_2.setEnabled(false);
-		btnTimezone_2.setBounds(42, 497, 137, 52);
+		btnTimezone_2.setBounds(47, 463, 137, 52);
 		contentPane.add(btnTimezone_2);
 		
 		
@@ -206,95 +206,95 @@ public class Gui extends JFrame {
 		contentPane.add(btnNew);
 		
 		txtVon = new JTextField();
-		txtVon.setBounds(67, 241, 36, 20);
+		txtVon.setBounds(72, 207, 36, 20);
 		contentPane.add(txtVon);
 		txtVon.setColumns(10);
 		
 		JLabel lblVon = new JLabel("von:");
-		lblVon.setBounds(42, 241, 46, 14);
+		lblVon.setBounds(47, 207, 46, 14);
 		contentPane.add(lblVon);
 		
 		JLabel lblBis = new JLabel("bis:");
-		lblBis.setBounds(46, 269, 46, 14);
+		lblBis.setBounds(51, 235, 46, 14);
 		contentPane.add(lblBis);
 		
 		textField = new JTextField();
 		textField.setColumns(10);
-		textField.setBounds(67, 269, 36, 20);
+		textField.setBounds(72, 235, 36, 20);
 		contentPane.add(textField);
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
-		textField_2.setBounds(114, 269, 36, 20);
+		textField_2.setBounds(119, 235, 36, 20);
 		contentPane.add(textField_2);
 		
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
-		textField_3.setBounds(114, 241, 36, 20);
+		textField_3.setBounds(119, 207, 36, 20);
 		contentPane.add(textField_3);
-		label.setBounds(123, 244, -13, 14);
+		label.setBounds(128, 210, -13, 14);
 		
 		contentPane.add(label);
-		label_1.setBounds(107, 244, 46, 14);
+		label_1.setBounds(112, 210, 46, 14);
 		
 		contentPane.add(label_1);
-		label_2.setBounds(107, 272, 46, 14);
+		label_2.setBounds(112, 238, 46, 14);
 		
 		contentPane.add(label_2);
 		textField_4.setColumns(10);
-		textField_4.setBounds(114, 425, 36, 20);
+		textField_4.setBounds(119, 391, 36, 20);
 		
 		contentPane.add(textField_4);
-		label_3.setBounds(107, 428, 46, 14);
+		label_3.setBounds(112, 394, 46, 14);
 		
 		contentPane.add(label_3);
 		textField_5.setColumns(10);
-		textField_5.setBounds(67, 425, 36, 20);
+		textField_5.setBounds(72, 391, 36, 20);
 		
 		contentPane.add(textField_5);
 		textField_6.setColumns(10);
-		textField_6.setBounds(67, 397, 36, 20);
+		textField_6.setBounds(72, 363, 36, 20);
 		
 		contentPane.add(textField_6);
 		textField_7.setColumns(10);
-		textField_7.setBounds(114, 397, 36, 20);
+		textField_7.setBounds(119, 363, 36, 20);
 		
 		contentPane.add(textField_7);
-		label_4.setBounds(107, 400, 46, 14);
+		label_4.setBounds(112, 366, 46, 14);
 		
 		contentPane.add(label_4);
-		label_5.setBounds(42, 397, 46, 14);
+		label_5.setBounds(47, 363, 46, 14);
 		
 		contentPane.add(label_5);
-		label_6.setBounds(46, 425, 46, 14);
+		label_6.setBounds(51, 391, 46, 14);
 		
 		contentPane.add(label_6);
 		textField_8.setColumns(10);
-		textField_8.setBounds(114, 579, 36, 20);
+		textField_8.setBounds(119, 545, 36, 20);
 		
 		contentPane.add(textField_8);
-		label_7.setBounds(107, 582, 46, 14);
+		label_7.setBounds(112, 548, 46, 14);
 		
 		contentPane.add(label_7);
 		textField_9.setColumns(10);
-		textField_9.setBounds(67, 579, 36, 20);
+		textField_9.setBounds(72, 545, 36, 20);
 		
 		contentPane.add(textField_9);
 		textField_10.setColumns(10);
-		textField_10.setBounds(67, 551, 36, 20);
+		textField_10.setBounds(72, 517, 36, 20);
 		
 		contentPane.add(textField_10);
 		textField_11.setColumns(10);
-		textField_11.setBounds(114, 551, 36, 20);
+		textField_11.setBounds(119, 517, 36, 20);
 		
 		contentPane.add(textField_11);
-		label_8.setBounds(107, 554, 46, 14);
+		label_8.setBounds(112, 520, 46, 14);
 		
 		contentPane.add(label_8);
-		label_9.setBounds(42, 551, 46, 14);
+		label_9.setBounds(47, 517, 46, 14);
 		
 		contentPane.add(label_9);
-		label_10.setBounds(46, 579, 46, 14);
+		label_10.setBounds(51, 545, 46, 14);
 		
 		contentPane.add(label_10);
 		
