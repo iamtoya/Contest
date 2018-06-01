@@ -34,19 +34,16 @@ import javax.swing.JTextPane;
 public class Gui extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField_1;
 	private ArrayList<String> teams_junior;
 	private ArrayList<String> teams_senior;
+	private ArrayList<String> judge_experienced;
+	private ArrayList<String> judge_unexperienced;
 	private ArrayList<JPanel> debates;
 	
 	private JButton btnNew = new JButton("New");
 	private JButton btnTimezone = new JButton("Timezone 1");
 	private JButton btnTimezone_1 = new JButton("Timezone 2");
 	private JButton btnTimezone_2 = new JButton("Timezone 3");
-	private JButton btnCreate = new JButton("Create");
-	
-	private JCheckBox chckbxIstsenior = new JCheckBox("has Senior-Team");
-	private JCheckBox chckbxHatJuniorteam = new JCheckBox("has Junior-Team");
 	
 	private JPanel panel = new JPanel();
 	private JPanel panel_1 = new JPanel();
@@ -89,6 +86,8 @@ public class Gui extends JFrame {
 		subFrame = new JFrame();
 		teams_junior = new ArrayList<String>();
 		teams_senior = new ArrayList<String>();
+		judge_experienced = new ArrayList<String>();
+		judge_unexperienced = new ArrayList<String>();
 		debates = new ArrayList<JPanel>();
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -125,35 +124,25 @@ public class Gui extends JFrame {
 		contentPane.add(btnTimezone_2);
 		
 		
-		//anzupassen (
-		JButton btnAddSchool = new JButton("Add");
+		//Add-School Button
+		JButton btnAddSchool = new JButton("Add School");
 		btnAddSchool.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showEnterSchoolDialog();
 			}
 		});
-		btnAddSchool.setEnabled(false);
-		btnAddSchool.setBounds(642, 32, 140, 54);
-		contentPane.add(btnAddSchool);
 		
-		JButton btnAddSpeaker = new JButton("Add Speaker");
-		btnAddSpeaker.setBounds(42, 616, 104, 23);
-		contentPane.add(btnAddSpeaker);
-		
+		//Add-Judge Button
 		JButton btnAddJudge = new JButton("Add Judge");
-		btnAddJudge.setBounds(42, 650, 104, 23);
-		contentPane.add(btnAddJudge);
-		// )
+		btnAddJudge.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showEnterJudgeDialog();
+			}
+		});
 		
-		//checkBoxes impl.
-		chckbxIstsenior.setBounds(793, 32, 165, 23);
-		chckbxIstsenior.setEnabled(false);
-		contentPane.add(chckbxIstsenior);
-		
-		
-		chckbxHatJuniorteam.setBounds(793, 63, 165, 23);
-		chckbxHatJuniorteam.setEnabled(false);
-		contentPane.add(chckbxHatJuniorteam);
+		btnAddSchool.setEnabled(false);
+		btnAddSchool.setBounds(269, 28, 99, 43);
+		contentPane.add(btnAddSchool);
 		
 		//Implementierung der 3 Panels ohne Border
 		panel_2.setBorder(null);
@@ -171,14 +160,6 @@ public class Gui extends JFrame {
 		contentPane.add(panel);
 		
 		
-		//Eingabe-Feld für Schulen
-		textField_1 = new JTextField();
-		textField_1.setBounds(191, 32, 435, 54);
-		textField_1.setEnabled(false);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
-		
-		
 		//New-Button macht den Rest der contentPane sichtbar
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -187,9 +168,7 @@ public class Gui extends JFrame {
 				btnTimezone_1.setEnabled(true);
 				btnTimezone_2.setEnabled(true);
 				btnAddSchool.setEnabled(true);
-				textField_1.setEnabled(true);
-				chckbxHatJuniorteam.setEnabled(true);
-				chckbxHatJuniorteam.setEnabled(true);
+				btnAddJudge.setEnabled(true);
 				panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 				panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 				panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -200,9 +179,6 @@ public class Gui extends JFrame {
 		
 		btnNew.setBounds(10, 11, 140, 88);
 		contentPane.add(btnNew);
-		
-		btnCreate.setBounds(964, 32, 157, 54);
-		contentPane.add(btnCreate);
 		
 		JButton btnStarttime = new JButton("Start");
 		btnStarttime.addActionListener(new ActionListener() {
@@ -239,6 +215,11 @@ public class Gui extends JFrame {
 		button_3.setBounds(113, 560, 66, 23);
 		
 		contentPane.add(button_3);
+		
+		
+		btnAddJudge.setEnabled(false);
+		btnAddJudge.setBounds(378, 28, 99, 43);
+		contentPane.add(btnAddJudge);
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
@@ -288,6 +269,24 @@ public class Gui extends JFrame {
 			else {
 				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
+		}
+	}
+	
+	public void showEnterJudgeDialog() {
+		JCheckBox[] chckbx = {new JCheckBox("is experienced")};
+		JTextField[] judgeName = {new JTextField()};
+		Object[] options = {"Enter judge name:", chckbx,judgeName};
+		String s = (String)JOptionPane.showInputDialog(subFrame, options);
+		if(s != null && s.length() > 0) {
+			if(chckbx[0].isSelected()) {
+				judge_experienced.add(s);
+			}
+			else {
+				judge_unexperienced.add(s);
+			}			
+		}
+		else {
+			JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
