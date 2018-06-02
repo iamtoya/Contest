@@ -39,6 +39,7 @@ public class Gui extends JFrame {
 	private ArrayList<String> judge_experienced;
 	private ArrayList<String> judge_unexperienced;
 	private ArrayList<JPanel> debates;
+	private Debatingplan dp;
 	
 	private JButton btnNew = new JButton("New");
 	private JButton btnTimezone = new JButton("Timezone 1");
@@ -108,6 +109,8 @@ public class Gui extends JFrame {
 		judge_experienced = new ArrayList<String>();
 		judge_unexperienced = new ArrayList<String>();
 		debates = new ArrayList<JPanel>();
+		
+		dp = new Debatingplan(this);
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
 	//	debates.get(0).setLayout(new BorderLayout(2, 2));;
@@ -371,5 +374,15 @@ public class Gui extends JFrame {
 			JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+	public ArrayList<String> getJuniorSchools() {
+		return teams_junior;
+	}
+	public ArrayList<String> getSeniorSchools() {
+		return teams_senior;
+	}
+	
+	public void berechne() {
+		
+		dp.berechne();
+	}
 }
-//sdsd
