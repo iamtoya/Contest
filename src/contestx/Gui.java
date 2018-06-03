@@ -105,6 +105,12 @@ public class Gui extends JFrame {
 		
 		subFrame = new JFrame();
 		teams_junior = new ArrayList<String>();
+		teams_junior.add("Leibniz");
+		teams_junior.add("KarlOZ");
+		teams_junior.add("MeisterLampe");
+		teams_junior.add("MaryPoppins");
+		teams_junior.add("hallo");
+		teams_junior.add("Rheinhardswald");
 		teams_senior = new ArrayList<String>();
 		judge_experienced = new ArrayList<String>();
 		judge_unexperienced = new ArrayList<String>();
@@ -300,6 +306,15 @@ public class Gui extends JFrame {
 		label_10.setBounds(51, 545, 46, 14);
 		
 		contentPane.add(label_10);
+		
+		JButton btnBerechne = new JButton("Berechne");
+		btnBerechne.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(teams_junior.size()>5) berechne();
+			}
+		});
+		btnBerechne.setBounds(1036, 122, 115, 29);
+		contentPane.add(btnBerechne);
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
