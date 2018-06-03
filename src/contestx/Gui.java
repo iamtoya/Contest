@@ -111,6 +111,7 @@ public class Gui extends JFrame {
 		teams_junior.add("MaryPoppins");
 		teams_junior.add("hallo");
 		teams_junior.add("Rheinhardswald");
+		teams_junior.add("SophieScholl");
 		teams_senior = new ArrayList<String>();
 		judge_experienced = new ArrayList<String>();
 		judge_unexperienced = new ArrayList<String>();
