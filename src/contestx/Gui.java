@@ -112,6 +112,14 @@ public class Gui extends JFrame {
 		teams_junior.add("hallo");
 		teams_junior.add("Rheinhardswald");
 		teams_junior.add("SophieScholl");
+		teams_junior.add("1");
+		teams_junior.add("2");
+		teams_junior.add("3");
+		teams_junior.add("4");
+		teams_junior.add("5");
+		teams_junior.add("6");
+		teams_junior.add("7");
+		teams_junior.add("8");
 		teams_senior = new ArrayList<String>();
 		judge_experienced = new ArrayList<String>();
 		judge_unexperienced = new ArrayList<String>();
@@ -197,17 +205,8 @@ public class Gui extends JFrame {
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//zu füllen
-				btnTimezone.setEnabled(true);
-				btnTimezone_1.setEnabled(true);
-				btnTimezone_2.setEnabled(true);
-				btnAddSchool.setEnabled(true);
-				btnAddJudge.setEnabled(true);
-				//chckbxHatJuniorteam.setEnabled(true);
-				//chckbxHatJuniorteam.setEnabled(true);
-				panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-				panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-				panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-				createRelativeSubpanels(5);
+				
+				//createRelativeSubpanels(5);
 				
 			}
 		});
@@ -311,10 +310,24 @@ public class Gui extends JFrame {
 		JButton btnBerechne = new JButton("Berechne");
 		btnBerechne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(teams_junior.size()>5) berechne();
+				if(teams_junior.size()>5) {
+					btnTimezone.setEnabled(true);
+					btnTimezone_1.setEnabled(true);
+					btnTimezone_2.setEnabled(true);
+					btnAddSchool.setEnabled(true);
+					btnAddJudge.setEnabled(true);
+					//chckbxHatJuniorteam.setEnabled(true);
+					//chckbxHatJuniorteam.setEnabled(true);
+					panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+					String[][] array = berechne();
+					int dPT = array.length/3;
+					createRelativeSubpanels(dPT, array);
+				}
 			}
 		});
-		btnBerechne.setBounds(1036, 122, 115, 29);
+		btnBerechne.setBounds(1035, 51, 115, 29);
 		contentPane.add(btnBerechne);
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
@@ -331,19 +344,21 @@ public class Gui extends JFrame {
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 	}
-	public void createRelativeSubpanels(int debatesPerTime) {
-		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*225, panel.getHeight());
-		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*225, panel_1.getHeight());
-		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*225, panel_2.getHeight());
+	public void createRelativeSubpanels(int debatesPerTime, String[][] array) {
+		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*150, panel.getHeight());
+		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*150, panel_1.getHeight());
+		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*150, panel_2.getHeight());
 		cutPanels(debatesPerTime);
 		for(int i = 0; i < debatesPerTime*3; i++) {
 			debates.add(new JPanel());
 			debates.get(i).setBorder(new LineBorder(new Color(0, 0, 0)));
-			debates.get(i).setLayout(new BorderLayout(1, 1));;
+			BorderLayout layout = new BorderLayout(1, 1);
+			debates.get(i).setLayout(layout);
 			debates.get(i).add(new JButton("Room Nr."), BorderLayout.NORTH);
-			debates.get(i).add(new JButton("<html>Pro<br/>Leibniz</html>"), BorderLayout.WEST);
-			debates.get(i).add(new JButton("Motion"), BorderLayout.CENTER);
-			debates.get(i).add(new JButton("<html>Con<br/>Schiller</html>"), BorderLayout.EAST);
+			debates.get(i).add(new JButton("<html>Pro<br/>" + array[i][0] + "</html>"), BorderLayout.WEST);
+			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150));
+			debates.get(i).add(new JButton("<html>Con<br/>" + array[i][1] + "</html>"), BorderLayout.EAST);
+			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(75, 150));
 			debates.get(i).add(new JButton("Judges"), BorderLayout.SOUTH);
 		}
 		for(int i = 0; i < debatesPerTime; i++) {
@@ -397,8 +412,9 @@ public class Gui extends JFrame {
 		return teams_senior;
 	}
 	
-	public void berechne() {
+	public String[][] berechne() {
 		
-		dp.berechne();
+		String[][] array = dp.berechne();
+		return array;
 	}
-}
+}//Majestät ANDI for presitend!!!

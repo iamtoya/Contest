@@ -27,7 +27,7 @@ public class Debatingplan {
 		usedCompsSenior = new String[dPTjunior*3][2];
 	}
 	
-	public void berechne() {
+	public String[][] berechne() {
 		//Juniors
 		while(!teamOnEachSide(usedCompsJunior, true)) {
 			for(int i = 1; i <= dPTjunior; i++) { //Timezone 1
@@ -71,8 +71,11 @@ public class Debatingplan {
 			System.out.println(usedCompsJunior[i][0]);
 			System.out.println(usedCompsJunior[i][1] + "\n");
 		}
+		System.out.println("\n\n\n");
+		
 		
 		System.out.println(teamOnEachSide(usedCompsJunior, true));
+		return usedCompsJunior;
 	}
 	
 	public boolean entryDuplicated(String[][] array, int start, int end) { //sucht nach Duplikaten im String[][]
