@@ -423,8 +423,8 @@ public class Gui extends JFrame {
 		String[] fin = new String[pieces+2];
 		fin[0] = "<html>";
 		for(int i = 1; i <= pieces; i++) {
-			for(int j = 0; j < 6; j++) {
-				temp = temp + str[i*j];
+			for(int j = 1; j <= 6; j++) {
+				temp = temp + str[i*j-1];
 			}
 			fin[i] = temp;
 			temp = "";
