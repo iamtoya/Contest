@@ -30,6 +30,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 
 public class Gui extends JFrame {
 
@@ -108,10 +109,11 @@ public class Gui extends JFrame {
 		teams_junior.add("Leibniz");
 		teams_junior.add("KarlOZ");
 		teams_junior.add("MeisterLampe");
-		teams_junior.add("MaryPoppins");
+		teams_junior.add("MaryPooooooooooooooooooooooooooppins");
 		teams_junior.add("hallo");
 		teams_junior.add("Rheinhardswald");
 		teams_junior.add("SophieScholl");
+		teams_junior.add("Wmmmmmmmmmmmmmmmmmmm");
 		teams_junior.add("1");
 		teams_junior.add("2");
 		teams_junior.add("3");
@@ -120,6 +122,7 @@ public class Gui extends JFrame {
 		teams_junior.add("6");
 		teams_junior.add("7");
 		teams_junior.add("8");
+		breakStringIfTooLong(teams_junior.get(3));
 		teams_senior = new ArrayList<String>();
 		judge_experienced = new ArrayList<String>();
 		judge_unexperienced = new ArrayList<String>();
@@ -355,10 +358,17 @@ public class Gui extends JFrame {
 			BorderLayout layout = new BorderLayout(1, 1);
 			debates.get(i).setLayout(layout);
 			debates.get(i).add(new JButton("Room Nr."), BorderLayout.NORTH);
-			debates.get(i).add(new JButton("<html>Pro<br/>" + array[i][0] + "</html>"), BorderLayout.WEST);
+			
+			JButton westB = new JButton("<html>Pro<br/>" + array[i][0] + "</html>");
+			westB.setHorizontalAlignment(SwingConstants.LEFT);
+			debates.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150));
-			debates.get(i).add(new JButton("<html>Con<br/>" + array[i][1] + "</html>"), BorderLayout.EAST);
+			
+			JButton eastB = new JButton("<html>Pro<br/>" + array[i][0] + "</html>");
+			eastB.setHorizontalAlignment(SwingConstants.LEFT);
+			debates.get(i).add(eastB, BorderLayout.EAST);
 			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(75, 150));
+			
 			debates.get(i).add(new JButton("Judges"), BorderLayout.SOUTH);
 		}
 		for(int i = 0; i < debatesPerTime; i++) {
@@ -404,6 +414,26 @@ public class Gui extends JFrame {
 		else {
 			JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	public String breakStringIfTooLong(String s) {
+		
+		String temp = "";
+		char[] str = s.toCharArray();
+		int pieces = (int)Math.floor(s.length()/6);
+		String[] fin = new String[pieces+2];
+		fin[0] = "<html>";
+		for(int i = 1; i <= pieces; i++) {
+			for(int j = 0; j < 6; j++) {
+				temp = temp + str[i*j];
+			}
+			fin[i] = temp;
+			temp = "";
+		}
+		fin[pieces+1] = "</html>";
+		for(int i = 0; i < fin.length; i++){
+			System.out.println(fin[i]);
+		}
+		return fin.toString();
 	}
 	public ArrayList<String> getJuniorSchools() {
 		return teams_junior;
