@@ -381,19 +381,16 @@ public class Gui extends JFrame {
 		JCheckBox[] chckbxs = {new JCheckBox("has junior team"), new JCheckBox("has senior team")};
 		Object[] options = {"Enter school name:", chckbxs};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options);
-		if(s != null && s.length() > 0) {
+		if(s != null && s.length() > 0) {			
 			if(chckbxs[0].isSelected() && chckbxs[1].isSelected()) {
 				teams_junior.add(s);
 				teams_senior.add(s);
 			}
 			else if(chckbxs[0].isSelected()) teams_junior.add(s);
 			else if(chckbxs[1].isSelected()) teams_senior.add(s);
-			else {
+		else if(s == null && s.length() ==0) {
 				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
-		}
-		else {
-			JOptionPane.showMessageDialog(subFrame, "No school name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -411,7 +408,7 @@ public class Gui extends JFrame {
 				judge_unexperienced.add(s);
 			}			
 		}
-		else {
+		else if(s == null && s.length() ==0) {
 			JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -447,4 +444,4 @@ public class Gui extends JFrame {
 		String[][] array = dp.berechne();
 		return array;
 	}
-}//Majestät ANDI for presitend!!!
+}
