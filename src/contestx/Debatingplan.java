@@ -1,12 +1,21 @@
 package contestx;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Debatingplan {
-	
+	private ArrayList<Debate> debates1;
+	private ArrayList<Debate> debates2;
+	private ArrayList<Debate> debates3;
+	private Zeitzone zeitzone1;
+	private Zeitzone zeitzone2;
+	private Zeitzone zeitzone3;
+	private ArrayList<Judge> judges;
+	private ArrayList<Schule> schulen;
+	private ArrayList<Speaker> speaker;
+	private ArrayList<String> motions;	  
+	//  obiges nach Modellierung
 	private Gui gui;
 	private ArrayList<String> teams_junior;
 	private int dPTjunior;
