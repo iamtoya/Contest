@@ -12,4 +12,5 @@ public class Debate {
 		zeit = new Zeitzone(0,0,1,0);
 		raum = "";
 	}
+	//Andy
 }
