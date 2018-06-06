@@ -38,8 +38,7 @@ public class Gui extends JFrame {
 	private ArrayList<Schule> schulen;
 	private ArrayList<Team> teams_junior;
 	private ArrayList<Team> teams_senior;
-	private ArrayList<String> judge_experienced;
-	private ArrayList<String> judge_unexperienced;
+	private ArrayList<Judge> judges;
 	private ArrayList<JPanel> debates;
 	private Debatingplan dp;
 	
@@ -120,8 +119,7 @@ public class Gui extends JFrame {
 		}
 		//breakStringIfTooLong(teams_junior.get(3));
 		teams_senior = new ArrayList<Team>();
-		judge_experienced = new ArrayList<String>();
-		judge_unexperienced = new ArrayList<String>();
+		judges = new ArrayList<Judge>();
 		debates = new ArrayList<JPanel>();
 		
 		dp = new Debatingplan(this);
@@ -170,7 +168,6 @@ public class Gui extends JFrame {
 		
 		//Add-Judge Button
 		JButton btnAddJudge = new JButton("Add Judge");
-		btnAddJudge.setEnabled(false);
 				btnAddJudge.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						showEnterJudgeDialog();
@@ -388,11 +385,17 @@ public class Gui extends JFrame {
 				teams_junior.add(new Team(schulen.get(schulen.size()-1), true));
 				teams_senior.add(new Team(schulen.get(schulen.size()-1), false));
 			}
-			else if(chckbxs[0].isSelected()) teams_junior.add(new Team(schulen.get(schulen.size()-1), true));
-			else if(chckbxs[1].isSelected()) teams_junior.add(new Team(schulen.get(schulen.size()-1), false));
-			else {
+			else if (chckbxs[0].isSelected()) {
+				teams_junior.add(new Team(schulen.get(schulen.size()-1), true));
+			}
+			else if (chckbxs[1].isSelected()) {
+				teams_junior.add(new Team(schulen.get(schulen.size()-1), false));
+			}
+			else 
 				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
+		else if(s.length() == 0) {
+			JOptionPane.showMessageDialog(subFrame, "Enter a school name", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -404,13 +407,13 @@ public class Gui extends JFrame {
 		String s = (String)JOptionPane.showInputDialog(subFrame, options);
 		if(s != null && s.length() > 0) {
 			if(chckbx[0].isSelected()) {
-				judge_experienced.add(s);
+				judges.add(new Judge(s,false));
 			}
 			else {
-				judge_unexperienced.add(s);
+				judges.add(new Judge(s, true));
 			}			
 		}
-		else if(s == null && s.length() ==0) {
+		else if(s.length() == 0) {
 			JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}

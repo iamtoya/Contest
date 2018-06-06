@@ -7,6 +7,11 @@ public class Judge {
 	private boolean erfahren;
 	private ArrayList<Boolean> kannZuZeit;
 	
+	public Judge(String name, boolean erfahren) {
+		this.name = name;
+		this.erfahren = erfahren;
+	}
+	
 	public Judge(String name, Schule schule, boolean erfahren) {
 		this.name=name;
 		this.schule=schule;
