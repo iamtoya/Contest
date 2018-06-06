@@ -450,6 +450,7 @@ public class Gui extends JFrame {
 		panel.removeAll();
 		panel_2.removeAll();
 		panel_1.removeAll();
+		debates.removeAll(debates);
 		dp.reset();
 		ArrayList<Debate> arrayJunior = dp.berechne(junior);
 		return arrayJunior;
