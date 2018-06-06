@@ -14,4 +14,9 @@ public class Schule {
 		this.juniorTeam=juniorTeam;
 		this.seniorTeam=seniorTeam;
 	}
+	
+	
+	
+	
 }
+
