@@ -319,14 +319,14 @@ public class Gui extends JFrame {
 					panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-					ArrayList<Debate> debatesJ = berechne();
-					int dPT = debatesJ.size()/3;
-					String[][] array = new String[debatesJ.size()][2];
-					for(int i = 0; i < debatesJ.size(); i++) {
-						array[i][0] = debatesJ.get(i).getTeamPro().getSchule().getName();
-						array[i][1] = debatesJ.get(i).getTeamCon().getSchule().getName();
-					}
-					createRelativeSubpanels(dPT, debatesJ);
+					//ArrayList<Debate> debatesJ = berechne();
+					//int dPT = debatesJ.size()/3;
+					//String[][] array = new String[debatesJ.size()][2];
+					//for(int i = 0; i < debatesJ.size(); i++) {
+						//array[i][0] = debatesJ.get(i).getTeamPro().getSchule().getName();
+						//array[i][1] = debatesJ.get(i).getTeamCon().getSchule().getName();
+					//}
+					//createRelativeSubpanels(dPT, debatesJ);
 					ArrayList<Debate> debatesJ = berechne(true);
 					int dPTjunior = debatesJ.size()/3;
 					createRelativeSubpanels(dPTjunior, debatesJ);
@@ -362,15 +362,11 @@ public class Gui extends JFrame {
 			debates.get(i).setLayout(layout); //BorderLayout wird festgelegt
 			debates.get(i).add(new JButton("Room Nr."), BorderLayout.NORTH);
 			
-			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>");
-			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);	
 			debates.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
 			
-			JButton eastB = new JButton("<html>Con<br/>" + array.get(i).getTeamCon().getSchule().getName() + "</html>");
-			eastB.setHorizontalAlignment(SwingConstants.LEFT);
 			JButton eastB = new JButton("<html>Con<br/>" + array.get(i).getTeamCon().getSchule().getName() + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			debates.get(i).add(eastB, BorderLayout.EAST);
