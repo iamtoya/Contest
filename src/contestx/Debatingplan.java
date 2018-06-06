@@ -46,10 +46,11 @@ public class Debatingplan {
 		usedCompsSenior = new String[dPTjunior*3][2];
 		
 		schulen = this.gui.getSchools();
-		
+		debatesJ = new ArrayList<Debate>();
+		debatesS = new ArrayList<Debate>();
 	}
 	
-	public String[][] berechne() {
+	/*public String[][] berechne() {
 		//Juniors
 		while(!teamOnEachSide(usedCompsJunior, true)) {
 			for(int i = 1; i <= dPTjunior; i++) { //Timezone 1; 1<=i<=dPTjunior, da i multipliziert wird.
@@ -97,6 +98,60 @@ public class Debatingplan {
 		
 		System.out.println(teamOnEachSide(usedCompsJunior, true));
 		return usedCompsJunior;
+	}*/
+	public ArrayList<Debate> berechne() {
+		//Juniors
+		while(!teamOnEachSide(usedCompsJunior, true)) {
+			for(int i = 1; i <= dPTjunior; i++) { //Timezone 1
+				usedCompsJunior[i-1][0] = teamJuniorNames.get((2*i)-2); //"[i-1]", da i in for-schleife um 1 größer; "(2*i)-1" = Index der zugewiesenen Schule, immer: s1+s2;s3+s4...
+				//System.out.println(usedCompsJunior[i-1][0]);
+				usedCompsJunior[i-1][1] = teamJuniorNames.get(2*i-1);
+				//System.out.println(usedCompsJunior[i-1][1] + "\n");
+				
+			}
+			//System.out.println("\n");
+		
+			boolean run = true;
+			while(run) { //Timezone 2
+				Collections.shuffle(teamJuniorNames);
+				for(int i = 1; i <= dPTjunior; i++) {
+					usedCompsJunior[dPTjunior+i-1][0] = teamJuniorNames.get((2*i)-2); //"[i-1]", da for-schleife einsbasiert
+					//System.out.println(usedCompsJunior[dPTjunior+i-1][0]);
+					usedCompsJunior[dPTjunior+i-1][1] = teamJuniorNames.get((2*i)-1);
+					//System.out.println(usedCompsJunior[dPTjunior+i-1][1]+"\n");
+					
+				}
+				//System.out.println("\n");
+				if(!entryDuplicated(usedCompsJunior, 0, dPTjunior*2)) { //wenn es keine Duplikate (kein Team spielt 2mal gegen dasselbe) in usedCompsJunior im bisher ausgefüllten Bereich gibt, ist Timezone 2 fertig
+					run = false;
+				}
+			}
+			//System.out.println("Timezone 3");
+			run = true;
+			while(run) { //Timezone 3
+				Collections.shuffle(teamJuniorNames);
+				for(int i = 1; i <= dPTjunior; i++) {
+					usedCompsJunior[(2*dPTjunior)+i-1][0] = teamJuniorNames.get((2*i)-2); //"[i-1]", da for-schleife einsbasiert
+					//System.out.println(usedCompsJunior[(2*dPTjunior)+i-1][0]);
+					usedCompsJunior[(2*dPTjunior)+i-1][1] = teamJuniorNames.get((2*i)-1);
+					//System.out.println(usedCompsJunior[(2*dPTjunior)+i-1][1]+"\n");
+					
+				}
+				if(!entryDuplicated(usedCompsJunior, 0, dPTjunior*3)) { //wenn es keine Duplikate (kein Team spielt 2mal gegen dasselbe) in usedCompsJunior im bisher ausgefüllten Bereich gibt, ist Timezone 2 fertig
+					run = false;
+				}
+			}
+		}
+		for(int i = 0; i < usedCompsJunior.length; i++) {
+			System.out.println(usedCompsJunior[i][0]);
+			System.out.println(usedCompsJunior[i][1] + "\n");
+		}
+		
+		System.out.println(teamOnEachSide(usedCompsJunior, true));
+		for(int i = 0; i < dPTjunior*3; i++) {
+			debatesJ.add(new Debate(replaceStringJunior(usedCompsJunior[i][0]), replaceStringJunior(usedCompsJunior[i][1])));
+		}
+		return debatesJ;
 	}
 	
 	public boolean entryDuplicated(String[][] array, int start, int end) { //sucht nach Duplikaten im String[][]
@@ -149,7 +204,7 @@ public class Debatingplan {
 	}
 	public Team replaceStringJunior(String s) { //findet das zum Teamnamen zugehörige Team
 		int i = 0;
-		while(teams_junior.get(i).getSchoolName().equals(s)) {
+		while(!teams_junior.get(i).getSchoolName().equals(s)) {
 			i++;
 		}
 		return teams_junior.get(i);

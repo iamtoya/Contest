@@ -107,14 +107,6 @@ public class Gui extends JFrame {
 		schulen = new ArrayList<Schule>();
 		subFrame = new JFrame();
 		teams_junior = new ArrayList<Team>();
-		schulen.add(new Schule("Leibniz"));
-		schulen.add(new Schule("KarlOZ"));
-		schulen.add(new Schule("MeisterLampe"));
-		schulen.add(new Schule("MaryPooooooooooooooooooooooooooppins"));
-		schulen.add(new Schule("hallo"));
-		schulen.add(new Schule("Rheinhardswald"));
-		schulen.add(new Schule("SophieScholl"));
-		schulen.add(new Schule("Wmmmmmmmmmmmmmmmmmmm"));
 		schulen.add(new Schule("1"));
 		schulen.add(new Schule("2"));
 		schulen.add(new Schule("3"));
@@ -123,6 +115,9 @@ public class Gui extends JFrame {
 		schulen.add(new Schule("6"));
 		schulen.add(new Schule("7"));
 		schulen.add(new Schule("8"));
+		for(int i = 0; i < schulen.size(); i++) {
+			teams_junior.add(new Team(schulen.get(i), true));
+		}
 		//breakStringIfTooLong(teams_junior.get(3));
 		teams_senior = new ArrayList<Team>();
 		judge_experienced = new ArrayList<String>();
@@ -182,7 +177,7 @@ public class Gui extends JFrame {
 					}
 		});
 				
-		btnAddSchool.setEnabled(false);
+		btnAddSchool.setEnabled(true);
 		btnAddSchool.setBounds(368, 28, 140, 54);
 		contentPane.add(btnAddSchool);
 		
@@ -318,15 +313,20 @@ public class Gui extends JFrame {
 					btnTimezone.setEnabled(true);
 					btnTimezone_1.setEnabled(true);
 					btnTimezone_2.setEnabled(true);
-					btnAddSchool.setEnabled(true);
+					//btnAddSchool.setEnabled(true);
 					btnAddJudge.setEnabled(true);
 					//chckbxHatJuniorteam.setEnabled(true);
 					//chckbxHatJuniorteam.setEnabled(true);
 					panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-					String[][] array = berechne();
-					int dPT = array.length/3;
+					ArrayList<Debate> debatesJ = berechne();
+					int dPT = debatesJ.size()/3;
+					String[][] array = new String[debatesJ.size()][2];
+					for(int i = 0; i < debatesJ.size(); i++) {
+						array[i][0] = debatesJ.get(i).getTeamPro().getSchoolName();
+						array[i][1] = debatesJ.get(i).getTeamCon().getSchoolName();
+					}
 					createRelativeSubpanels(dPT, array);
 				}
 			}
@@ -390,7 +390,7 @@ public class Gui extends JFrame {
 			}
 			else if(chckbxs[0].isSelected()) teams_junior.add(new Team(schulen.get(schulen.size()-1), true));
 			else if(chckbxs[1].isSelected()) teams_junior.add(new Team(schulen.get(schulen.size()-1), false));
-		else if(s == null && s.length() ==0) {
+			else {
 				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
 		}
@@ -441,9 +441,9 @@ public class Gui extends JFrame {
 		return teams_senior;
 	}
 	
-	public String[][] berechne() {
+	public ArrayList<Debate> berechne() {
 		
-		String[][] array = dp.berechne();
+		ArrayList<Debate> array = dp.berechne();
 		return array;
 	}
 	public ArrayList<Schule> getSchools() {
