@@ -20,7 +20,9 @@ public class Team {
 		this.speaker=speaker;
 		this.isJunior=isJunior;
 	}
-
+	public String getSchoolName() {
+		return schule.getName();
+	}
 
 	
 }

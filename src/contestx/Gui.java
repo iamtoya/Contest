@@ -35,8 +35,9 @@ import javax.swing.SwingConstants;
 public class Gui extends JFrame {
 
 	private JPanel contentPane;
-	private ArrayList<String> teams_junior;
-	private ArrayList<String> teams_senior;
+	private ArrayList<Schule> schulen;
+	private ArrayList<Team> teams_junior;
+	private ArrayList<Team> teams_senior;
 	private ArrayList<String> judge_experienced;
 	private ArrayList<String> judge_unexperienced;
 	private ArrayList<JPanel> debates;
@@ -103,27 +104,27 @@ public class Gui extends JFrame {
 	 */
 	public Gui() {
 		
-		
+		schulen = new ArrayList<Schule>();
 		subFrame = new JFrame();
-		teams_junior = new ArrayList<String>();
-		teams_junior.add("Leibniz");
-		teams_junior.add("KarlOZ");
-		teams_junior.add("MeisterLampe");
-		teams_junior.add("MaryPooooooooooooooooooooooooooppins");
-		teams_junior.add("hallo");
-		teams_junior.add("Rheinhardswald");
-		teams_junior.add("SophieScholl");
-		teams_junior.add("Wmmmmmmmmmmmmmmmmmmm");
-		teams_junior.add("1");
-		teams_junior.add("2");
-		teams_junior.add("3");
-		teams_junior.add("4");
-		teams_junior.add("5");
-		teams_junior.add("6");
-		teams_junior.add("7");
-		teams_junior.add("8");
+		teams_junior = new ArrayList<Team>();
+		schulen.add(new Schule("Leibniz"));
+		schulen.add(new Schule("KarlOZ"));
+		schulen.add(new Schule("MeisterLampe"));
+		schulen.add(new Schule("MaryPooooooooooooooooooooooooooppins"));
+		schulen.add(new Schule("hallo"));
+		schulen.add(new Schule("Rheinhardswald"));
+		schulen.add(new Schule("SophieScholl"));
+		schulen.add(new Schule("Wmmmmmmmmmmmmmmmmmmm"));
+		schulen.add(new Schule("1"));
+		schulen.add(new Schule("2"));
+		schulen.add(new Schule("3"));
+		schulen.add(new Schule("4"));
+		schulen.add(new Schule("5"));
+		schulen.add(new Schule("6"));
+		schulen.add(new Schule("7"));
+		schulen.add(new Schule("8"));
 		//breakStringIfTooLong(teams_junior.get(3));
-		teams_senior = new ArrayList<String>();
+		teams_senior = new ArrayList<Team>();
 		judge_experienced = new ArrayList<String>();
 		judge_unexperienced = new ArrayList<String>();
 		debates = new ArrayList<JPanel>();
@@ -381,13 +382,14 @@ public class Gui extends JFrame {
 		JCheckBox[] chckbxs = {new JCheckBox("has junior team"), new JCheckBox("has senior team")};
 		Object[] options = {"Enter school name:", chckbxs};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options);
+		schulen.add(new Schule(s));
 		if(s != null && s.length() > 0) {			
 			if(chckbxs[0].isSelected() && chckbxs[1].isSelected()) {
-				teams_junior.add(s);
-				teams_senior.add(s);
+				teams_junior.add(new Team(schulen.get(schulen.size()-1), true));
+				teams_senior.add(new Team(schulen.get(schulen.size()-1), false));
 			}
-			else if(chckbxs[0].isSelected()) teams_junior.add(s);
-			else if(chckbxs[1].isSelected()) teams_senior.add(s);
+			else if(chckbxs[0].isSelected()) teams_junior.add(new Team(schulen.get(schulen.size()-1), true));
+			else if(chckbxs[1].isSelected()) teams_junior.add(new Team(schulen.get(schulen.size()-1), false));
 		else if(s == null && s.length() ==0) {
 				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
@@ -432,10 +434,10 @@ public class Gui extends JFrame {
 		}
 		return fin.toString();
 	}
-	public ArrayList<String> getJuniorSchools() {
+	public ArrayList<Team> getJuniorSchools() {
 		return teams_junior;
 	}
-	public ArrayList<String> getSeniorSchools() {
+	public ArrayList<Team> getSeniorSchools() {
 		return teams_senior;
 	}
 	

@@ -5,12 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Debatingplan {
-	private ArrayList<Debate> debates1J;
-	private ArrayList<Debate> debates2J;
-	private ArrayList<Debate> debates3J;
-	private ArrayList<Debate> debates1S;
-	private ArrayList<Debate> debates2S;
-	private ArrayList<Debate> debates3S;
+	private ArrayList<Debate> debatesJ;
+	private ArrayList<Debate> debatesS;
 	private Zeitzone zeitzone1;
 	private Zeitzone zeitzone2;
 	private Zeitzone zeitzone3;
@@ -20,12 +16,12 @@ public class Debatingplan {
 	private ArrayList<String> motions;	  
 	//  obiges nach Modellierung
 	private Gui gui;
-	private ArrayList<String> teams_junior;
+	private ArrayList<Team> teams_junior;
 	private int dPTjunior;
-	private ArrayList<String> teams_senior;
+	private ArrayList<Team> teams_senior;
 	private int dPTsenior;
-	private String[][] usedCompsJunior; //hier werden die verwendeten Kompositionen gespeichert
-	private String[][] usedCompsSenior;
+	private Team[][] usedCompsJunior; //hier werden die verwendeten Kompositionen gespeichert
+	private Team[][] usedCompsSenior;
 	
 	public Debatingplan(Gui gui) {
 		this.gui = gui; //referenzieren (für Datenfluss später)
@@ -35,8 +31,8 @@ public class Debatingplan {
 		teams_senior = this.gui.getSeniorSchools(); //Datenfluss
 		Collections.shuffle(teams_senior); //Reihenfolge randomisieren
 		dPTsenior = (int) teams_senior.size()/2; //?
-		usedCompsJunior = new String[dPTjunior*3][2];
-		usedCompsSenior = new String[dPTjunior*3][2];
+		usedCompsJunior = new Team[dPTjunior*3][2];
+		usedCompsSenior = new Team[dPTjunior*3][2];
 		/*for(int i = 0; i < dPTjunior; i++) { //debate-listen initialisieren
 			debates1J.add(new Debate());
 			debates2J.add(new Debate());
@@ -47,6 +43,7 @@ public class Debatingplan {
 			debates2S.add(new Debate());
 			debates3S.add(new Debate());
 		}*/
+		
 	}
 	
 	public String[][] berechne() {
@@ -55,7 +52,7 @@ public class Debatingplan {
 			for(int i = 1; i <= dPTjunior; i++) { //Timezone 1; 1<=i<=dPTjunior, da i multipliziert wird.
 				usedCompsJunior[i-1][0] = teams_junior.get((2*i)-2); //"[i-1]", da i in for-schleife um 1 größer; "(2*i)-1" = Index der zugewiesenen Schule, immer: s1+s2;s3+s4...
 				usedCompsJunior[i-1][1] = teams_junior.get(2*i-1);
-				
+				debatesJ.add(new Debate(usedCompsJunior[i-1][0], usedCompsJunior[i-1][1]));
 			}
 			//System.out.println("\n");
 			
