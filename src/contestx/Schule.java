@@ -1,11 +1,11 @@
 package contestx;
 
 public class Schule {
-	private String name;
-	private Boolean hasJuniorTeam;
-	private Boolean hasSeniorTeam;
-	private Team juniorTeam;
-	private Team seniorTeam;
+	public String name;
+	public Boolean hasJuniorTeam;
+	public Boolean hasSeniorTeam;
+	public Team juniorTeam;
+	public Team seniorTeam;
 	
 	public void Schule(String name, boolean junior, boolean senior, Team juniorTeam, Team seniorTeam) {
 		this.name=name;

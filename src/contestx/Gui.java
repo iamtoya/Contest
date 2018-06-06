@@ -122,7 +122,7 @@ public class Gui extends JFrame {
 		teams_junior.add("6");
 		teams_junior.add("7");
 		teams_junior.add("8");
-		breakStringIfTooLong(teams_junior.get(3));
+		//breakStringIfTooLong(teams_junior.get(3));
 		teams_senior = new ArrayList<String>();
 		judge_experienced = new ArrayList<String>();
 		judge_unexperienced = new ArrayList<String>();
@@ -364,7 +364,7 @@ public class Gui extends JFrame {
 			debates.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150));
 			
-			JButton eastB = new JButton("<html>Pro<br/>" + array[i][0] + "</html>");
+			JButton eastB = new JButton("<html>Con<br/>" + array[i][1] + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT);
 			debates.get(i).add(eastB, BorderLayout.EAST);
 			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(75, 150));
