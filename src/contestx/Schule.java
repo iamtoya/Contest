@@ -1,11 +1,11 @@
 package contestx;
 
 public class Schule {
-	public String name;
-	public Boolean hasJuniorTeam;
-	public Boolean hasSeniorTeam;
-	public Team juniorTeam;
-	public Team seniorTeam;
+	private String name;
+	private Boolean hasJuniorTeam;
+	private Boolean hasSeniorTeam;
+	private Team juniorTeam;
+	private Team seniorTeam;
 	
 	public Schule(String name) {
 		this.name = name;
@@ -18,10 +18,48 @@ public class Schule {
 		this.seniorTeam=seniorTeam;
 	}
 	
+	
+	
 	public String getName() {
 		return name;
 	}
 	
+	public Boolean getHasJuniorTeam() {
+		return hasJuniorTeam;
+	}
+	
+	public Boolean getHasSeniorTeam() {
+		return hasSeniorTeam;
+	}
+	
+	public Team getJuniorTeam() {
+		return juniorTeam;
+	}
+	
+	public Team getSeniorTeam() {
+		return seniorTeam;
+	}
+	
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setHasJuniorTeam(Boolean hasJuniorTeam) {
+		this.hasJuniorTeam = hasJuniorTeam;
+	}
+	
+	public void setHasSeniorTeam(Boolean hasSeniorTeam) {
+		this.hasSeniorTeam = hasSeniorTeam;
+	}
+	
+	public void setJuniorTeam(Team juniorTeam) {
+		this.juniorTeam = juniorTeam;
+	}
+	
+	public void setSeniorTeam(Team seniorTeam) {
+		this.seniorTeam = seniorTeam;
+	}
 	
 }
 

@@ -324,8 +324,8 @@ public class Gui extends JFrame {
 					int dPT = debatesJ.size()/3;
 					String[][] array = new String[debatesJ.size()][2];
 					for(int i = 0; i < debatesJ.size(); i++) {
-						array[i][0] = debatesJ.get(i).getTeamPro().getSchoolName();
-						array[i][1] = debatesJ.get(i).getTeamCon().getSchoolName();
+						array[i][0] = debatesJ.get(i).getTeamPro().getSchule().getName();
+						array[i][1] = debatesJ.get(i).getTeamCon().getSchule().getName();
 					}
 					createRelativeSubpanels(dPT, debatesJ);
 				}
@@ -360,12 +360,12 @@ public class Gui extends JFrame {
 			debates.get(i).setLayout(layout);
 			debates.get(i).add(new JButton("Room Nr."), BorderLayout.NORTH);
 			
-			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchoolName() + "</html>");
+			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>");
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			debates.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150));
 			
-			JButton eastB = new JButton("<html>Con<br/>" + array.get(i).getTeamCon().getSchoolName() + "</html>");
+			JButton eastB = new JButton("<html>Con<br/>" + array.get(i).getTeamCon().getSchule().getName() + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT);
 			debates.get(i).add(eastB, BorderLayout.EAST);
 			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(75, 150));

@@ -30,7 +30,7 @@ public class Debatingplan {
 		teams_junior = this.gui.getJuniorTeams();
 		teamJuniorNames = new ArrayList<String>(); 
 		for(int i = 0; i < teams_junior.size(); i++) {
-			teamJuniorNames.add(teams_junior.get(i).getSchoolName());
+			teamJuniorNames.add(teams_junior.get(i).getSchule().getName());
 		}
 		Collections.shuffle(teamJuniorNames); //Reihenfolge randomisieren
 		dPTjunior = (int) teamJuniorNames.size()/2; //?
@@ -38,7 +38,7 @@ public class Debatingplan {
 		teams_senior = this.gui.getSeniorTeams();
 		teamSeniorNames = new ArrayList<String>();
 		for(int i = 0; i < teams_senior.size(); i++) {
-			teamSeniorNames.add(teams_senior.get(i).getSchoolName());
+			teamSeniorNames.add(teams_senior.get(i).getSchule().getName());
 		}
 		Collections.shuffle(teamSeniorNames); //Reihenfolge randomisieren
 		dPTsenior = (int) teamSeniorNames.size()/2; //?
@@ -204,7 +204,7 @@ public class Debatingplan {
 	}
 	public Team replaceStringJunior(String s) { //findet das zum Teamnamen zugehörige Team
 		int i = 0;
-		while(!teams_junior.get(i).getSchoolName().equals(s)) {
+		while(!teams_junior.get(i).getSchule().getName().equals(s)) {
 			i++;
 		}
 		return teams_junior.get(i);
