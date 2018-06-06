@@ -5,4 +5,5 @@ Datum		Name			Was?
 30.5.18		Jonas			Grundgerüst der GUI
 30.5.18		Andreas			Grundgerüst der Klassen eingeführt
 5.6.18		Andreas			Klassenattribute und Konstruktoren nach Modellierung eingeführt
-
+6.6.18		Jonas			Überarbeitung von GUI und Debatingplan nach Modellierung, BerechnenMethode verfeinert
+6.6.18		Andreas			Get und SetMethoden, Verfeinerung von GUI (haupts. Judge-Zeug)
