@@ -40,7 +40,7 @@ public class Gui extends JFrame {
 	private ArrayList<Team> teams_senior;
 	private ArrayList<String> judge_experienced;
 	private ArrayList<String> judge_unexperienced;
-	private ArrayList<JPanel> debates;
+	private ArrayList<JPanel> debates; //die Debates werden hier vereinfacht als Panels betrachtet; Liste aller im Plan vorkommenden Debates als Panels
 	private Debatingplan dp;
 	
 	private JButton btnNew = new JButton("New");
@@ -320,7 +320,7 @@ public class Gui extends JFrame {
 					panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-					ArrayList<Debate> debatesJ = berechne();
+					ArrayList<Debate> debatesJ = berechneJunior();
 					int dPT = debatesJ.size()/3;
 					String[][] array = new String[debatesJ.size()][2];
 					for(int i = 0; i < debatesJ.size(); i++) {
@@ -349,48 +349,48 @@ public class Gui extends JFrame {
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 	}
 	public void createRelativeSubpanels(int debatesPerTime, ArrayList<Debate> array) {
-		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*150, panel.getHeight());
+		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*150, panel.getHeight()); //Länge der 3 großen Panels wird entsprechen der Zahl der Debates angepasst
 		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*150, panel_1.getHeight());
 		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*150, panel_2.getHeight());
-		cutPanels(debatesPerTime);
+		cutPanels(debatesPerTime); //Panels werden in Subpanels zerschnitten
 		for(int i = 0; i < debatesPerTime*3; i++) {
 			debates.add(new JPanel());
-			debates.get(i).setBorder(new LineBorder(new Color(0, 0, 0)));
+			debates.get(i).setBorder(new LineBorder(new Color(0, 0, 0))); //Grenzen werden gezeichnet
 			BorderLayout layout = new BorderLayout(1, 1);
-			debates.get(i).setLayout(layout);
+			debates.get(i).setLayout(layout); //BorderLayout wird festgelegt
 			debates.get(i).add(new JButton("Room Nr."), BorderLayout.NORTH);
 			
-			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchoolName() + "</html>");
-			westB.setHorizontalAlignment(SwingConstants.LEFT);
+			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchoolName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
+			westB.setHorizontalAlignment(SwingConstants.LEFT);													   //("array" besteht aus debatesPerTime*3 Elementen)
 			debates.get(i).add(westB, BorderLayout.WEST);
-			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150));
+			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
 			
 			JButton eastB = new JButton("<html>Con<br/>" + array.get(i).getTeamCon().getSchoolName() + "</html>");
-			eastB.setHorizontalAlignment(SwingConstants.LEFT);
+			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			debates.get(i).add(eastB, BorderLayout.EAST);
-			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(75, 150));
+			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(75, 150)); 
 			
 			debates.get(i).add(new JButton("Judges"), BorderLayout.SOUTH);
 		}
-		for(int i = 0; i < debatesPerTime; i++) {
+		for(int i = 0; i < debatesPerTime; i++) { //die in debates gespeicherten, oben modifizierten Panels werden den drei großen Panels hinzugefügt
 			panel.add(debates.get(i));
 			panel_1.add(debates.get(i+debatesPerTime));
 			panel_2.add(debates.get(i+debatesPerTime+debatesPerTime));
 		}
 	}
 	public void showEnterSchoolDialog() {
-		JCheckBox[] chckbxs = {new JCheckBox("has junior team"), new JCheckBox("has senior team")};
+		JCheckBox[] chckbxs = {new JCheckBox("has junior team"), new JCheckBox("has senior team")}; //2 CheckBoxen fragen ab, welche Teams die eingetragene Schule bereitstellt
 		Object[] options = {"Enter school name:", chckbxs};
-		String s = (String)JOptionPane.showInputDialog(subFrame, options);
-		schulen.add(new Schule(s));
-		if(s != null && s.length() > 0) {			
-			if(chckbxs[0].isSelected() && chckbxs[1].isSelected()) {
-				teams_junior.add(new Team(schulen.get(schulen.size()-1), true));
+		String s = (String)JOptionPane.showInputDialog(subFrame, options); //Schulname wird in "s" gespeichert
+		schulen.add(new Schule(s)); //und den "schulen" hinzugefügt
+		if(s != null && s.length() > 0) { //der Fall, dass keine Schule eingegeben wurde wird hier abgefangen
+			if(chckbxs[0].isSelected() && chckbxs[1].isSelected()) { //unterschieden wird in der Anzahl der gewählten Checkboxes
+				teams_junior.add(new Team(schulen.get(schulen.size()-1), true)); //die team-listen werden erweitert
 				teams_senior.add(new Team(schulen.get(schulen.size()-1), false));
 			}
 			else if(chckbxs[0].isSelected()) teams_junior.add(new Team(schulen.get(schulen.size()-1), true));
 			else if(chckbxs[1].isSelected()) teams_junior.add(new Team(schulen.get(schulen.size()-1), false));
-			else {
+			else { //keine Checkbox wurde ausgewählt -> kein Team dieser Schule nimmt teil -> die Schule nimmt nicht teil
 				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
 		}
@@ -441,10 +441,15 @@ public class Gui extends JFrame {
 		return teams_senior;
 	}
 	
-	public ArrayList<Debate> berechne() {
+	public ArrayList<Debate> berechneJunior() {
 		
-		ArrayList<Debate> array = dp.berechne();
-		return array;
+		ArrayList<Debate> arrayJunior = dp.berechneJunior();
+		return arrayJunior;
+	}
+public ArrayList<Debate> berechneSenior() {
+		
+		ArrayList<Debate> arrayJunior = dp.berechneJunior();
+		return arrayJunior;
 	}
 	public ArrayList<Schule> getSchools() {
 		return schulen;

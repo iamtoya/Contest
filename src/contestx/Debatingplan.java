@@ -27,13 +27,13 @@ public class Debatingplan {
 	
 	public Debatingplan(Gui gui) {
 		this.gui = gui; //referenzieren (für Datenfluss später)
-		teams_junior = this.gui.getJuniorTeams();
+		teams_junior = this.gui.getJuniorTeams(); //Datenfluss: zur Liste der im GUI gespeicherten Teams wird hier referenziert
 		teamJuniorNames = new ArrayList<String>(); 
 		for(int i = 0; i < teams_junior.size(); i++) {
-			teamJuniorNames.add(teams_junior.get(i).getSchoolName());
+			teamJuniorNames.add(teams_junior.get(i).getSchoolName()); //Strings werden hier verwendet, da sie besser in der berechne()-Methode anwendbar sind, als Teams
 		}
 		Collections.shuffle(teamJuniorNames); //Reihenfolge randomisieren
-		dPTjunior = (int) teamJuniorNames.size()/2; //?
+		dPTjunior = (int) teamJuniorNames.size()/2; //pro Zeitzone können nur die Hälfte (abgerundet) alles Teams in verschiedenen Debates sein, da zwei jener eins jenes besuchen
 		
 		teams_senior = this.gui.getSeniorTeams();
 		teamSeniorNames = new ArrayList<String>();
@@ -46,7 +46,7 @@ public class Debatingplan {
 		usedCompsSenior = new String[dPTjunior*3][2];
 		
 		schulen = this.gui.getSchools();
-		debatesJ = new ArrayList<Debate>();
+		debatesJ = new ArrayList<Debate>(); //die nachher auszugebende Liste der Debates
 		debatesS = new ArrayList<Debate>();
 	}
 	
@@ -99,42 +99,30 @@ public class Debatingplan {
 		System.out.println(teamOnEachSide(usedCompsJunior, true));
 		return usedCompsJunior;
 	}*/
-	public ArrayList<Debate> berechne() {
-		//Juniors
+	public ArrayList<Debate> berechneJunior() {
 		while(!teamOnEachSide(usedCompsJunior, true)) {
 			for(int i = 1; i <= dPTjunior; i++) { //Timezone 1
 				usedCompsJunior[i-1][0] = teamJuniorNames.get((2*i)-2); //"[i-1]", da i in for-schleife um 1 größer; "(2*i)-1" = Index der zugewiesenen Schule, immer: s1+s2;s3+s4...
-				//System.out.println(usedCompsJunior[i-1][0]);
 				usedCompsJunior[i-1][1] = teamJuniorNames.get(2*i-1);
-				//System.out.println(usedCompsJunior[i-1][1] + "\n");
 				
 			}
-			//System.out.println("\n");
-		
 			boolean run = true;
 			while(run) { //Timezone 2
 				Collections.shuffle(teamJuniorNames);
 				for(int i = 1; i <= dPTjunior; i++) {
 					usedCompsJunior[dPTjunior+i-1][0] = teamJuniorNames.get((2*i)-2); //"[i-1]", da for-schleife einsbasiert
-					//System.out.println(usedCompsJunior[dPTjunior+i-1][0]);
-					usedCompsJunior[dPTjunior+i-1][1] = teamJuniorNames.get((2*i)-1);
-					//System.out.println(usedCompsJunior[dPTjunior+i-1][1]+"\n");
-					
+					usedCompsJunior[dPTjunior+i-1][1] = teamJuniorNames.get((2*i)-1); //usedCompsJunior wird ausgefüllt
 				}
-				//System.out.println("\n");
 				if(!entryDuplicated(usedCompsJunior, 0, dPTjunior*2)) { //wenn es keine Duplikate (kein Team spielt 2mal gegen dasselbe) in usedCompsJunior im bisher ausgefüllten Bereich gibt, ist Timezone 2 fertig
 					run = false;
 				}
 			}
-			//System.out.println("Timezone 3");
 			run = true;
 			while(run) { //Timezone 3
-				Collections.shuffle(teamJuniorNames);
+				Collections.shuffle(teamJuniorNames); //teamnamenliste wird neu gemischt
 				for(int i = 1; i <= dPTjunior; i++) {
 					usedCompsJunior[(2*dPTjunior)+i-1][0] = teamJuniorNames.get((2*i)-2); //"[i-1]", da for-schleife einsbasiert
-					//System.out.println(usedCompsJunior[(2*dPTjunior)+i-1][0]);
 					usedCompsJunior[(2*dPTjunior)+i-1][1] = teamJuniorNames.get((2*i)-1);
-					//System.out.println(usedCompsJunior[(2*dPTjunior)+i-1][1]+"\n");
 					
 				}
 				if(!entryDuplicated(usedCompsJunior, 0, dPTjunior*3)) { //wenn es keine Duplikate (kein Team spielt 2mal gegen dasselbe) in usedCompsJunior im bisher ausgefüllten Bereich gibt, ist Timezone 2 fertig
@@ -149,7 +137,7 @@ public class Debatingplan {
 		
 		System.out.println(teamOnEachSide(usedCompsJunior, true));
 		for(int i = 0; i < dPTjunior*3; i++) {
-			debatesJ.add(new Debate(replaceStringJunior(usedCompsJunior[i][0]), replaceStringJunior(usedCompsJunior[i][1])));
+			debatesJ.add(new Debate(replaceStringJunior(usedCompsJunior[i][0]), replaceStringJunior(usedCompsJunior[i][1]))); //Debates werden aufgrund der Teamnamen gebildet
 		}
 		return debatesJ;
 	}
