@@ -7,11 +7,16 @@ public class Schule {
 	public Team juniorTeam;
 	public Team seniorTeam;
 	
-	public void Schule(String name, boolean junior, boolean senior, Team juniorTeam, Team seniorTeam) {
+	public Schule(String name, boolean junior, boolean senior, Team juniorTeam, Team seniorTeam) {
 		this.name=name;
 		this.hasJuniorTeam=junior;
 		this.hasSeniorTeam=senior;
 		this.juniorTeam=juniorTeam;
 		this.seniorTeam=seniorTeam;
 	}
+	
+	
+	
+	
 }
+

@@ -7,7 +7,7 @@ public class Speaker {
 	private ArrayList<Integer> Punkte;
 	private Team team;
 	
-	public void Speaker(String name, Team team) {
+	public Speaker(String name, Team team) {
 		this.name=name;
 		this.team=team;
 	}

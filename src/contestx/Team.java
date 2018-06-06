@@ -8,15 +8,19 @@ public class Team {
 	private Boolean isJunior;
 	private ArrayList<Teambewertung> bewertungen;
 	
+
 	public Team(Schule schule, boolean isJunior) {
 		this.schule=schule;
 		this.isJunior=isJunior;
 	}
-	public Team(Schule schule, ArrayList<Speaker> speaker, boolean isJunior) {
+
+	
+	public Team(Schule schule, ArrayList<Speaker> speaker, Boolean isJunior) {
 		this.schule=schule;
 		this.speaker=speaker;
 		this.isJunior=isJunior;
 	}
+
 
 	
 }
