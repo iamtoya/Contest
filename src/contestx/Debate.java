@@ -6,7 +6,7 @@ public class Debate {
 	private Zeitzone zeit;
 	private String raum;
 	
-	public void Debate(Team pro, Team con) {
+	public Debate(Team pro, Team con) {
 		this.teamCon = con;
 		this.teamPro = pro;
 		zeit = new Zeitzone(0,0,1,0);

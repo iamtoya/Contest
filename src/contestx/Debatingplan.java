@@ -5,9 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Debatingplan {
-	private ArrayList<Debate> debates1;
-	private ArrayList<Debate> debates2;
-	private ArrayList<Debate> debates3;
+	private ArrayList<Debate> debates1J;
+	private ArrayList<Debate> debates2J;
+	private ArrayList<Debate> debates3J;
+	private ArrayList<Debate> debates1S;
+	private ArrayList<Debate> debates2S;
+	private ArrayList<Debate> debates3S;
 	private Zeitzone zeitzone1;
 	private Zeitzone zeitzone2;
 	private Zeitzone zeitzone3;
@@ -34,19 +37,28 @@ public class Debatingplan {
 		dPTsenior = (int) teams_senior.size()/2; //?
 		usedCompsJunior = new String[dPTjunior*3][2];
 		usedCompsSenior = new String[dPTjunior*3][2];
+		/*for(int i = 0; i < dPTjunior; i++) { //debate-listen initialisieren
+			debates1J.add(new Debate());
+			debates2J.add(new Debate());
+			debates3J.add(new Debate());
+		}
+		for(int i = 0; i < dPTsenior; i++) {
+			debates1S.add(new Debate());
+			debates2S.add(new Debate());
+			debates3S.add(new Debate());
+		}*/
 	}
 	
 	public String[][] berechne() {
 		//Juniors
 		while(!teamOnEachSide(usedCompsJunior, true)) {
-			for(int i = 1; i <= dPTjunior; i++) { //Timezone 1
+			for(int i = 1; i <= dPTjunior; i++) { //Timezone 1; 1<=i<=dPTjunior, da i multipliziert wird.
 				usedCompsJunior[i-1][0] = teams_junior.get((2*i)-2); //"[i-1]", da i in for-schleife um 1 größer; "(2*i)-1" = Index der zugewiesenen Schule, immer: s1+s2;s3+s4...
-				//System.out.println(usedCompsJunior[i-1][0]);
 				usedCompsJunior[i-1][1] = teams_junior.get(2*i-1);
-				//System.out.println(usedCompsJunior[i-1][1] + "\n");
+				
 			}
 			//System.out.println("\n");
-		
+			
 			boolean run = true;
 			while(run) { //Timezone 2
 				Collections.shuffle(teams_junior);
