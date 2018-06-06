@@ -8,11 +8,17 @@ public class Team {
 	private Boolean isJunior;
 	private ArrayList<Teambewertung> bewertungen;
 	
-	public void Team(Schule schule, ArrayList<Speaker> speaker, Boolean isJunior) {
+	public Team(Schule schule, Boolean isJunior) {
+		this.schule=schule;
+		this.isJunior=isJunior;
+	}
+	
+	public Team(Schule schule, ArrayList<Speaker> speaker, Boolean isJunior) {
 		this.schule=schule;
 		this.speaker=speaker;
 		this.isJunior=isJunior;
 	}
+
 
 	
 }
