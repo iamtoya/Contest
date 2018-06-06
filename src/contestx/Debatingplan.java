@@ -115,7 +115,7 @@ public class Debatingplan {
 	        else {
 	            set[i] = array[i];
 	        }
-	    }//l
+	    }
 	    return false;
 	}
 	
