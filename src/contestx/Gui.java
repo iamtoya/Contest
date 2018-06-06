@@ -107,6 +107,7 @@ public class Gui extends JFrame {
 		schulen = new ArrayList<Schule>();
 		subFrame = new JFrame();
 		teams_junior = new ArrayList<Team>();
+		teams_senior = new ArrayList<Team>();
 		schulen.add(new Schule("1"));
 		schulen.add(new Schule("2"));
 		schulen.add(new Schule("3"));
@@ -117,9 +118,10 @@ public class Gui extends JFrame {
 		schulen.add(new Schule("8"));
 		for(int i = 0; i < schulen.size(); i++) {
 			teams_junior.add(new Team(schulen.get(i), true));
+			teams_senior.add(new Team(schulen.get(i), true));
 		}
 		//breakStringIfTooLong(teams_junior.get(3));
-		teams_senior = new ArrayList<Team>();
+		
 		judge_experienced = new ArrayList<String>();
 		judge_unexperienced = new ArrayList<String>();
 		debates = new ArrayList<JPanel>();
@@ -320,14 +322,9 @@ public class Gui extends JFrame {
 					panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-					ArrayList<Debate> debatesJ = berechneJunior();
-					int dPT = debatesJ.size()/3;
-					String[][] array = new String[debatesJ.size()][2];
-					for(int i = 0; i < debatesJ.size(); i++) {
-						array[i][0] = debatesJ.get(i).getTeamPro().getSchoolName();
-						array[i][1] = debatesJ.get(i).getTeamCon().getSchoolName();
-					}
-					createRelativeSubpanels(dPT, debatesJ);
+					ArrayList<Debate> debatesJ = berechne(true);
+					int dPTjunior = debatesJ.size()/3;
+					createRelativeSubpanels(dPTjunior, debatesJ);
 				}
 			}
 		});
@@ -441,14 +438,9 @@ public class Gui extends JFrame {
 		return teams_senior;
 	}
 	
-	public ArrayList<Debate> berechneJunior() {
+	public ArrayList<Debate> berechne(boolean junior) {
 		
-		ArrayList<Debate> arrayJunior = dp.berechneJunior();
-		return arrayJunior;
-	}
-public ArrayList<Debate> berechneSenior() {
-		
-		ArrayList<Debate> arrayJunior = dp.berechneJunior();
+		ArrayList<Debate> arrayJunior = dp.berechne(junior);
 		return arrayJunior;
 	}
 	public ArrayList<Schule> getSchools() {
