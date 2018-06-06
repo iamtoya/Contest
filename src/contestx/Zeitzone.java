@@ -1,6 +1,7 @@
 
 package contestx;
 
+//neu Andy
 public class Zeitzone {
 	private int startHours;
 	private int startMins;

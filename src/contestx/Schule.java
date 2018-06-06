@@ -1,5 +1,6 @@
 package contestx;
 
+//neu Andy
 public class Schule {
 	private String name;
 	private Boolean hasJuniorTeam;

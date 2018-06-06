@@ -1,6 +1,7 @@
 package contestx;
 import java.util.ArrayList;
 
+//neu Andy
 public class Teambewertung {
 	private int gesamtpunkte;
 	private Boolean pro;

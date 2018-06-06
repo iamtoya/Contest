@@ -1,5 +1,5 @@
 package contestx;
-
+//neu Andy
 public class Debate {
 	private Team teamPro;
 	private Team teamCon;

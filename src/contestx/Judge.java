@@ -1,5 +1,6 @@
 package contestx;
 import java.util.ArrayList;
+//neu Andy
 
 public class Judge {
 	private String name;
