@@ -434,10 +434,10 @@ public class Gui extends JFrame {
 		}
 		return fin.toString();
 	}
-	public ArrayList<Team> getJuniorSchools() {
+	public ArrayList<Team> getJuniorTeams() {
 		return teams_junior;
 	}
-	public ArrayList<Team> getSeniorSchools() {
+	public ArrayList<Team> getSeniorTeams() {
 		return teams_senior;
 	}
 	
@@ -445,5 +445,8 @@ public class Gui extends JFrame {
 		
 		String[][] array = dp.berechne();
 		return array;
+	}
+	public ArrayList<Schule> getSchools() {
+		return schulen;
 	}
 }

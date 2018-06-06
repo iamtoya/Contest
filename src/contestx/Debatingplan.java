@@ -17,32 +17,35 @@ public class Debatingplan {
 	//  obiges nach Modellierung
 	private Gui gui;
 	private ArrayList<Team> teams_junior;
+	private ArrayList<String> teamJuniorNames;
 	private int dPTjunior;
 	private ArrayList<Team> teams_senior;
+	private ArrayList<String> teamSeniorNames;
 	private int dPTsenior;
-	private Team[][] usedCompsJunior; //hier werden die verwendeten Kompositionen gespeichert
-	private Team[][] usedCompsSenior;
+	private String[][] usedCompsJunior; //hier werden die verwendeten Kompositionen gespeichert
+	private String[][] usedCompsSenior;
 	
 	public Debatingplan(Gui gui) {
 		this.gui = gui; //referenzieren (für Datenfluss später)
-		teams_junior = this.gui.getJuniorSchools(); //Datenfluss
-		Collections.shuffle(teams_junior); //Reihenfolge randomisieren
-		dPTjunior = (int) teams_junior.size()/2; //?
-		teams_senior = this.gui.getSeniorSchools(); //Datenfluss
-		Collections.shuffle(teams_senior); //Reihenfolge randomisieren
-		dPTsenior = (int) teams_senior.size()/2; //?
-		usedCompsJunior = new Team[dPTjunior*3][2];
-		usedCompsSenior = new Team[dPTjunior*3][2];
-		/*for(int i = 0; i < dPTjunior; i++) { //debate-listen initialisieren
-			debates1J.add(new Debate());
-			debates2J.add(new Debate());
-			debates3J.add(new Debate());
+		teams_junior = this.gui.getJuniorTeams();
+		teamJuniorNames = new ArrayList<String>(); 
+		for(int i = 0; i < teams_junior.size(); i++) {
+			teamJuniorNames.add(teams_junior.get(i).getSchoolName());
 		}
-		for(int i = 0; i < dPTsenior; i++) {
-			debates1S.add(new Debate());
-			debates2S.add(new Debate());
-			debates3S.add(new Debate());
-		}*/
+		Collections.shuffle(teamJuniorNames); //Reihenfolge randomisieren
+		dPTjunior = (int) teamJuniorNames.size()/2; //?
+		
+		teams_senior = this.gui.getSeniorTeams();
+		teamSeniorNames = new ArrayList<String>();
+		for(int i = 0; i < teams_senior.size(); i++) {
+			teamSeniorNames.add(teams_senior.get(i).getSchoolName());
+		}
+		Collections.shuffle(teamSeniorNames); //Reihenfolge randomisieren
+		dPTsenior = (int) teamSeniorNames.size()/2; //?
+		usedCompsJunior = new String[dPTjunior*3][2];
+		usedCompsSenior = new String[dPTjunior*3][2];
+		
+		schulen = this.gui.getSchools();
 		
 	}
 	
@@ -50,19 +53,19 @@ public class Debatingplan {
 		//Juniors
 		while(!teamOnEachSide(usedCompsJunior, true)) {
 			for(int i = 1; i <= dPTjunior; i++) { //Timezone 1; 1<=i<=dPTjunior, da i multipliziert wird.
-				usedCompsJunior[i-1][0] = teams_junior.get((2*i)-2); //"[i-1]", da i in for-schleife um 1 größer; "(2*i)-1" = Index der zugewiesenen Schule, immer: s1+s2;s3+s4...
-				usedCompsJunior[i-1][1] = teams_junior.get(2*i-1);
-				debatesJ.add(new Debate(usedCompsJunior[i-1][0], usedCompsJunior[i-1][1]));
+				usedCompsJunior[i-1][0] = teamJuniorNames.get((2*i)-2); //"[i-1]", da i in for-schleife um 1 größer; "(2*i)-1" = Index der zugewiesenen Schule, immer: s1+s2;s3+s4...
+				usedCompsJunior[i-1][1] = teamJuniorNames.get(2*i-1);
+				debatesJ.add(new Debate(replaceStringJunior(usedCompsJunior[i-1][0]), replaceStringJunior(usedCompsJunior[i-1][1])));
 			}
 			//System.out.println("\n");
 			
 			boolean run = true;
 			while(run) { //Timezone 2
-				Collections.shuffle(teams_junior);
+				Collections.shuffle(teamJuniorNames);
 				for(int i = 1; i <= dPTjunior; i++) {
-					usedCompsJunior[dPTjunior+i-1][0] = teams_junior.get((2*i)-2); //"[i-1]", da for-schleife einsbasiert
+					usedCompsJunior[dPTjunior+i-1][0] = teamJuniorNames.get((2*i)-2); //"[i-1]", da for-schleife einsbasiert
 					//System.out.println(usedCompsJunior[dPTjunior+i-1][0]);
-					usedCompsJunior[dPTjunior+i-1][1] = teams_junior.get((2*i)-1);
+					usedCompsJunior[dPTjunior+i-1][1] = teamJuniorNames.get((2*i)-1);
 					//System.out.println(usedCompsJunior[dPTjunior+i-1][1]+"\n");
 				}
 				//System.out.println("\n");
@@ -73,11 +76,11 @@ public class Debatingplan {
 			//System.out.println("Timezone 3");
 			run = true;
 			while(run) { //Timezone 3
-				Collections.shuffle(teams_junior);
+				Collections.shuffle(teamJuniorNames);
 				for(int i = 1; i <= dPTjunior; i++) {
-					usedCompsJunior[(2*dPTjunior)+i-1][0] = teams_junior.get((2*i)-2); //"[i-1]", da for-schleife einsbasiert
+					usedCompsJunior[(2*dPTjunior)+i-1][0] = teamJuniorNames.get((2*i)-2); //"[i-1]", da for-schleife einsbasiert
 					//System.out.println(usedCompsJunior[(2*dPTjunior)+i-1][0]);
-					usedCompsJunior[(2*dPTjunior)+i-1][1] = teams_junior.get((2*i)-1);
+					usedCompsJunior[(2*dPTjunior)+i-1][1] = teamJuniorNames.get((2*i)-1);
 					//System.out.println(usedCompsJunior[(2*dPTjunior)+i-1][1]+"\n");
 				}
 				if(!entryDuplicated(usedCompsJunior, 0, dPTjunior*3)) { //wenn es keine Duplikate (kein Team spielt 2mal gegen dasselbe) in usedCompsJunior im bisher ausgefüllten Bereich gibt, ist Timezone 2 fertig
@@ -136,12 +139,19 @@ public class Debatingplan {
 			}
 		}
 		if(juniorTeams) {
-			if((teamsPro.size() == teams_junior.size()) && (teamsCon.size() == teams_junior.size())) return true;
+			if((teamsPro.size() == teamJuniorNames.size()) && (teamsCon.size() == teamJuniorNames.size())) return true;
 			else return false;
 		}
 		else {
-			if((teamsPro.size() == teams_senior.size()) && (teamsCon.size() == teams_senior.size())) return true;
+			if((teamsPro.size() == teamSeniorNames.size()) && (teamsCon.size() == teamSeniorNames.size())) return true;
 			else return false;
 		}
+	}
+	public Team replaceStringJunior(String s) { //findet das zum Teamnamen zugehörige Team
+		int i = 0;
+		while(teams_junior.get(i).getSchoolName().equals(s)) {
+			i++;
+		}
+		return teams_junior.get(i);
 	}
 }
