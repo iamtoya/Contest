@@ -1,5 +1,6 @@
 package contestx;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +31,6 @@ public class Debatingplan {
 		teams_junior = this.gui.getJuniorTeams(); //Datenfluss: zur Liste der im GUI gespeicherten Teams wird hier referenziert
 		teamJuniorNames = new ArrayList<String>(); 
 		for(int i = 0; i < teams_junior.size(); i++) {
-			teamJuniorNames.add(teams_junior.get(i).getSchule().getName());
 			teamJuniorNames.add(teams_junior.get(i).getSchule().getName()); //Strings werden hier verwendet, da sie besser in der berechne()-Methode anwendbar sind, als Teams
 		Collections.shuffle(teamJuniorNames); //Reihenfolge randomisieren
 		dPTjunior = (int) teamJuniorNames.size()/2; //pro Zeitzone können nur die Hälfte (abgerundet) alles Teams in verschiedenen Debates sein, da zwei jener eins jenes besuchen
@@ -43,8 +43,7 @@ public class Debatingplan {
 		Collections.shuffle(teamSeniorNames); //Reihenfolge randomisieren
 		dPTsenior = (int) teamSeniorNames.size()/2; //?
 		usedCompsJunior = new String[dPTjunior*3][2];
-		usedCompsSenior = new String[dPTjunior*3][2];
-		
+		usedCompsSenior = new String[dPTsenior*3][2];
 		schulen = this.gui.getSchools();
 		debatesJ = new ArrayList<Debate>(); //die nachher auszugebende Liste der Debates
 		debatesS = new ArrayList<Debate>();
@@ -256,5 +255,11 @@ public class Debatingplan {
 			i++;
 		}
 		return teams_senior.get(i);
+	}
+	public void reset() {
+		debatesJ.removeAll(debatesJ);
+		debatesS.removeAll(debatesS);
+		usedCompsJunior = new String[dPTjunior*3][2];
+		usedCompsSenior = new String[dPTsenior*3][2];
 	}
 }

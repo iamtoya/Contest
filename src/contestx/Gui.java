@@ -319,17 +319,11 @@ public class Gui extends JFrame {
 					panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-					//ArrayList<Debate> debatesJ = berechne();
-					//int dPT = debatesJ.size()/3;
-					//String[][] array = new String[debatesJ.size()][2];
-					//for(int i = 0; i < debatesJ.size(); i++) {
-						//array[i][0] = debatesJ.get(i).getTeamPro().getSchule().getName();
-						//array[i][1] = debatesJ.get(i).getTeamCon().getSchule().getName();
-					//}
-					//createRelativeSubpanels(dPT, debatesJ);
+					
 					ArrayList<Debate> debatesJ = berechne(true);
 					int dPTjunior = debatesJ.size()/3;
 					createRelativeSubpanels(dPTjunior, debatesJ);
+					dPTjunior = 0;
 				}
 			}
 		});
@@ -452,7 +446,11 @@ public class Gui extends JFrame {
 	}
 	
 	public ArrayList<Debate> berechne(boolean junior) {
-		
+		//Panels zurücksetzen(mehrfaches drücken)
+		panel.removeAll();
+		panel_2.removeAll();
+		panel_1.removeAll();
+		dp.reset();
 		ArrayList<Debate> arrayJunior = dp.berechne(junior);
 		return arrayJunior;
 	}
