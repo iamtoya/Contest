@@ -327,7 +327,7 @@ public class Gui extends JFrame {
 						array[i][0] = debatesJ.get(i).getTeamPro().getSchoolName();
 						array[i][1] = debatesJ.get(i).getTeamCon().getSchoolName();
 					}
-					createRelativeSubpanels(dPT, array);
+					createRelativeSubpanels(dPT, debatesJ);
 				}
 			}
 		});
@@ -348,7 +348,7 @@ public class Gui extends JFrame {
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 	}
-	public void createRelativeSubpanels(int debatesPerTime, String[][] array) {
+	public void createRelativeSubpanels(int debatesPerTime, ArrayList<Debate> array) {
 		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*150, panel.getHeight());
 		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*150, panel_1.getHeight());
 		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*150, panel_2.getHeight());
@@ -360,12 +360,12 @@ public class Gui extends JFrame {
 			debates.get(i).setLayout(layout);
 			debates.get(i).add(new JButton("Room Nr."), BorderLayout.NORTH);
 			
-			JButton westB = new JButton("<html>Pro<br/>" + array[i][0] + "</html>");
+			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchoolName() + "</html>");
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			debates.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150));
 			
-			JButton eastB = new JButton("<html>Con<br/>" + array[i][1] + "</html>");
+			JButton eastB = new JButton("<html>Con<br/>" + array.get(i).getTeamCon().getSchoolName() + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT);
 			debates.get(i).add(eastB, BorderLayout.EAST);
 			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(75, 150));
