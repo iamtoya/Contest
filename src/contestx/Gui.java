@@ -5,11 +5,13 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -75,6 +77,9 @@ public class Gui extends JFrame {
 	private final JLabel label_8 = new JLabel(":");
 	private final JLabel label_9 = new JLabel("von:");
 	private final JLabel label_10 = new JLabel("bis:");
+	
+	//Attribute für showEnterPointsDialog (für den ActionListener)
+	private Team selectedTeam;
 
 	/**
 	 * Launch the application.
@@ -117,8 +122,12 @@ public class Gui extends JFrame {
 		schulen.add(new Schule("8"));
 		for(int i = 0; i < schulen.size(); i++) {
 			teams_junior.add(new Team(schulen.get(i), true));
+			teams_junior.get(i).setSpeakerAt(0,new Speaker("Tim", teams_junior.get(i)));
+			teams_junior.get(i).setSpeakerAt(1,new Speaker("Joe", teams_junior.get(i)));
+			teams_junior.get(i).setSpeakerAt(2,new Speaker("Ann", teams_junior.get(i)));
 			teams_senior.add(new Team(schulen.get(i), true));
 		}
+		teams_junior.get(2).setSpeakerAt(3, new Speaker("Hans", teams_junior.get(2)));
 		//breakStringIfTooLong(teams_junior.get(3));
 		teams_senior = new ArrayList<Team>();
 		judges = new ArrayList<Judge>();
@@ -324,6 +333,7 @@ public class Gui extends JFrame {
 					int dPTjunior = debatesJ.size()/3;
 					createRelativeSubpanels(dPTjunior, debatesJ);
 					dPTjunior = 0;
+					showEnterPointsDialog();
 				}
 			}
 		});
@@ -357,7 +367,7 @@ public class Gui extends JFrame {
 			debates.get(i).add(new JButton("Room Nr."), BorderLayout.NORTH);
 			
 			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
-			westB.setHorizontalAlignment(SwingConstants.LEFT);	
+			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			debates.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
 			
@@ -418,6 +428,65 @@ public class Gui extends JFrame {
 			JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+	
+	//Methode zur Eingabe der Punkte
+	public void showEnterPointsDialog() {
+		Team[] teams = new Team[teams_junior.size()];  //JComboBox requires an array...
+		String[] team_names = new String[teams.length];//...of String
+		for(int i = 0; i < teams.length; i++) { //Arrays werden gefüllt
+			teams[i] = teams_junior.get(i);
+			team_names[i] = teams[i].getSchule().getName();
+		}
+		JComboBox team = new JComboBox(team_names);
+		selectedTeam = teams[team.getSelectedIndex()];
+		Speaker[] speakers = new Speaker[selectedTeam.getAllSpeaker().size()];
+		String[] speaker_names = new String[speakers.length];
+		for(int i = 0; i < speakers.length; i++) { //Speaker-Array wird gefüllt
+			speakers[i] = selectedTeam.getAllSpeaker().get(i);
+			speaker_names[i] = speakers[i].getName();
+		}
+		JComboBox[] speaker = {new JComboBox(speaker_names), new JComboBox(speaker_names), new JComboBox(speaker_names), new JComboBox(speaker_names)}; //JLists are to enter the Speaker
+		
+		JTextField[] points = {new JTextField(), new JTextField(), new JTextField(), new JTextField()}; //JTextFields are to enter the points
+		
+		team.addActionListener(new ActionListener() { //wenn Team geändert wird, werden die auswählbaren Speaker-Namen ebenfalls geändert
+			public void actionPerformed(ActionEvent e) {
+				selectedTeam = teams[team.getSelectedIndex()]; //ActionListener benötigt finale Variablen, daher ist selectedTeam als Attribut definiert
+				for(int i = 0; i < speakers.length; i++) { //Speaker-Array wird mit neuen Speakern gefüllt
+					speakers[i] = selectedTeam.getAllSpeaker().get(i);
+					speaker_names[i] = speakers[i].getName();
+				}
+				for(int i = 0; i < speaker.length; i++) {
+					speaker[i].removeAllItems();
+					for(int j = 0; j < speaker_names.length; j++) {
+						speaker[i].addItem(speaker_names[j]);
+					}
+				}
+			}
+		});
+		
+		subFrame.setVisible(true);
+		subFrame.setBounds(500, 150, 500, 500);
+		JPanel subFrameCP = new JPanel();
+		subFrame.setContentPane(subFrameCP);
+		subFrameCP.setLayout(new GridLayout(0, 2, 20, 0)); //2 Spalten
+		
+		JPanel subPanel1 = new JPanel();
+		subFrameCP.add(subPanel1);
+		subPanel1.setLayout(new GridLayout(5, 0, 0, 20)); //4 Zeilen
+		
+		JPanel subPanel2 = new JPanel();
+		subFrameCP.add(subPanel2);
+		subPanel2.setLayout(new GridLayout(5, 0, 0, 20)); //4 Zeilen
+		
+		subPanel1.add(new JLabel("Select Team:"));
+		subPanel2.add(team); //fügt Team-Liste auf rechter Seite hinzu
+		for(int i = 0; i < speaker.length; i++) {
+			subPanel1.add(speaker[i]);
+			subPanel2.add(points[i]);
+		}
+	}
+	
 	public String breakStringIfTooLong(String s) {
 		
 		String temp = "";

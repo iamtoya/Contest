@@ -13,6 +13,10 @@ public class Team {
 	public Team(Schule schule, boolean isJunior) {
 		this.schule=schule;
 		this.isJunior=isJunior;
+		speaker = new ArrayList<Speaker>();
+		for(int i = 0; i < 9; i++) { //9 = max Anzahl Speaker pro Team
+			speaker.add(new Speaker("", this)); //verhindert durch setSpeakerAt() ausgelöste IndexOutOfBoundsException
+		}
 	}
 
 	
