@@ -474,7 +474,7 @@ public class Gui extends JFrame {
 					speakers[i] = selectedTeam.getAllSpeaker().get(i);
 					speaker_names[i] = speakers[i].getName();
 				}
-				for(int i = 0; i < speaker.length; i++) {
+				for(int i = 0; i < speaker.length; i++) { //JComboBoxes werden erneuert
 					speaker[i].removeAllItems();
 					for(int j = 0; j < speaker_names.length; j++) {
 						speaker[i].addItem(speaker_names[j]);
