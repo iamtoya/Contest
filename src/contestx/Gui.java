@@ -110,6 +110,8 @@ public class Gui extends JFrame {
 		
 		schulen = new ArrayList<Schule>();
 		subFrame = new JFrame();
+		subFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE); //resettet sich beim Schließen
+		
 		teams_junior = new ArrayList<Team>();
 		teams_senior = new ArrayList<Team>();
 		schulen.add(new Schule("1"));
@@ -211,10 +213,7 @@ public class Gui extends JFrame {
 		//New-Button macht den Rest der contentPane sichtbar
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//zu füllen
-				
-				//createRelativeSubpanels(5);
-				
+				showEnterPointsDialog();
 			}
 		});
 		
@@ -405,8 +404,13 @@ public class Gui extends JFrame {
 				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		else if(s.length() == 0) {
-			JOptionPane.showMessageDialog(subFrame, "Enter a school name", "Error Message", JOptionPane.ERROR_MESSAGE);
+		try{
+			if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
+				JOptionPane.showMessageDialog(subFrame, "Enter a school name", "Error Message", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		catch(NullPointerException e) {
+			
 		}
 	}
 	
@@ -424,8 +428,13 @@ public class Gui extends JFrame {
 				judges.add(new Judge(s, true));
 			}			
 		}
-		else if(s.length() == 0) {
-			JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
+		try{ 
+			if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
+				JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		catch(NullPointerException e) {
+			
 		}
 	}
 	
@@ -448,6 +457,15 @@ public class Gui extends JFrame {
 		JComboBox[] speaker = {new JComboBox(speaker_names), new JComboBox(speaker_names), new JComboBox(speaker_names), new JComboBox(speaker_names)}; //JLists are to enter the Speaker
 		
 		JTextField[] points = {new JTextField(), new JTextField(), new JTextField(), new JTextField()}; //JTextFields are to enter the points
+		
+		JButton[] okCancel = {new JButton("Okay"), new JButton("Cancel")};
+		okCancel[0].setBackground(Color.GREEN);
+		okCancel[1].setBackground(Color.RED);
+		okCancel[1].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				subFrame.dispose(); //resettet subFrame und schließt ihn
+			}
+		});
 		
 		team.addActionListener(new ActionListener() { //wenn Team geändert wird, werden die auswählbaren Speaker-Namen ebenfalls geändert
 			public void actionPerformed(ActionEvent e) {
@@ -473,11 +491,11 @@ public class Gui extends JFrame {
 		
 		JPanel subPanel1 = new JPanel();
 		subFrameCP.add(subPanel1);
-		subPanel1.setLayout(new GridLayout(5, 0, 0, 20)); //4 Zeilen
+		subPanel1.setLayout(new GridLayout(6, 0, 0, 20)); //4 Zeilen
 		
 		JPanel subPanel2 = new JPanel();
 		subFrameCP.add(subPanel2);
-		subPanel2.setLayout(new GridLayout(5, 0, 0, 20)); //4 Zeilen
+		subPanel2.setLayout(new GridLayout(6, 0, 0, 20)); //4 Zeilen
 		
 		subPanel1.add(new JLabel("Select Team:"));
 		subPanel2.add(team); //fügt Team-Liste auf rechter Seite hinzu
@@ -485,9 +503,11 @@ public class Gui extends JFrame {
 			subPanel1.add(speaker[i]);
 			subPanel2.add(points[i]);
 		}
+		subPanel1.add(okCancel[0]);
+		subPanel2.add(okCancel[1]);
 	}
 	
-	public String breakStringIfTooLong(String s) {
+	public String breakStringIfTooLong(String s) { //funktioniert noch nicht!
 		
 		String temp = "";
 		char[] str = s.toCharArray();
