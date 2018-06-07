@@ -2,8 +2,10 @@ CHANGELOG:
 
 Datum		Name			Was?
 
-30.5.18		Jonas			Grundgerüst der GUI
-30.5.18		Andreas			Grundgerüst der Klassen eingeführt
-5.6.18		Andreas			Klassenattribute und Konstruktoren nach Modellierung eingeführt
-6.6.18		Jonas			Überarbeitung von GUI und Debatingplan nach Modellierung, BerechnenMethode verfeinert
+30.5.18		Jonas			GrundgerÃ¼st der GUI
+30.5.18		Andreas			GrundgerÃ¼st der Klassen eingefÃ¼hrt
+5.6.18		Andreas			Klassenattribute und Konstruktoren nach Modellierung eingefÃ¼hrt
+6.6.18		Jonas			Ãœberarbeitung von GUI und Debatingplan nach Modellierung, BerechnenMethode verfeinert
 6.6.18		Andreas			Get und SetMethoden, Verfeinerung von GUI (haupts. Judge-Zeug)
+7.6.18    Jonas     gui und team angepasst, damit ein punkte-dialog mit auswÃ¤hlbaren Teams und sich entsprechend
+                    anpassenden Speakern erscheint.
