@@ -43,8 +43,9 @@ public class Gui extends JFrame {
 	private ArrayList<Judge> judges;
 	private ArrayList<JPanel> debates; //die Debates werden hier vereinfacht als Panels betrachtet; Liste aller im Plan vorkommenden Debates als Panels
 	private Debatingplan dp;
+	private Verwaltung verwaltung;
 	
-	private JButton btnNew = new JButton("New");
+	private JButton btnNew = new JButton("Evaluate");
 	private JButton btnTimezone = new JButton("Timezone 1");
 	private JButton btnTimezone_1 = new JButton("Timezone 2");
 	private JButton btnTimezone_2 = new JButton("Timezone 3");
@@ -136,6 +137,7 @@ public class Gui extends JFrame {
 		debates = new ArrayList<JPanel>();
 		
 		dp = new Debatingplan(this);
+		verwaltung = new Verwaltung(dp);
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
 	//	debates.get(0).setLayout(new BorderLayout(2, 2));;
@@ -337,6 +339,15 @@ public class Gui extends JFrame {
 		});
 		btnBerechne.setBounds(1035, 51, 115, 29);
 		contentPane.add(btnBerechne);
+		
+		JButton btnManage = new JButton("Manage");
+		btnManage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				manage();
+			}
+		});
+		btnManage.setBounds(716, 15, 156, 81);
+		contentPane.add(btnManage);
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
@@ -546,5 +557,9 @@ public class Gui extends JFrame {
 	}
 	public ArrayList<Schule> getSchools() {
 		return schulen;
+	}
+	
+	public void manage() {
+		verwaltung.anzeigen();		
 	}
 }
