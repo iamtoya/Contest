@@ -45,7 +45,14 @@ public class Team {
 	}
 	
 	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone) {
-		
+		for(int i = 0; i < speakers.length; i++) { //i = 1.,2.,3.,Reply-Speaker
+			int j = 0;
+			while(!speaker.get(j).equals(speakers[i])) {
+				j++;
+			}
+			if(i != 3) speaker.get(j).setPunkteIn(zeitzone.getNumber()-1, punkte[i]); //-1, da speaker nullbasiert, zeitzonenNummer nicht
+			else speaker.get(j).setPunkteIn(zeitzone.getNumber()-1+3, punkte[i]);
+		}
 	}
 	
 	public void setSchule(Schule schule) {

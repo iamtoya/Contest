@@ -13,6 +13,9 @@ public class Speaker {
 		this.name=name;
 		this.team=team;
 		punkte = new ArrayList<Integer>();
+		for(int i = 0; i < 6; i++) { //verhindert durch setPunkteIn() ausgelöste IndexOutOfBoundsException
+			punkte.add(0);
+		}
 	}
 	
 		
@@ -21,12 +24,7 @@ public class Speaker {
 	}
 	
 	public int getPunkteIn(int index) {
-		if(index<3) {
-			return this.getPunkteIn(index);
-		}
-		else {
-			return(-1);
-		}
+		return punkte.get(index);
 	}
 	
 	public Team getTeam() {

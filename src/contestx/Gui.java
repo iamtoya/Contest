@@ -385,18 +385,23 @@ public class Gui extends JFrame {
 					while(!debates.get(j).getComponent(1).equals(westB)) {
 						j++;
 					}
-					if(debatesPerTime > j) showEnterPointsDialog(array.get(j).getTeamPro(), 
-							new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
-										 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
+					try {
+						if(debatesPerTime > j) showEnterPointsDialog(array.get(j).getTeamPro(), 
+								new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
+										 	 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
 					
-					else if(j > debatesPerTime) {
-						if(j > debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamPro(), 
-								new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
-											 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 3)); //Zeitzone 3
+						else if(j > debatesPerTime) {
+							if(j > debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamPro(), 
+									new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
+											 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 3)); //Zeitzone 3
 						
-						else showEnterPointsDialog(array.get(j).getTeamPro(), 
-								new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
-											 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 2)); //Zeitzone 2
+							else showEnterPointsDialog(array.get(j).getTeamPro(), 
+									new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
+											 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 2)); //Zeitzone 2
+						}
+					}
+					catch(NumberFormatException ex) {
+						JOptionPane.showMessageDialog(subFrame, "You must enter values to the timezones", "Error Message", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			});
@@ -496,8 +501,8 @@ public class Gui extends JFrame {
 		}
 		okCancel[0].addActionListener(new ActionListener() { //Okay-Button
 			public void actionPerformed(ActionEvent e) {
+				boolean everythingCorrect = true;
 				try {
-					boolean everythingCorrect = true;
 					for(int i = 0; i < 4; i++) {
 						takenSpeakers[i] = new Speaker("", selectedTeam); //takenSpeaker wird resettet, damit bei mehrfachen Eingabeversuchen kein Fehler entsteht
 						givenPoints[i] = Integer.parseInt(points[i].getText());
@@ -510,7 +515,6 @@ public class Gui extends JFrame {
 						if(takenSpeakers[i].getName() == "") { //wenn kein existenter Speaker ausgewählt wurde
 							everythingCorrect = false;
 						}
-						System.out.println(takenSpeakers[i].getName() + " " + givenPoints[i]);
 					}
 					if(everythingCorrect) subFrame.dispose(); //resettet subFrame und schließt ihn
 					else {
@@ -518,9 +522,17 @@ public class Gui extends JFrame {
 					}
 				}
 				catch(NumberFormatException ex) {
+					everythingCorrect = false;
 					JOptionPane.showMessageDialog(subFrame, "Not every field was filled correctly.\nNotice: You can't use decimal numbers.", "Error Message", JOptionPane.ERROR_MESSAGE);
 				}
-				selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone); //Punkte in den Teams eintragen
+				if(everythingCorrect) {
+						selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone); //Punkte in den Teams eintragen
+					for(int i = 0; i < selectedTeam.getAllSpeaker().size(); i++) {
+						for(int j = 0; j < 6; j++) {
+							System.out.println(selectedTeam.getAllSpeaker().get(i).getName() + " " + selectedTeam.getAllSpeaker().get(i).getPunkteIn(j));
+						}
+					}
+				}
 			}
 		});
 		
