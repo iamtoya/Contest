@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 public class Speaker {
 	private String name;
-	private ArrayList<Integer> punkte;
+	private ArrayList<Integer> punkte; //Aufgebaut wie folgt: index: 		0			 ;			  1			 ;			2			 ;			3		 ;			4		 ;			5
+														//Bedeutung: Zeitzone1, 1. Speech;  Zeitzone 2, 1. Speech;  Zeitzone 3, 1. Speech;  Zeitzone 1, Reply;  Zeitzone 2, Reply;  Zeitzone 3, Reply
 	private Team team;
 	
 	public Speaker(String name, Team team) {
 		this.name=name;
 		this.team=team;
+		punkte = new ArrayList<Integer>();
 	}
 	
 		
