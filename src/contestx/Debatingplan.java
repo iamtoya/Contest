@@ -257,9 +257,18 @@ public class Debatingplan {
 		return teams_senior.get(i);
 	}
 	public void reset() {
-		debatesJ.removeAll(debatesJ);
-		debatesS.removeAll(debatesS);
-		usedCompsJunior = new String[dPTjunior*3][2];
-		usedCompsSenior = new String[dPTsenior*3][2];
+		debatesJ.clear();
+		debatesS.clear();
+		for(int i = 0; i < usedCompsJunior.length; i++) {
+			for(int j = 0; j < usedCompsJunior[0].length; j++) {
+				usedCompsJunior[i][j] = null;
+			}
+		}
+		
+		for(int i = 0; i < usedCompsSenior.length; i++) {
+			for(int j = 0; j < usedCompsSenior[0].length; j++) {
+				usedCompsSenior[i][j] = null;
+			}
+		}
 	}
 }

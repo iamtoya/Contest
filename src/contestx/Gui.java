@@ -53,7 +53,7 @@ public class Gui extends JFrame {
 	private JPanel panel_1 = new JPanel();
 	private JPanel panel_2 = new JPanel();
 	
-	private JFrame subFrame;
+	private JFrame subFrame; //für alle möglichen Dialogfelder
 	private JTextField txtVon;
 	private JTextField textField;
 	private JTextField textField_2;
@@ -332,7 +332,6 @@ public class Gui extends JFrame {
 					int dPTjunior = debatesJ.size()/3;
 					createRelativeSubpanels(dPTjunior, debatesJ);
 					dPTjunior = 0;
-					showEnterPointsDialog();
 				}
 			}
 		});
@@ -539,10 +538,11 @@ public class Gui extends JFrame {
 		panel.removeAll();
 		panel_2.removeAll();
 		panel_1.removeAll();
-		debates.removeAll(debates);
+		debates.clear();
 		dp.reset();
-		ArrayList<Debate> arrayJunior = dp.berechne(junior);
-		return arrayJunior;
+		//berechnen lassen
+		ArrayList<Debate> array = dp.berechne(junior);
+		return array;
 	}
 	public ArrayList<Schule> getSchools() {
 		return schulen;
