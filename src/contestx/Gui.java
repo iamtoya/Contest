@@ -379,10 +379,11 @@ public class Gui extends JFrame {
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			debates.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
+			//TeamPro-button clicked
 			westB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int j = 0;
-					while(!debates.get(j).getComponent(1).equals(westB)) {
+					while(!debates.get(j).getComponent(1).equals(westB)) { //findet den index des entsprechenden array-eintrags zum button 
 						j++;
 					}
 					try {
@@ -409,6 +410,33 @@ public class Gui extends JFrame {
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			debates.get(i).add(eastB, BorderLayout.EAST);
 			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(75, 150)); 
+			//TeamPro-button clicked
+			eastB.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int j = 0;
+					while(!debates.get(j).getComponent(2).equals(eastB)) { //findet den index des entsprechenden array-eintrags zum button 
+						j++;
+					}
+					try {
+						if(debatesPerTime > j) showEnterPointsDialog(array.get(j).getTeamCon(), 
+								new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
+										 	 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
+					
+						else if(j > debatesPerTime) {
+							if(j > debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamCon(), 
+									new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
+											 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 3)); //Zeitzone 3
+						
+							else showEnterPointsDialog(array.get(j).getTeamCon(), 
+									new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
+											 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 2)); //Zeitzone 2
+						}
+					}
+					catch(NumberFormatException ex) {
+						JOptionPane.showMessageDialog(subFrame, "You must enter values to the timezones", "Error Message", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			});
 			
 			debates.get(i).add(new JButton("Judges"), BorderLayout.SOUTH);
 		}
@@ -494,12 +522,15 @@ public class Gui extends JFrame {
 				subFrame.dispose(); //resettet subFrame und schließt ihn
 			}
 		});
+		//Attribute für okay-Button
 		int[] givenPoints = new int[4]; //speichert die gegebenen Punkte
 		Speaker[] takenSpeakers = new Speaker[4];
 		for(int i = 0; i < 4; i++) { //takenSpeakers füllen, um NullPointerException zu verhindern
 			takenSpeakers[i] = new Speaker("", selectedTeam);
 		}
-		okCancel[0].addActionListener(new ActionListener() { //Okay-Button
+		
+		//Okay-Button
+		okCancel[0].addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				boolean everythingCorrect = true;
 				try {
@@ -527,7 +558,7 @@ public class Gui extends JFrame {
 				}
 				if(everythingCorrect) {
 						selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone); //Punkte in den Teams eintragen
-					for(int i = 0; i < selectedTeam.getAllSpeaker().size(); i++) {
+					for(int i = 0; i < selectedTeam.getAllSpeaker().size(); i++) { //KonsolenAusgabe
 						for(int j = 0; j < 6; j++) {
 							System.out.println(selectedTeam.getAllSpeaker().get(i).getName() + " " + selectedTeam.getAllSpeaker().get(i).getPunkteIn(j));
 						}
@@ -536,6 +567,7 @@ public class Gui extends JFrame {
 			}
 		});
 		
+		//JFrame-Aufbau:
 		subFrame.setVisible(true);
 		subFrame.setBounds(500, 150, 500, 500);
 		JPanel subFrameCP = new JPanel();
@@ -550,9 +582,7 @@ public class Gui extends JFrame {
 		subFrameCP.add(subPanel2);
 		subPanel2.setLayout(new GridLayout(5, 0, 0, 20)); //5 Zeilen
 		
-		//subPanel1.add(new JLabel("Select Team:"));
-		//subPanel2.add(team); //fügt Team-Liste auf rechter Seite hinzu
-		for(int i = 0; i < speaker.length; i++) {
+		for(int i = 0; i < speaker.length; i++) { //fügt JComboBoxes und JTextFields den Panels hinzu
 			subPanel1.add(speaker[i]);
 			subPanel2.add(points[i]);
 		}
@@ -605,5 +635,30 @@ public class Gui extends JFrame {
 	
 	public void manage() {
 		verwaltung.anzeigen();		
+	}
+	
+	public void punkteEintragen(JButton caller, ArrayList<Debate> array, int debatesPerTime, boolean pro) {
+		int j = 0;
+		while(!debates.get(j).getComponent(1).equals(caller)) {
+			j++;
+		}
+		try {
+			if(debatesPerTime > j) showEnterPointsDialog(array.get(j).getTeamPro(), 
+					new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
+							 	 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
+		
+			else if(j > debatesPerTime) {
+				if(j > debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamPro(), 
+						new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
+								 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 3)); //Zeitzone 3
+			
+				else showEnterPointsDialog(array.get(j).getTeamPro(), 
+						new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
+								 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 2)); //Zeitzone 2
+			}
+		}
+		catch(NumberFormatException ex) {
+			JOptionPane.showMessageDialog(subFrame, "You must enter values to the timezones", "Error Message", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }
