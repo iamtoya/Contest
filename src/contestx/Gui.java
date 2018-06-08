@@ -446,6 +446,7 @@ public class Gui extends JFrame {
 			panel_2.add(debates.get(i+debatesPerTime+debatesPerTime));
 		}
 	}
+	
 	public void showEnterSchoolDialog() {
 		JCheckBox[] chckbxs = {new JCheckBox("has junior team"), new JCheckBox("has senior team")}; //2 CheckBoxen fragen ab, welche Teams die eingetragene Schule bereitstellt
 		Object[] options = {"Enter school name:", chckbxs};
