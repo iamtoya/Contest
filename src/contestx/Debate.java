@@ -9,7 +9,7 @@ public class Debate {
 	public Debate(Team pro, Team con) {
 		this.teamCon = con;
 		this.teamPro = pro;
-		zeit = new Zeitzone(0,0,1,0);
+		//zeit = new Zeitzone(0,0,1,0);
 		raum = "";
 	}
 	

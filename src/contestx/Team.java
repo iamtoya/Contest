@@ -44,6 +44,9 @@ public class Team {
 		return bewertungen;
 	}
 	
+	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone) {
+		
+	}
 	
 	public void setSchule(Schule schule) {
 		this.schule = schule;

@@ -212,10 +212,10 @@ public class Gui extends JFrame {
 		contentPane.add(panel);
 		
 		
-		//New-Button macht den Rest der contentPane sichtbar
+		
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				showEnterPointsDialog();
+				
 			}
 		});
 		
@@ -379,7 +379,27 @@ public class Gui extends JFrame {
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			debates.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
-			
+			westB.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int j = 0;
+					while(!debates.get(j).getComponent(1).equals(westB)) {
+						j++;
+					}
+					if(debatesPerTime > j) showEnterPointsDialog(array.get(j).getTeamPro(), 
+							new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
+										 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
+					
+					else if(j > debatesPerTime) {
+						if(j > debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamPro(), 
+								new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
+											 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 3)); //Zeitzone 3
+						
+						else showEnterPointsDialog(array.get(j).getTeamPro(), 
+								new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
+											 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 2)); //Zeitzone 2
+					}
+				}
+			});
 			JButton eastB = new JButton("<html>Con<br/>" + array.get(i).getTeamCon().getSchule().getName() + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			debates.get(i).add(eastB, BorderLayout.EAST);
@@ -449,17 +469,10 @@ public class Gui extends JFrame {
 	}
 	
 	//Methode zur Eingabe der Punkte
-	public void showEnterPointsDialog() {
-		Team[] teams = new Team[teams_junior.size()];  //JComboBox requires an array...
-		String[] team_names = new String[teams.length];//...of String
-		for(int i = 0; i < teams.length; i++) { //Arrays werden gefüllt
-			teams[i] = teams_junior.get(i);
-			team_names[i] = teams[i].getSchule().getName();
-		}
-		JComboBox team = new JComboBox(team_names);
-		selectedTeam = teams[team.getSelectedIndex()];
+	public void showEnterPointsDialog(Team selectedTeam, Zeitzone zeitzone) {
 		Speaker[] speakers = new Speaker[selectedTeam.getAllSpeaker().size()];
 		String[] speaker_names = new String[speakers.length];
+		//speakers und speaker_names haben dieselbe Ordnung und bezeichnen dieselben Speaker
 		for(int i = 0; i < speakers.length; i++) { //Speaker-Array wird gefüllt
 			speakers[i] = selectedTeam.getAllSpeaker().get(i);
 			speaker_names[i] = speakers[i].getName();
@@ -471,25 +484,43 @@ public class Gui extends JFrame {
 		JButton[] okCancel = {new JButton("Okay"), new JButton("Cancel")};
 		okCancel[0].setBackground(Color.GREEN);
 		okCancel[1].setBackground(Color.RED);
-		okCancel[1].addActionListener(new ActionListener() {
+		okCancel[1].addActionListener(new ActionListener() { //Cancel-Button
 			public void actionPerformed(ActionEvent e) {
 				subFrame.dispose(); //resettet subFrame und schließt ihn
 			}
 		});
-		
-		team.addActionListener(new ActionListener() { //wenn Team geändert wird, werden die auswählbaren Speaker-Namen ebenfalls geändert
+		int[] givenPoints = new int[4]; //speichert die gegebenen Punkte
+		Speaker[] takenSpeakers = new Speaker[4];
+		for(int i = 0; i < 4; i++) { //takenSpeakers füllen, um NullPointerException zu verhindern
+			takenSpeakers[i] = new Speaker("", selectedTeam);
+		}
+		okCancel[0].addActionListener(new ActionListener() { //Okay-Button
 			public void actionPerformed(ActionEvent e) {
-				selectedTeam = teams[team.getSelectedIndex()]; //ActionListener benötigt finale Variablen, daher ist selectedTeam als Attribut definiert
-				for(int i = 0; i < speakers.length; i++) { //Speaker-Array wird mit neuen Speakern gefüllt
-					speakers[i] = selectedTeam.getAllSpeaker().get(i);
-					speaker_names[i] = speakers[i].getName();
-				}
-				for(int i = 0; i < speaker.length; i++) { //JComboBoxes werden erneuert
-					speaker[i].removeAllItems();
-					for(int j = 0; j < speaker_names.length; j++) {
-						speaker[i].addItem(speaker_names[j]);
+				try {
+					boolean everythingCorrect = true;
+					for(int i = 0; i < 4; i++) {
+						takenSpeakers[i] = new Speaker("", selectedTeam); //takenSpeaker wird resettet, damit bei mehrfachen Eingabeversuchen kein Fehler entsteht
+						givenPoints[i] = Integer.parseInt(points[i].getText());
+						for(int j = 0; j <= i; j++) { //verhindert doppeltes Eintragen von Speakern
+							if(takenSpeakers[j].equals(speakers[speaker[i].getSelectedIndex()]) && i != 3) { //wenn Speaker bereits eingetragen
+								everythingCorrect = false;
+							}
+						}
+						takenSpeakers[i] = speakers[speaker[i].getSelectedIndex()];
+						if(takenSpeakers[i].getName() == "") { //wenn kein existenter Speaker ausgewählt wurde
+							everythingCorrect = false;
+						}
+						System.out.println(takenSpeakers[i].getName() + " " + givenPoints[i]);
+					}
+					if(everythingCorrect) subFrame.dispose(); //resettet subFrame und schließt ihn
+					else {
+						JOptionPane.showMessageDialog(subFrame, "You must select 3 different existing Team-Members", "Error Message", JOptionPane.ERROR_MESSAGE);
 					}
 				}
+				catch(NumberFormatException ex) {
+					JOptionPane.showMessageDialog(subFrame, "Not every field was filled correctly.\nNotice: You can't use decimal numbers.", "Error Message", JOptionPane.ERROR_MESSAGE);
+				}
+				selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone); //Punkte in den Teams eintragen
 			}
 		});
 		
@@ -501,20 +532,21 @@ public class Gui extends JFrame {
 		
 		JPanel subPanel1 = new JPanel();
 		subFrameCP.add(subPanel1);
-		subPanel1.setLayout(new GridLayout(6, 0, 0, 20)); //4 Zeilen
+		subPanel1.setLayout(new GridLayout(5, 0, 0, 20)); //5 Zeilen
 		
 		JPanel subPanel2 = new JPanel();
 		subFrameCP.add(subPanel2);
-		subPanel2.setLayout(new GridLayout(6, 0, 0, 20)); //4 Zeilen
+		subPanel2.setLayout(new GridLayout(5, 0, 0, 20)); //5 Zeilen
 		
-		subPanel1.add(new JLabel("Select Team:"));
-		subPanel2.add(team); //fügt Team-Liste auf rechter Seite hinzu
+		//subPanel1.add(new JLabel("Select Team:"));
+		//subPanel2.add(team); //fügt Team-Liste auf rechter Seite hinzu
 		for(int i = 0; i < speaker.length; i++) {
 			subPanel1.add(speaker[i]);
 			subPanel2.add(points[i]);
 		}
 		subPanel1.add(okCancel[0]);
 		subPanel2.add(okCancel[1]);
+		
 	}
 	
 	public String breakStringIfTooLong(String s) { //funktioniert noch nicht!

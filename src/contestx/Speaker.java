@@ -39,9 +39,7 @@ public class Speaker {
 	}
 	
 	public void setPunkteIn(int index, int punkte) {
-		if(index < 3) {
-			this.punkte.set(index,punkte);
-		}
+		this.punkte.set(index,punkte);
 	}
 	
 	public void setTeam(Team team) {
