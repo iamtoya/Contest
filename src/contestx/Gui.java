@@ -558,7 +558,8 @@ public class Gui extends JFrame {
 					JOptionPane.showMessageDialog(subFrame, "Not every field was filled correctly.\nNotice: You can't use decimal numbers.", "Error Message", JOptionPane.ERROR_MESSAGE);
 				}
 				if(everythingCorrect) {
-						selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone); //Punkte in den Teams eintragen
+																				// TRUE UND TRUE ALS TESTWERTE EINGETRAGEN!!!!!!!
+						selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone,true, true); //Punkte in den Teams eintragen 
 					for(int i = 0; i < selectedTeam.getAllSpeaker().size(); i++) { //KonsolenAusgabe
 						for(int j = 0; j < 6; j++) {
 							System.out.println(selectedTeam.getAllSpeaker().get(i).getName() + " " + selectedTeam.getAllSpeaker().get(i).getPunkteIn(j));
