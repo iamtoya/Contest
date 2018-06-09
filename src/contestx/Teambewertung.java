@@ -7,8 +7,11 @@ public class Teambewertung {
 	private Boolean pro;
 	private Boolean win;
 	private ArrayList<Speaker> speakerZuDiesemZeitpunkt;
+	private Zeitzone zeitzone;
 	
-	
+	public Teambewertung() {
+		
+	}
 	
 	public int getGesamtpunkte() {
 		return gesamtpunkte;
@@ -44,7 +47,7 @@ public class Teambewertung {
 		this.pro = isPro;
 	}
 	
-	public void setHaveWOn(Boolean haveWon) {
+	public void setHaveWon(Boolean haveWon) {
 		this.win = haveWon;
 	}
 	
@@ -54,7 +57,8 @@ public class Teambewertung {
 		}
 	}
 	
-	
-	
+	public void setZeitzone(Zeitzone zeitzone ) {
+		this.zeitzone = zeitzone;
+	}
 	
 }

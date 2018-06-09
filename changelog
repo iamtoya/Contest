@@ -9,4 +9,5 @@ Datum		Name			Was?
 6.6.18		Andreas			Get und SetMethoden, Verfeinerung von GUI (haupts. Judge-Zeug)
 7.6.18    	Jonas    		gui und team angepasst, damit ein punkte-dialog mit auswählbaren Teams und sich entsprechend
                     		anpassenden Speakern erscheint.
-8.6.18  Jonas okay-button von punkteeingabe funktioniert jetzt
+8.6.18  	Jonas 			okay-button von punkteeingabe funktioniert jetzt
+9.6.18		Leo				setPoints Methode erweitert und beendet

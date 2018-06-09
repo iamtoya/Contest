@@ -43,8 +43,23 @@ public class Team {
 	public ArrayList<Teambewertung> getTeambewertungen() {
 		return bewertungen;
 	}
+	//funktionierende Methode ohne Teambewertung, gesaved als backup
+	//public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone) {
+	//	for(int i = 0; i < speakers.length; i++) { //i = 1.,2.,3.,Reply-Speaker
+	//		int j = 0;
+	//		while(!speaker.get(j).equals(speakers[i])) {
+	//			j++;
+	//		}
+	//		if(i != 3) speaker.get(j).setPunkteIn(zeitzone.getNumber()-1, punkte[i]); //-1, da speaker nullbasiert, zeitzonenNummer nicht
+	//		else speaker.get(j).setPunkteIn(zeitzone.getNumber()-1+3, punkte[i]);
+	//	  }
+	//	
+	//}
 	
-	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone) {
+	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone, boolean pro, boolean win) {
+		int teampunkteGesamt = 0;
+		Teambewertung tb = new Teambewertung();
+		
 		for(int i = 0; i < speakers.length; i++) { //i = 1.,2.,3.,Reply-Speaker
 			int j = 0;
 			while(!speaker.get(j).equals(speakers[i])) {
@@ -52,8 +67,24 @@ public class Team {
 			}
 			if(i != 3) speaker.get(j).setPunkteIn(zeitzone.getNumber()-1, punkte[i]); //-1, da speaker nullbasiert, zeitzonenNummer nicht
 			else speaker.get(j).setPunkteIn(zeitzone.getNumber()-1+3, punkte[i]);
+		    }
+		
+		for(int k = 0; k < punkte.length; k++) {
+			teampunkteGesamt = punkte[k] + teampunkteGesamt;	
+			}
+		
+		tb.setGesamtpunkte(teampunkteGesamt);
+		tb.setIsPro(pro);
+		tb.setHaveWon(win);
+		tb.setZeitzone(zeitzone);
+		
+		for(int z = 0; z < speakers.length; z++) {
+			tb.setSpeakerAt(z, speakers[z]);
 		}
+		this.setTeambewertung(tb);
+		//this.setTeambewertungAt(index, teambewertung);
 	}
+	
 	
 	public void setSchule(Schule schule) {
 		this.schule = schule;
@@ -71,6 +102,10 @@ public class Team {
 		if(index<3) {
 			this.bewertungen.set(index, teambewertung);
 		}
+	}
+	
+	public void setTeambewertung(Teambewertung teambewertung) {
+		this.bewertungen.add(teambewertung);
 	}
 	
 
