@@ -182,7 +182,7 @@ public class Gui extends JFrame {
 		
 		//Add-Judge Button
 		JButton btnAddJudge = new JButton("Add Judge");
-				btnAddJudge.addActionListener(new ActionListener() {
+		btnAddJudge.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						showEnterJudgeDialog();
 					}
