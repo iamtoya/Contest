@@ -378,11 +378,10 @@ public class Gui extends JFrame {
 			debates.get(i).setLayout(layout); //BorderLayout wird festgelegt
 			JButton northB = new JButton("Room Nr. ?");
 			debates.get(i).add(northB, BorderLayout.NORTH);
-				northB.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					String s=JOptionPane.showInputDialog("Room Nr."); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man die Raumnummer eingeben kann
-					northB.setText("Room Nr. " + s);
-				}
+			northB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String s=JOptionPane.showInputDialog("Room Nr."); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man die Raumnummer eingeben kann
+				northB.setText("Room Nr. " + s);				}
 			});
 			
 			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
@@ -600,7 +599,7 @@ public class Gui extends JFrame {
 		}
 		subPanel1.add(okCancel[0]);
 		subPanel2.add(okCancel[1]);
-		
+	 	
 	}
 	
 	public String breakStringIfTooLong(String s) { //funktioniert noch nicht!
