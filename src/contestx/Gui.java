@@ -380,7 +380,7 @@ public class Gui extends JFrame {
 			debates.get(i).add(northB, BorderLayout.NORTH);
 				northB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					String s=JOptionPane.showInputDialog("Room Nr.");
+					String s=JOptionPane.showInputDialog("Room Nr."); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man die Raumnummer eingeben kann
 					northB.setText("Room Nr. " + s);
 				}
 			});
