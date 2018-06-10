@@ -44,8 +44,6 @@ public class Gui extends JFrame {
 	private ArrayList<JPanel> debates; //die Debates werden hier vereinfacht als Panels betrachtet; Liste aller im Plan vorkommenden Debates als Panels
 	private Debatingplan dp;
 	private Verwaltung verwaltung;
-	
-	private JButton btnNew = new JButton("Evaluate");
 	private JButton btnTimezone = new JButton("Timezone 1");
 	private JButton btnTimezone_1 = new JButton("Timezone 2");
 	private JButton btnTimezone_2 = new JButton("Timezone 3");
@@ -211,17 +209,6 @@ public class Gui extends JFrame {
 		panel.setBorder(null);
 		panel.setBounds(194, 139, 734, 150);
 		contentPane.add(panel);
-		
-		
-		
-		btnNew.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-			}
-		});
-		
-		btnNew.setBounds(10, 11, 140, 88);
-		contentPane.add(btnNew);
 		
 		txtVon = new JTextField();
 		txtVon.setBounds(72, 207, 36, 20);
