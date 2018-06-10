@@ -162,6 +162,7 @@ public class Gui extends JFrame {
 		btnTimezone.setBounds(47, 152, 137, 52);
 		contentPane.add(btnTimezone);
 		
+		
 		//Timezone 2-Button impl.
 		btnTimezone_1.setEnabled(false);
 		btnTimezone_1.setBounds(47, 309, 137, 52);
@@ -363,7 +364,9 @@ public class Gui extends JFrame {
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 	}
+	
 	public void createRelativeSubpanels(int debatesPerTime, ArrayList<Debate> array) {
+		
 		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*150, panel.getHeight()); //L‰nge der 3 groﬂen Panels wird entsprechen der Zahl der Debates angepasst
 		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*150, panel_1.getHeight());
 		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*150, panel_2.getHeight());
@@ -373,7 +376,14 @@ public class Gui extends JFrame {
 			debates.get(i).setBorder(new LineBorder(new Color(0, 0, 0))); //Grenzen werden gezeichnet
 			BorderLayout layout = new BorderLayout(1, 1);
 			debates.get(i).setLayout(layout); //BorderLayout wird festgelegt
-			debates.get(i).add(new JButton("Room Nr."), BorderLayout.NORTH);
+			JButton northB = new JButton("Room Nr. ?");
+			debates.get(i).add(northB, BorderLayout.NORTH);
+				northB.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String s=JOptionPane.showInputDialog("Room Nr.");
+					northB.setText("Room Nr. " + s);
+				}
+			});
 			
 			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
