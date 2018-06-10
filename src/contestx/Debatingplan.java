@@ -271,4 +271,8 @@ public class Debatingplan {
 			}
 		}
 	}
+	
+	public ArrayList<Schule> getSchulen() {
+		return schulen;
+	}
 }

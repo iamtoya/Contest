@@ -1,39 +1,16 @@
 package contestx;
 
-import java.awt.BorderLayout;
+
 import javax.swing.*;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JRadioButton;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import javax.swing.border.LineBorder;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-
-import java.awt.Color;
-import java.awt.Dimension;
-
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
+import java.awt.Font;
 
 public class Verwaltung extends JFrame {
 
@@ -43,18 +20,20 @@ public class Verwaltung extends JFrame {
 	private JPanel contentPane;
 	private Debatingplan dp;
 	private ButtonGroup radioButtonGroup;
-	private JList liste;
 	private JRadioButton rdbtnNewSchools;
 	private JRadioButton rdbtnNewJudges;
 	private JRadioButton rdbtnNewSpeaker;
-	private JTextField textField;
+	private JTextField txtSchools;
+	private JComboBox comboBox;
 	
 	public Verwaltung(Debatingplan dp) {
-		liste = new JList();
 		rdbtnNewSpeaker = new JRadioButton("Speaker");
 		rdbtnNewJudges = new JRadioButton("Judges");
 		rdbtnNewSchools = new JRadioButton("Schools");
 		radioButtonGroup = new ButtonGroup();
+		txtSchools = new JTextField();
+		comboBox = new JComboBox();
+		this.dp=dp;
 		
 		//Allgemeine Dinge des Fensters werden eingestellt
 		setAlwaysOnTop(true);
@@ -79,7 +58,7 @@ public class Verwaltung extends JFrame {
 		radioButtonGroup.add(rdbtnNewJudges);
 		radioButtonGroup.add(rdbtnNewSpeaker);
 		
-		
+		//Methoden werden Buttons zugeteilt
 		rdbtnNewSchools.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				aktualisierenMit(SCHULEN);
@@ -99,15 +78,27 @@ public class Verwaltung extends JFrame {
 		});
 	
 			
+		//Debugfenster zum erkennen der funktion
+		txtSchools.setBounds(35, 594, 377, 32);
+		getContentPane().add(txtSchools);
+		txtSchools.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Debug-Textfield:");
+		lblNewLabel.setBounds(35, 569, 97, 14);
+		getContentPane().add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("Datens\u00E4tze:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_1.setBounds(35, 206, 109, 23);
+		getContentPane().add(lblNewLabel_1);
 		
 		
-		liste.setBounds(122, 350, 1, 1);
-		getContentPane().add(liste);
+		comboBox.setBounds(35, 240, 377, 319);
+		getContentPane().add(comboBox);
 		
-		textField = new JTextField();
-		textField.setBounds(87, 327, 86, 20);
-		getContentPane().add(textField);
-		textField.setColumns(10);
+		aktualisierenMit(SCHULEN);
+		
+		
 	}
 		
 		
@@ -116,15 +107,21 @@ public class Verwaltung extends JFrame {
 	}	
 	
 	public void aktualisierenMit(int was) {
+		int i = 0;
+		comboBox.removeAllItems();
+		
 		switch(was) {
-		case(0): 
-			textField.setText("schulen");
+		case(0): 			
+			for(i = 0; i < dp.getSchulen().size(); i++ ) {
+				comboBox.addItem(dp.getSchulen().get(i).getName());
+			}
+			txtSchools.setText("schulen");
 			break;
 		case(1):
-			textField.setText("judges");
+			txtSchools.setText("judges");
 			break;
 		case(2):
-			textField.setText("Speaker");
+			txtSchools.setText("Speaker");
 			break;
 		}
 	}
