@@ -107,12 +107,21 @@ public class Gui extends JFrame {
 	 */
 	public Gui() {
 		
-		schulen = new ArrayList<Schule>();
 		subFrame = new JFrame();
 		subFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE); //resettet sich beim Schließen
 		
 		teams_junior = new ArrayList<Team>();
 		teams_senior = new ArrayList<Team>();
+		
+		teams_junior.get(2).setSpeakerAt(3, new Speaker("Hans", teams_junior.get(2)));
+		//breakStringIfTooLong(teams_junior.get(3));
+		teams_senior = new ArrayList<Team>();
+		judges = new ArrayList<Judge>();
+		debates = new ArrayList<JPanel>();
+		
+		dp = new Debatingplan(this);
+		verwaltung = new Verwaltung(dp);
+		schulen = dp.getSchulen();
 		schulen.add(new Schule("1"));
 		schulen.add(new Schule("2"));
 		schulen.add(new Schule("3"));
@@ -128,14 +137,6 @@ public class Gui extends JFrame {
 			teams_junior.get(i).setSpeakerAt(2,new Speaker("Ann", teams_junior.get(i)));
 			teams_senior.add(new Team(schulen.get(i), true));
 		}
-		teams_junior.get(2).setSpeakerAt(3, new Speaker("Hans", teams_junior.get(2)));
-		//breakStringIfTooLong(teams_junior.get(3));
-		teams_senior = new ArrayList<Team>();
-		judges = new ArrayList<Judge>();
-		debates = new ArrayList<JPanel>();
-		
-		dp = new Debatingplan(this);
-		verwaltung = new Verwaltung(dp);
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
 	//	debates.get(0).setLayout(new BorderLayout(2, 2));;
@@ -618,9 +619,6 @@ public class Gui extends JFrame {
 	
 	public ArrayList<Debate> berechne(boolean junior) {
 		//Panels zurücksetzen(mehrfaches drücken)
-		panel.removeAll();
-		panel_2.removeAll();
-		panel_1.removeAll();
 		debates.clear();
 		dp.reset();
 		//berechnen lassen
