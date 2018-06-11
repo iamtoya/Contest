@@ -137,6 +137,8 @@ public class Gui extends JFrame {
 			teams_junior.get(i).setSpeakerAt(2,new Speaker("Ann", teams_junior.get(i)));
 			teams_senior.add(new Team(schulen.get(i), true));
 		}
+		//schulen problem gelöst
+		
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
 	//	debates.get(0).setLayout(new BorderLayout(2, 2));;
