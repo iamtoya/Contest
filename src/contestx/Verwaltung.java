@@ -39,7 +39,7 @@ public class Verwaltung extends JFrame {
 		this.dp=dp;
 		textFieldSchools1 = new JTextField();
 		
-		//Allgemeine Dinge des Fensters werden eingestellt
+		//Allgemeine Eigenschaften des Fensters werden eingestellt
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setTitle("Verwaltung");
