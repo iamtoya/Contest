@@ -172,7 +172,7 @@ public class Debatingplan {
 		dPTsenior = (int) teamSeniorNames.size()/2;
 		usedCompsJunior = new String[dPTjunior*3][2];
 		usedCompsSenior = new String[dPTsenior*3][2];
-		schulen = this.gui.getSchools();
+		schulen.clear();
 	}
 	
 	public ArrayList<Schule> getSchulen() {
