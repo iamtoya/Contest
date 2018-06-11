@@ -120,6 +120,7 @@ public class Verwaltung extends JFrame {
 		
 	public void anzeigen() {
 		this.setVisible(true);
+		aktualisierenMit(SCHULEN);
 	}	
 	
 	public void aktualisierenMit(int was) {
