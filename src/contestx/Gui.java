@@ -112,8 +112,7 @@ public class Gui extends JFrame {
 		
 		teams_junior = new ArrayList<Team>();
 		teams_senior = new ArrayList<Team>();
-		
-		teams_junior.get(2).setSpeakerAt(3, new Speaker("Hans", teams_junior.get(2)));
+				
 		//breakStringIfTooLong(teams_junior.get(3));
 		teams_senior = new ArrayList<Team>();
 		judges = new ArrayList<Judge>();
@@ -138,6 +137,7 @@ public class Gui extends JFrame {
 			teams_senior.add(new Team(schulen.get(i), true));
 		}
 		//schulen problem gelöst
+		teams_junior.get(2).setSpeakerAt(3, new Speaker("Hans", teams_junior.get(2)));
 		
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
