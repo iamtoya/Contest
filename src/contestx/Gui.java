@@ -390,14 +390,14 @@ public class Gui extends JFrame {
 								new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
 										 	 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
 					
-						else if(j > debatesPerTime) {
-							if(j > debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamPro(), 
-									new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
-											 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 3)); //Zeitzone 3
+						else if(j >= debatesPerTime) {
+							if(j >= debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamPro(), 
+									new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
+											 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 3)); //Zeitzone 3
 						
 							else showEnterPointsDialog(array.get(j).getTeamPro(), 
-									new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
-											 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 2)); //Zeitzone 2
+									new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
+											 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 2)); //Zeitzone 2
 						}
 					}
 					catch(NumberFormatException ex) {
@@ -421,14 +421,14 @@ public class Gui extends JFrame {
 								new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
 										 	 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
 					
-						else if(j > debatesPerTime) {
-							if(j > debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamCon(), 
-									new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
-											 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 3)); //Zeitzone 3
+						else if(j >= debatesPerTime) {
+							if(j >= debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamCon(), 
+									new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
+											 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 3)); //Zeitzone 3
 						
 							else showEnterPointsDialog(array.get(j).getTeamCon(), 
-									new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
-											 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 2)); //Zeitzone 2
+									new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
+											 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 2)); //Zeitzone 2
 						}
 					}
 					catch(NumberFormatException ex) {
@@ -448,6 +448,8 @@ public class Gui extends JFrame {
 	
 	public void showEnterSchoolDialog() {
 		JCheckBox[] chckbxs = {new JCheckBox("has junior team"), new JCheckBox("has senior team")}; //2 CheckBoxen fragen ab, welche Teams die eingetragene Schule bereitstellt
+		chckbxs[0].setSelected(true); //CheckBoxen werden zu Beginn auf true gesetzt (erleichtert schnelle Eingabe)
+		chckbxs[1].setSelected(true);
 		Object[] options = {"Enter school name:", chckbxs};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options); //Schulname wird in "s" gespeichert
 		schulen.add(new Schule(s)); //und den "schulen" hinzugefügt

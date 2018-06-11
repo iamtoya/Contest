@@ -6,11 +6,15 @@ public class Teambewertung {
 	private int gesamtpunkte;
 	private Boolean pro;
 	private Boolean win;
-	private ArrayList<Speaker> speakerZuDiesemZeitpunkt;
+	private Speaker[] speakerZuDiesemZeitpunkt;
 	private Zeitzone zeitzone;
 	
 	public Teambewertung() {
-		
+		gesamtpunkte = 0;
+		pro = true;
+		win = false;
+		zeitzone = new Zeitzone(0, 0, 0, 0, 0);
+		speakerZuDiesemZeitpunkt = new Speaker[4];
 	}
 	
 	public int getGesamtpunkte() {
@@ -25,13 +29,9 @@ public class Teambewertung {
 		return win;
 	}
 	
-	public ArrayList<Speaker> getAllSpeakers() {
-		return speakerZuDiesemZeitpunkt;
-	}
-	
 	public Speaker getSpeakerAt(int index) {
 		if(index<4) {
-			return this.speakerZuDiesemZeitpunkt.get(index);
+			return speakerZuDiesemZeitpunkt[index];
 		}
 		else {
 			return null;
@@ -53,7 +53,7 @@ public class Teambewertung {
 	
 	public void setSpeakerAt(int index, Speaker speaker) {
 		if(index < 4) {
-			this.speakerZuDiesemZeitpunkt.set(index, speaker);
+			speakerZuDiesemZeitpunkt[index] = speaker;
 		}
 	}
 	

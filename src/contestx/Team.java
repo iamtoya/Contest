@@ -17,6 +17,7 @@ public class Team {
 		for(int i = 0; i < 9; i++) { //9 = max Anzahl Speaker pro Team
 			speaker.add(new Speaker("", this)); //verhindert durch setSpeakerAt() ausgelöste IndexOutOfBoundsException
 		}
+		bewertungen = new ArrayList<Teambewertung>();
 	}
 
 	
@@ -62,7 +63,7 @@ public class Team {
 		
 		for(int i = 0; i < speakers.length; i++) { //i = 1.,2.,3.,Reply-Speaker
 			int j = 0;
-			while(!speaker.get(j).equals(speakers[i])) {
+			while(!speaker.get(j).equals(speakers[i])) { //richtiger Speaker in der speaker-liste wird gefunden
 				j++;
 			}
 			if(i != 3) speaker.get(j).setPunkteIn(zeitzone.getNumber()-1, punkte[i]); //-1, da speaker nullbasiert, zeitzonenNummer nicht
