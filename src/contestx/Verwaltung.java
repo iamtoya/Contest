@@ -36,6 +36,8 @@ public class Verwaltung extends JFrame {
 	private JCheckBox chckbxJudgesZZ3;
 	private JLabel lblName;
 	private JLabel lblSchool;
+	private JTextField textFieldSpeaker;
+	private JLabel lblNewLabel_1;
 	
 	public Verwaltung(Debatingplan dp) {
 		rdbtnNewSpeaker = new JRadioButton("Speaker");
@@ -69,7 +71,7 @@ public class Verwaltung extends JFrame {
 		radioButtonGroup.add(rdbtnNewJudges);
 		radioButtonGroup.add(rdbtnNewSpeaker);
 		
-		JLabel lblNewLabel_1 = new JLabel("Choose the object to be changed:");
+		lblNewLabel_1 = new JLabel("Choose the school to be changed:");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabel_1.setBounds(35, 68, 238, 23);
 		getContentPane().add(lblNewLabel_1);
@@ -134,6 +136,11 @@ public class Verwaltung extends JFrame {
 		lblSchool = new JLabel("School:");
 		lblSchool.setBounds(35, 225, 46, 14);
 		getContentPane().add(lblSchool);
+		
+		textFieldSpeaker = new JTextField();
+		textFieldSpeaker.setBounds(35, 194, 124, 20);
+		getContentPane().add(textFieldSpeaker);
+		textFieldSpeaker.setColumns(10);
 		lblSchool.setVisible(false);
 		
 		//Methoden werden Buttons zugeteilt
@@ -180,6 +187,7 @@ public class Verwaltung extends JFrame {
 			for(i = 0; i < dp.getSchulen().size(); i++ ) {
 				comboBox.addItem(dp.getSchulen().get(i).getName());
 			}
+			this.lblNewLabel_1.setText("Choose the school to be changed:");
 			nurAnzeigen(was);			
 			break;
 		case(1):
@@ -189,9 +197,14 @@ public class Verwaltung extends JFrame {
 			for(i = 0; i < dp.getSchulen().size(); i++ ) {
 				comboBoxJudgesSchools.addItem(dp.getSchulen().get(i).getName());
 			}
+			this.lblNewLabel_1.setText("Choose the judge to be changed:");
 			nurAnzeigen(was);
 			break;
 		case(2):
+			for(i = 0; i < dp.getSpeaker().size(); i++ ) {
+				comboBox.addItem(dp.getSpeaker().get(i).getName());
+			}
+		this.lblNewLabel_1.setText("Choose the speaker to be changed:");
 			nurAnzeigen(was);
 			break;
 		}
@@ -210,6 +223,7 @@ public class Verwaltung extends JFrame {
 			this.chckbxJudgesZZ2.setVisible(false);
 			this.chckbxJudgesZZ3.setVisible(false);
 			this.lblSchool.setVisible(false);
+			this.textFieldSpeaker.setVisible(false);
 			break;
 		case(1):
 			this.chckbxSchools1.setVisible(false);
@@ -222,6 +236,7 @@ public class Verwaltung extends JFrame {
 			this.chckbxJudgesZZ2.setVisible(true);
 			this.chckbxJudgesZZ3.setVisible(true);
 			this.lblSchool.setVisible(true);
+			this.textFieldSpeaker.setVisible(false);
 			break;
 		case(2):
 			this.chckbxSchools1.setVisible(false);
@@ -234,6 +249,7 @@ public class Verwaltung extends JFrame {
 			this.chckbxJudgesZZ2.setVisible(false);
 			this.chckbxJudgesZZ3.setVisible(false);
 			this.lblSchool.setVisible(false);
+			this.textFieldSpeaker.setVisible(true);
 			break;
 		}
 	}
@@ -255,7 +271,7 @@ public class Verwaltung extends JFrame {
 			aktualisierenMit(JUDGES);
 		}
 		else if(rdbtnNewSpeaker.isSelected()==true) {
-			
+			dp.getSpeaker().get(comboBox.getSelectedIndex()).setName(textFieldSpeaker.getText());
 		}
 	}
 }

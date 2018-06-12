@@ -20,6 +20,15 @@ public class Speaker {
 		}
 	}
 	
+	public Speaker(String name) {
+		this.name = name;
+		punkte = new ArrayList<Integer>();
+		for(int i = 0; i < 6; i++) { //verhindert durch setPunkteIn() ausgelöste IndexOutOfBoundsException
+			punkte.add(0);
+		}
+		
+	}
+	
 		
 	public String getName() {
 		return name;

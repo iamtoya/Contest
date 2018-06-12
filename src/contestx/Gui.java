@@ -41,6 +41,7 @@ public class Gui extends JFrame {
 	private ArrayList<Team> teams_junior;
 	private ArrayList<Team> teams_senior;
 	private ArrayList<Judge> judges;
+	private ArrayList<Speaker> speaker;
 	private ArrayList<JPanel> debates; //die Debates werden hier vereinfacht als Panels betrachtet; Liste aller im Plan vorkommenden Debates als Panels
 	private Debatingplan dp;
 	private Verwaltung verwaltung;
@@ -121,6 +122,7 @@ public class Gui extends JFrame {
 		verwaltung = new Verwaltung(dp);
 		schulen = dp.getSchulen();
 		judges = dp.getJudges();
+		speaker = dp.getSpeaker();
 		schulen.add(new Schule("1"));
 		schulen.add(new Schule("2"));
 		schulen.add(new Schule("3"));
@@ -152,7 +154,7 @@ public class Gui extends JFrame {
 	//	debates.get(0).add(new JButton("Hi"), BorderLayout.SOUTH);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1390, 817);
+		setBounds(100, 100, 1389, 708);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -186,16 +188,25 @@ public class Gui extends JFrame {
 		//Add-Judge Button
 		JButton btnAddJudge = new JButton("Add Judge");
 		btnAddJudge.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						showEnterJudgeDialog();
-					}
+			public void actionPerformed(ActionEvent e) {
+				showEnterJudgeDialog();
+			}
 		});
+		
+		//Add-Speaker Button
+		JButton btnAddSpeaker = new JButton("Add Speaker");
+		btnAddSpeaker.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showEnterSpeakerDialog();
+			}
+		});
+		
 				
 		btnAddSchool.setEnabled(true);
-		btnAddSchool.setBounds(368, 28, 140, 54);
+		btnAddSchool.setBounds(216, 45, 140, 54);
 		contentPane.add(btnAddSchool);
 		
-		btnAddJudge.setBounds(526, 29, 140, 52);
+		btnAddJudge.setBounds(366, 46, 140, 52);
 		contentPane.add(btnAddJudge);
 		
 		//Implementierung der 3 Panels ohne Border
@@ -306,7 +317,7 @@ public class Gui extends JFrame {
 		
 		contentPane.add(label_10);
 		
-		JButton btnBerechne = new JButton("Berechne");
+		JButton btnBerechne = new JButton("Calculate with insert data");
 		btnBerechne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(teams_junior.size()>5) {
@@ -328,7 +339,7 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-		btnBerechne.setBounds(1035, 51, 115, 29);
+		btnBerechne.setBounds(986, 45, 169, 54);
 		contentPane.add(btnBerechne);
 		
 		JButton btnManage = new JButton("Manage");
@@ -337,8 +348,11 @@ public class Gui extends JFrame {
 				manage();
 			}
 		});
-		btnManage.setBounds(716, 15, 156, 81);
+		btnManage.setBounds(701, 32, 156, 81);
 		contentPane.add(btnManage);
+		btnAddSpeaker.setBounds(516, 47, 140, 51);
+		
+		contentPane.add(btnAddSpeaker);
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
@@ -496,6 +510,22 @@ public class Gui extends JFrame {
 		try{ 
 			if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
 				JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		catch(NullPointerException e) {
+			
+		}
+	}
+	
+	public void showEnterSpeakerDialog() {
+		Object[] options = {"Enter speaker name:"};
+		String s = (String)JOptionPane.showInputDialog(subFrame, options);
+		if(s != null && s.length() > 0) {
+			speaker.add(new Speaker(s));
+		}
+		try{ 
+			if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
+				JOptionPane.showMessageDialog(subFrame, "No speaker name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		catch(NullPointerException e) {
