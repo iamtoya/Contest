@@ -636,29 +636,4 @@ public class Gui extends JFrame {
 	public void manage() {
 		verwaltung.anzeigen();		
 	}
-	
-	public void punkteEintragen(JButton caller, ArrayList<Debate> array, int debatesPerTime, boolean pro) {
-		int j = 0;
-		while(!debates.get(j).getComponent(1).equals(caller)) {
-			j++;
-		}
-		try {
-			if(debatesPerTime > j) showEnterPointsDialog(array.get(j).getTeamPro(), 
-					new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
-							 	 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
-		
-			else if(j > debatesPerTime) {
-				if(j > debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamPro(), 
-						new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
-								 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 3)); //Zeitzone 3
-			
-				else showEnterPointsDialog(array.get(j).getTeamPro(), 
-						new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
-								 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 2)); //Zeitzone 2
-			}
-		}
-		catch(NumberFormatException ex) {
-			JOptionPane.showMessageDialog(subFrame, "You must enter values to the timezones", "Error Message", JOptionPane.ERROR_MESSAGE);
-		}
-	}
 }
