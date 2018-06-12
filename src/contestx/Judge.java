@@ -11,12 +11,20 @@ public class Judge {
 	public Judge(String name, boolean erfahren) {
 		this.name = name;
 		this.erfahren = erfahren;
+		kannZuZeit = new ArrayList<>();
+		kannZuZeit.add(false);
+		kannZuZeit.add(false);
+		kannZuZeit.add(false);
 	}
 	
 	public Judge(String name, Schule schule, boolean erfahren) {
 		this.name=name;
 		this.schule=schule;
 		this.erfahren=erfahren;
+		kannZuZeit = new ArrayList<>();
+		kannZuZeit.add(false);
+		kannZuZeit.add(false);
+		kannZuZeit.add(false);
 	}
 	
 	
@@ -59,15 +67,15 @@ public class Judge {
 	}
 	
 	public void setKannZuZZ1(Boolean kann) {
-		this.kannZuZeit.set(1, kann);
+		this.kannZuZeit.set(0, kann);
 	}
 	
 	public void setKannZuZZ2(Boolean kann) {
-		this.kannZuZeit.set(2, kann);
+		this.kannZuZeit.set(1, kann);
 	}
 	
 	public void setKannZuZZ3(Boolean kann) {
-		this.kannZuZeit.set(3, kann);
+		this.kannZuZeit.set(2, kann);
 	}
 	
 	

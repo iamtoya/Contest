@@ -115,12 +115,12 @@ public class Gui extends JFrame {
 				
 		//breakStringIfTooLong(teams_junior.get(3));
 		teams_senior = new ArrayList<Team>();
-		judges = new ArrayList<Judge>();
 		debates = new ArrayList<JPanel>();
 		
 		dp = new Debatingplan(this);
 		verwaltung = new Verwaltung(dp);
 		schulen = dp.getSchulen();
+		judges = dp.getJudges();
 		schulen.add(new Schule("1"));
 		schulen.add(new Schule("2"));
 		schulen.add(new Schule("3"));

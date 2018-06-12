@@ -33,6 +33,8 @@ public class Debatingplan {
 		teamJuniorNames = new ArrayList<String>(); 
 		teamSeniorNames = new ArrayList<String>();
 		schulen = new ArrayList<Schule>();
+		speaker = new ArrayList<Speaker>();
+		judges = new ArrayList<Judge>();
 	}
 	
 	public ArrayList<Debate> berechne(boolean junior) {
@@ -176,5 +178,13 @@ public class Debatingplan {
 	
 	public ArrayList<Schule> getSchulen() {
 		return schulen;
+	}
+	
+	public ArrayList<Judge> getJudges() {
+		return judges;
+	}
+	
+	public ArrayList<Speaker> getSpeaker() {
+		return speaker;
 	}
 }
