@@ -1,6 +1,4 @@
 package contestx;
-
-
 import javax.swing.*;
 
 import javax.swing.JFrame;
@@ -13,7 +11,7 @@ import javax.swing.JRadioButton;
 import java.awt.Font;
 
 public class Verwaltung extends JFrame {
-
+	//Klassenattribute, auf die in Methoden zugegriffen wird
 	private static final int SCHULEN = 0;
 	private static final int JUDGES = 1;
 	private static final int SPEAKERS = 2;
@@ -39,14 +37,20 @@ public class Verwaltung extends JFrame {
 	private JTextField textFieldSpeaker;
 	private JLabel lblNewLabel_1;
 	
+	
+	
 	public Verwaltung(Debatingplan dp) {
+		this.dp=dp;
 		rdbtnNewSpeaker = new JRadioButton("Speaker");
 		rdbtnNewJudges = new JRadioButton("Judges");
 		rdbtnNewSchools = new JRadioButton("Schools");
 		radioButtonGroup = new ButtonGroup();
 		comboBox = new JComboBox();
-		this.dp=dp;
 		textFieldSchools1 = new JTextField();
+		
+		
+		
+		
 		
 		//Allgemeine Eigenschaften des Fensters werden eingestellt
 		setAlwaysOnTop(true);
@@ -54,6 +58,9 @@ public class Verwaltung extends JFrame {
 		setTitle("Verwaltung");
 		getContentPane().setLayout(null);
 		setBounds(100, 100, 444, 363);
+		
+		
+		
 		
 		//Auswahlbuttons werden zugewiesen/verteilt
 		rdbtnNewSchools.setSelected(true);
@@ -66,16 +73,22 @@ public class Verwaltung extends JFrame {
 		rdbtnNewSpeaker.setBounds(303, 23, 109, 23);
 		getContentPane().add(rdbtnNewSpeaker);		
 		
+		
+		
+		
+		
 		//Buttons werden der Gruppe zugewiesen, damit nur einer ausgewählt werden kann
 		radioButtonGroup.add(rdbtnNewSchools);
 		radioButtonGroup.add(rdbtnNewJudges);
 		radioButtonGroup.add(rdbtnNewSpeaker);
 		
+		
+		
+		//Allgemeine Komponenten werden erstellt und bekommen Position und Eigenschaften
 		lblNewLabel_1 = new JLabel("Choose the school to be changed:");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabel_1.setBounds(35, 68, 238, 23);
-		getContentPane().add(lblNewLabel_1);
-		
+		getContentPane().add(lblNewLabel_1);		
 		
 		comboBox.setBounds(35, 102, 377, 32);
 		getContentPane().add(comboBox);
@@ -143,6 +156,12 @@ public class Verwaltung extends JFrame {
 		textFieldSpeaker.setColumns(10);
 		lblSchool.setVisible(false);
 		
+		
+		
+		
+		
+		
+		
 		//Methoden werden Buttons zugeteilt
 		rdbtnNewSchools.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -168,40 +187,47 @@ public class Verwaltung extends JFrame {
 			};
 		});
 		
+		
+		
+		
+		//am Ende wird das Fenster auf den voreingestellten Button  Schule angepasst und Daten derselben Gruppe mit "aktualisierenMit()" aktualisiert
 		aktualisierenMit(SCHULEN);		
 	}
 		
 		
+	//Fenster wird wieder angezeigt und resettet (Wieder Schools ausgewählt und dargestellt)
 	public void anzeigen() {
 		this.setVisible(true);
 		rdbtnNewSchools.setSelected(true);		
 		aktualisierenMit(SCHULEN);
 	}	
 	
+	
+	//aktualisiert das Fenster mit den Daten der mitgeteilten Gruppe "was"
 	public void aktualisierenMit(int was) {
 		int i = 0;
 		comboBox.removeAllItems();
 		
 		switch(was) {
-		case(0): 			
-			for(i = 0; i < dp.getSchulen().size(); i++ ) {
+		case(0): //Schulen			
+			for(i = 0; i < dp.getSchulen().size(); i++ ) {					//Alle Schulen werden in die Auswahlliste eingetragen
 				comboBox.addItem(dp.getSchulen().get(i).getName());
 			}
 			this.lblNewLabel_1.setText("Choose the school to be changed:");
 			nurAnzeigen(was);			
 			break;
-		case(1):
-			for(i = 0; i < dp.getJudges().size(); i++ ) {
+		case(1): //Judges
+			for(i = 0; i < dp.getJudges().size(); i++ ) {					//Alle Judges werden in die Auswahlliste eingetragen
 				comboBox.addItem(dp.getJudges().get(i).getName());
 			}
-			for(i = 0; i < dp.getSchulen().size(); i++ ) {
+			for(i = 0; i < dp.getSchulen().size(); i++ ) {					//Schulen werden zusätzlich geaddet, da benötigt für Judges
 				comboBoxJudgesSchools.addItem(dp.getSchulen().get(i).getName());
 			}
-			this.lblNewLabel_1.setText("Choose the judge to be changed:");
+			this.lblNewLabel_1.setText("Choose the judge to be changed:");	
 			nurAnzeigen(was);
 			break;
-		case(2):
-			for(i = 0; i < dp.getSpeaker().size(); i++ ) {
+		case(2): //Speaker
+			for(i = 0; i < dp.getSpeaker().size(); i++ ) {					//Alle Speaker werden in die Auswahlliste eingetragen
 				comboBox.addItem(dp.getSpeaker().get(i).getName());
 			}
 		this.lblNewLabel_1.setText("Choose the speaker to be changed:");
@@ -210,6 +236,8 @@ public class Verwaltung extends JFrame {
 		}
 	}
 	
+	
+	//Zeigt die Komponenten an, die für gewählte Gruppe wichtig sind, andere werden ausgeblendet
 	public void nurAnzeigen(int was) {
 		switch(was) {
 		case(0): 			
@@ -254,6 +282,8 @@ public class Verwaltung extends JFrame {
 		}
 	}
 	
+	
+	//eingetrage Änderungen werden im Debatingplan geändert, anschlie0end wird Fenster aktualisiert, um Änderungen direkt anzuzeigen
 	public void change() {
 		if(rdbtnNewSchools.isSelected()==true) { 			
 			dp.getSchulen().get(comboBox.getSelectedIndex()).setName(textFieldSchools1.getText());
@@ -272,6 +302,7 @@ public class Verwaltung extends JFrame {
 		}
 		else if(rdbtnNewSpeaker.isSelected()==true) {
 			dp.getSpeaker().get(comboBox.getSelectedIndex()).setName(textFieldSpeaker.getText());
+			aktualisierenMit(SPEAKERS);
 		}
 	}
 }
