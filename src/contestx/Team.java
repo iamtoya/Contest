@@ -79,7 +79,7 @@ public class Team {
 		tb.setHaveWon(win);										// das Team hat gewonnen
 		tb.setZeitzone(zeitzone);								// Zeitzone des Teams
 		
-		for(int z = 0; z < speakers.length; z++) {				// Speakerreihenfolge in Teambewertung
+		for(int z = 0; z < speakers.length; z++) {				// Speaker in Teambewertung
 			tb.setSpeakerAt(z, speakers[z]);
 		}
 		this.setTeambewertung(tb);
