@@ -38,7 +38,7 @@ public class Debatingplan {
 	}
 	
 	public ArrayList<Debate> berechne(boolean junior) {
-		reset();
+		reset(); //Komponenten erneuern/zurücksetzen
 		String[][] usedComps;
 		int dPT;
 		ArrayList<String> teamNames;
@@ -116,9 +116,9 @@ public class Debatingplan {
 	    return false;
 	}
 	
-	public boolean arrayContains(String[][] set, String[] temp) { //nur für String[2] temp!
+	public boolean arrayContains(String[][] set, String[] temp) {
 		for(int i = 0; i < set.length; i++) {
-			if((set[i][0].equals(temp[0]) && set[i][1].equals(temp[1])) || (set[i][0].equals(temp[1]) && set[i][1].equals(temp[0]))) {
+			if((set[i][0].equals(temp[0]) && set[i][1].equals(temp[1])) || (set[i][0].equals(temp[1]) && set[i][1].equals(temp[0]))) { //wenn die Zuordnung (TeamX vs. TeamY) bereits vorhanden ist
 				return true;
 			}
 		}
@@ -136,7 +136,7 @@ public class Debatingplan {
 			}
 		}
 		
-		if((teamsPro.size() == teamNames.size()) && (teamsCon.size() == teamNames.size())) return true;
+		if((teamsPro.size() == teamNames.size()) && (teamsCon.size() == teamNames.size())) return true; //wenn alle Teams enthalten sind, muss die Länge mit der der vorhandenen Teams übereinstimmen
 		else return false;
 	}
 	public Team replaceStringJunior(String s) { //findet das zum Teamnamen zugehörige Team
@@ -155,6 +155,7 @@ public class Debatingplan {
 		return teams_senior.get(i);
 	}
 	public void reset() {
+		//Zurücksetzen der Listen
 		debatesJ.clear();
 		debatesS.clear();
 		teamJuniorNames.clear();
