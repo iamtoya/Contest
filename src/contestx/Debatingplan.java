@@ -189,3 +189,5 @@ public class Debatingplan {
 		return speaker;
 	}
 }
+//Githubg ist beste
+
