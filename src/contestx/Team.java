@@ -58,8 +58,8 @@ public class Team {
 	//}
 	
 	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone, boolean pro, boolean win) {
-		int teampunkteGesamt = 0;
-		Teambewertung tb = new Teambewertung();
+		int teampunkteGesamt = 0;					// Variable die Punkte eines Teamsspeichert
+		Teambewertung tb = new Teambewertung();		// neues Teambewertungsobjekt
 		
 		for(int i = 0; i < speakers.length; i++) { //i = 1.,2.,3.,Reply-Speaker
 			int j = 0;
@@ -70,16 +70,16 @@ public class Team {
 			else speaker.get(j).setPunkteIn(zeitzone.getNumber()-1+3, punkte[i]);
 		    }
 		
-		for(int k = 0; k < punkte.length; k++) {
-			teampunkteGesamt = punkte[k] + teampunkteGesamt;	
+		for(int k = 0; k < punkte.length; k++) {				// geht Punktearray durch
+			teampunkteGesamt = punkte[k] + teampunkteGesamt;	// addiert die Punkte der Spieler um Teampunktzahl zu erhalten
 			}
 		
-		tb.setGesamtpunkte(teampunkteGesamt);
-		tb.setIsPro(pro);
-		tb.setHaveWon(win);
-		tb.setZeitzone(zeitzone);
+		tb.setGesamtpunkte(teampunkteGesamt);					// Punkte werden gespeichert in Teambewertung
+		tb.setIsPro(pro);										// das Team ist pro
+		tb.setHaveWon(win);										// das Team hat gewonnen
+		tb.setZeitzone(zeitzone);								// Zeitzone des Teams
 		
-		for(int z = 0; z < speakers.length; z++) {
+		for(int z = 0; z < speakers.length; z++) {				// Speakerreihenfolge in Teambewertung
 			tb.setSpeakerAt(z, speakers[z]);
 		}
 		this.setTeambewertung(tb);
