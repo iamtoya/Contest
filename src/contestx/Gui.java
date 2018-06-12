@@ -1,5 +1,4 @@
 package contestx;
-//SCHEI? GITHUB NEU HOCHLADEN
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 

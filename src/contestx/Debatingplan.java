@@ -1,5 +1,3 @@
-
-//SCHEI? GITHUB NEU HOCHLADEN
 package contestx;
 import java.util.ArrayList;
 import java.util.Arrays;
