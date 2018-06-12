@@ -11,3 +11,4 @@ Datum		Name			Was?
                     		anpassenden Speakern erscheint.
 8.6.18  	Jonas 			okay-button von punkteeingabe funktioniert jetzt
 9.6.18		Leo				setPoints Methode erweitert und beendet
+11.6.18 Jonas fixed setPoints-Methode (NullPointerException)
