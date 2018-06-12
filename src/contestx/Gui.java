@@ -623,6 +623,13 @@ public class Gui extends JFrame {
 	
 	public ArrayList<Debate> berechne(boolean junior) {
 		//Panels zurücksetzen(mehrfaches drücken)
+		panel.removeAll();
+		panel_1.removeAll();
+		panel_2.removeAll();
+		panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
+		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
 		debates.clear();
 		dp.reset();
 		//berechnen lassen
