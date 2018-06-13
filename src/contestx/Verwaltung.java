@@ -220,6 +220,7 @@ public class Verwaltung extends JFrame {
 			for(i = 0; i < dp.getJudges().size(); i++ ) {					//Alle Judges werden in die Auswahlliste eingetragen
 				comboBox.addItem(dp.getJudges().get(i).getName());
 			}
+			comboBoxJudgesSchools.removeAllItems();
 			for(i = 0; i < dp.getSchulen().size(); i++ ) {					//Schulen werden zusätzlich geaddet, da benötigt für Judges
 				comboBoxJudgesSchools.addItem(dp.getSchulen().get(i).getName());
 			}
