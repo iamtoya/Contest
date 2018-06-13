@@ -384,7 +384,14 @@ public class Gui extends JFrame {
 			northB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String s=JOptionPane.showInputDialog("Room Nr."); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man die Raumnummer eingeben kann
-				northB.setText("Room Nr. " + s);				}
+				if(s=="")
+				{
+					JOptionPane.showMessageDialog(subFrame, "No room entered", "Error Message", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					northB.setText("Room Nr. " + s);				}
+				}
 			});
 			
 			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
@@ -450,7 +457,31 @@ public class Gui extends JFrame {
 				}
 			});
 			
-			debates.get(i).add(new JButton("Judges"), BorderLayout.SOUTH);
+			 JButton southB = new JButton("Judge ?");
+	            debates.get(i).add(southB, BorderLayout.SOUTH);
+	            southB.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent arg0) {
+	                String s=JOptionPane.showInputDialog("Judge"); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man den Judge eingeben kann
+	               
+	                boolean e=false;
+	                for(int i=0; i<=dp.getJudges().size();i++)
+	                {
+	                    if(dp.getJudgeAt(i).getName()==s)
+	                    {
+	                        if(dp.getJudgeAt(i).getErfahren())
+	                        {
+	                            e=true;
+	                        }
+	                    }
+	                }
+	                if(e){
+	                    northB.setText("Judge" + s);
+	                }
+	                else{
+	                    JOptionPane.showMessageDialog(subFrame, "No experienced judge entered", "Error Message", JOptionPane.ERROR_MESSAGE);
+	                }
+	                }
+	            });
 		}
 		for(int i = 0; i < debatesPerTime; i++) { //die in debates gespeicherten, oben modifizierten Panels werden den drei großen Panels hinzugefügt
 			panel.add(debates.get(i));

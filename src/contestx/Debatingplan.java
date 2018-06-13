@@ -181,6 +181,11 @@ public class Debatingplan {
 		return schulen;
 	}
 	
+	public Judge getJudgeAt(int index)
+	{
+		return judges.get(index);
+	}
+	
 	public ArrayList<Judge> getJudges() {
 		return judges;
 	}
