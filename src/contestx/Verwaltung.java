@@ -36,6 +36,7 @@ public class Verwaltung extends JFrame {
 	private JLabel lblSchool;
 	private JTextField textFieldSpeaker;
 	private JLabel lblNewLabel_1;
+	private JButton btnDelete;
 	
 	
 	
@@ -154,9 +155,18 @@ public class Verwaltung extends JFrame {
 		textFieldSpeaker.setBounds(35, 194, 124, 20);
 		getContentPane().add(textFieldSpeaker);
 		textFieldSpeaker.setColumns(10);
+		
+		btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				delete();
+			}
+		});
+		btnDelete.setBounds(326, 150, 86, 36);
+		getContentPane().add(btnDelete);
+		
 		lblSchool.setVisible(false);
-		
-		
+			
 		
 		
 		
@@ -305,5 +315,23 @@ public class Verwaltung extends JFrame {
 			dp.getSpeaker().get(comboBox.getSelectedIndex()).setName(textFieldSpeaker.getText());
 			aktualisierenMit(SPEAKERS);
 		}
+	}
+	
+	
+	public void delete() {
+		int was;
+		if(rdbtnNewSchools.isSelected()==true){ was = SCHULEN; }
+		else if(rdbtnNewJudges.isSelected()==true) {was = JUDGES;  }
+		else if(rdbtnNewSpeaker.isSelected()==true) {was = SPEAKERS;  }
+		else { was = -1; }
+		if(true==true) {
+			switch(was) {
+				case(SCHULEN): dp.getSchulen().remove(comboBox.getSelectedIndex());
+				case(JUDGES): dp.getJudges().remove(comboBox.getSelectedIndex());
+				case(SPEAKERS): dp.getSpeaker().remove(comboBox.getSelectedIndex());
+			}
+			
+		}
+		
 	}
 }
