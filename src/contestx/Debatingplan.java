@@ -96,6 +96,19 @@ public class Debatingplan {
 		else return debatesS;
 	}
 	
+	public void judgesZuordnen()
+	{
+		ArrayList<Judge> kannAktuell = new ArrayList<Judge>();
+		//Zeitzone 1
+		for(int i = 0; i < judges.size(); i++)
+		{
+			
+		}
+			
+		//Zeitzone 2
+		//Zeitzone 3
+	}
+	
 	public boolean entryDuplicated(String[][] array, int start, int end) { //sucht nach Duplikaten im String[][]
 		String[][] set = new String[array.length][array[0].length];
 		for(int i = 0; i < set.length; i++) { //Array wird mit "" gefüllt (verhindert NullPointerException)
@@ -188,6 +201,10 @@ public class Debatingplan {
 	
 	public ArrayList<Judge> getJudges() {
 		return judges;
+	}
+	
+	public void addJudge(Judge j) {
+		judges.add(j);
 	}
 	
 	public ArrayList<Speaker> getSpeaker() {

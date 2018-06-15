@@ -12,9 +12,9 @@ public class Judge {
 		this.name = name;
 		this.erfahren = erfahren;
 		kannZuZeit = new ArrayList<>();
-		kannZuZeit.add(false);
-		kannZuZeit.add(false);
-		kannZuZeit.add(false);
+		kannZuZeit.add(true);
+		kannZuZeit.add(true);
+		kannZuZeit.add(true);
 	}
 	
 	public Judge(String name, Schule schule, boolean erfahren) {
@@ -22,9 +22,9 @@ public class Judge {
 		this.schule=schule;
 		this.erfahren=erfahren;
 		kannZuZeit = new ArrayList<>();
-		kannZuZeit.add(false);
-		kannZuZeit.add(false);
-		kannZuZeit.add(false);
+		kannZuZeit.add(true);
+		kannZuZeit.add(true);
+		kannZuZeit.add(true);
 	}
 	
 	

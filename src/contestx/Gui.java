@@ -135,7 +135,7 @@ public class Gui extends JFrame {
 			teams_junior.get(i).setSpeakerAt(0,new Speaker("Tim", teams_junior.get(i)));
 			teams_junior.get(i).setSpeakerAt(1,new Speaker("Joe", teams_junior.get(i)));
 			teams_junior.get(i).setSpeakerAt(2,new Speaker("Ann", teams_junior.get(i)));
-			teams_senior.add(new Team(schulen.get(i), true));
+			teams_senior.add(new Team(schulen.get(i), false));
 		}
 		//schulen problem gelöst
 		teams_junior.get(2).setSpeakerAt(3, new Speaker("Hans", teams_junior.get(2)));
@@ -189,6 +189,7 @@ public class Gui extends JFrame {
 		btnAddJudge.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showEnterJudgeDialog();
+				int i = 0;
 			}
 		});
 		
@@ -466,7 +467,7 @@ public class Gui extends JFrame {
 	            		boolean e=false;
 	            		for(int i=0; i<dp.getJudges().size();i++)
 	            		{
-	            			if(dp.getJudgeAt(i).getName()==s)
+	            			if(dp.getJudgeAt(i).getName().equals(s))
 	            			{
 	            				if(dp.getJudgeAt(i).getErfahren())
 	            				{
@@ -475,7 +476,7 @@ public class Gui extends JFrame {
 	            			}
 	            		}
 	            		if(e){
-	            			northB.setText("Judge" + s);
+	            			southB.setText("Judge" + s);
 	            		}
 	            		else{
 	            			JOptionPane.showMessageDialog(subFrame, "No experienced judge entered", "Error Message", JOptionPane.ERROR_MESSAGE);
@@ -531,10 +532,10 @@ public class Gui extends JFrame {
 		String s = (String)JOptionPane.showInputDialog(subFrame, options);
 		if(s != null && s.length() > 0) {
 			if(chckbx[0].isSelected()) {
-				judges.add(new Judge(s,false));
+				dp.addJudge(new Judge(s, true));
 			}
 			else {
-				judges.add(new Judge(s, true));
+				dp.addJudge(new Judge(s, false));
 			}			
 		}
 		try{ 
