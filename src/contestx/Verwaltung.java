@@ -324,14 +324,17 @@ public class Verwaltung extends JFrame {
 		else if(rdbtnNewJudges.isSelected()==true) {was = JUDGES;  }
 		else if(rdbtnNewSpeaker.isSelected()==true) {was = SPEAKERS;  }
 		else { was = -1; }
-		if(true==true) {
+		int i = (int)JOptionPane.showConfirmDialog(getParent(), "Are you sure to delete " + comboBox.getSelectedItem().toString() + " ?", "Confirm deleting", JOptionPane.YES_NO_OPTION);
+		if(i==0) {
 			switch(was) {
-				case(SCHULEN): dp.getSchulen().remove(comboBox.getSelectedIndex());
-				case(JUDGES): dp.getJudges().remove(comboBox.getSelectedIndex());
-				case(SPEAKERS): dp.getSpeaker().remove(comboBox.getSelectedIndex());
+				case(SCHULEN): {
+					dp.getSchulen().remove(comboBox.getSelectedIndex()); break;
+					dp.
+				}
+				case(JUDGES): dp.getJudges().remove(comboBox.getSelectedIndex()); break;
+				case(SPEAKERS): dp.getSpeaker().remove(comboBox.getSelectedIndex()); break;				
 			}
-			
-		}
-		
+			aktualisierenMit(was);			
+		}		
 	}
 }
