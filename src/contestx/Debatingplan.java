@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JButton;
+
 public class Debatingplan {
 	private ArrayList<Debate> debatesJ;
 	private ArrayList<Debate> debatesS;
@@ -35,6 +37,28 @@ public class Debatingplan {
 		schulen = new ArrayList<Schule>();
 		speaker = new ArrayList<Speaker>();
 		judges = new ArrayList<Judge>();
+		
+		judges.add(new Judge("1", true));
+		judges.add(new Judge("2", true));
+		judges.add(new Judge("3", true));
+		judges.add(new Judge("4", true));
+		judges.add(new Judge("5", true));
+		judges.add(new Judge("6", true));
+		judges.add(new Judge("7", true));
+		judges.add(new Judge("8", true));
+		judges.add(new Judge("9", true));
+		judges.add(new Judge("10", true));
+		judges.add(new Judge("11", true));
+		judges.add(new Judge("12", true));
+		judges.add(new Judge("13", true));
+		judges.add(new Judge("14", true));
+		judges.add(new Judge("15", true));
+		judges.add(new Judge("16", true));
+		judges.add(new Judge("17", true));
+		judges.add(new Judge("18", true));
+		judges.add(new Judge("19", true));
+
+		
 	}
 	
 	public ArrayList<Debate> berechne(boolean junior) {
@@ -98,15 +122,86 @@ public class Debatingplan {
 	
 	public void judgesZuordnen()
 	{
+		Collections.shuffle(judges);
+		ArrayList<Judge> erfahren = new ArrayList<Judge>();
 		ArrayList<Judge> kannAktuell = new ArrayList<Judge>();
 		//Zeitzone 1
 		for(int i = 0; i < judges.size(); i++)
 		{
+			if(judges.get(i).getKannZuZZ1()) {
+				kannAktuell.add(judges.get(i));
+			}
+		}
+		kannAktuell = erfahrenFuellen(erfahren, kannAktuell);
+		zuordnen(1, erfahren, kannAktuell);
+		
+		erfahren.clear();
+		kannAktuell.clear();
+		//Zeitzone 2
+		for(int i = 0; i < judges.size(); i++)
+		{
+			if(judges.get(i).getKannZuZZ2()) {
+				kannAktuell.add(judges.get(i));
+			}
+		}
+		kannAktuell = erfahrenFuellen(erfahren, kannAktuell);
+		zuordnen(2, erfahren, kannAktuell);
+		
+		erfahren.clear();
+		kannAktuell.clear();
+		//Zeitzone 3
+		for(int i = 0; i < judges.size(); i++)
+		{
+			if(judges.get(i).getKannZuZZ3()) {
+				kannAktuell.add(judges.get(i));
+			}
+		}
+		kannAktuell = erfahrenFuellen(erfahren, kannAktuell);
+		zuordnen(3, erfahren, kannAktuell);
+	}
+	
+	private ArrayList<Judge> erfahrenFuellen(ArrayList<Judge> erfahren, ArrayList<Judge> kannAktuell) {
+		Collections.shuffle(judges);
+		int x = 0;
+		dPTsenior = 0; //erstmal wenn nur junior wichtig
+		while(erfahren.size() < (dPTjunior + dPTsenior)) {
+			if(kannAktuell.get(x).getErfahren()) {
+				erfahren.add(kannAktuell.get(x));
+				kannAktuell.remove(x);
+				x--;
+			}
+			x++;
+		}
+		return kannAktuell;
+	}
+	private void zuordnen(int zeitzone, ArrayList<Judge> erfahren, ArrayList<Judge> kannAktuell) {
+		for(int i = 0; i < erfahren.size(); i++) {
+			JButton b;
+			switch(zeitzone) {
+			case 1: b = (JButton) this.gui.getDebates().get(i).getComponent(3);
+			break;
+			case 2: b = (JButton) this.gui.getDebates().get(i+erfahren.size()).getComponent(3);
+			break;
+			case 3: b = (JButton) this.gui.getDebates().get(2*erfahren.size()+i).getComponent(3);
+			break;
+			default: b = (JButton) this.gui.getDebates().get(i).getComponent(3);
+			}
+			Judge j1 = new Judge();
+			Judge j2 = new Judge();
+			for(int j = 0; j < kannAktuell.size(); j++) {
+				if(j1.getName().equals("")) {
+					j1 = kannAktuell.get(j);
+					kannAktuell.remove(j);
+				}
+				if(j2.getName().equals("")) {
+					j2 = kannAktuell.get(j);
+					kannAktuell.remove(j);
+				}
+			}
+			b.setText(erfahren.get(i).getName() + ", " + j1.getName() + ", " + j2.getName());
 			
 		}
-			
-		//Zeitzone 2
-		//Zeitzone 3
+		
 	}
 	
 	public boolean entryDuplicated(String[][] array, int start, int end) { //sucht nach Duplikaten im String[][]

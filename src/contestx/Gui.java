@@ -174,6 +174,11 @@ public class Gui extends JFrame {
 		btnTimezone_2.setEnabled(false);
 		btnTimezone_2.setBounds(47, 463, 137, 52);
 		contentPane.add(btnTimezone_2);
+		btnTimezone_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				dp.judgesZuordnen();
+			}
+		});
 		
 		
 		//Add-SchoolButton
@@ -703,6 +708,10 @@ public class Gui extends JFrame {
 	
 	public void manage() {
 		verwaltung.anzeigen();		
+	}
+	
+	public ArrayList<JPanel> getDebates() {
+		return debates;
 	}
 }
 //Githubg ist beste

@@ -8,6 +8,11 @@ public class Judge {
 	private boolean erfahren;
 	private ArrayList<Boolean> kannZuZeit;
 	
+	public Judge() { //Dummy-Judge
+		name = "";
+		erfahren = false;
+		kannZuZeit = new ArrayList<>();
+	}
 	public Judge(String name, boolean erfahren) {
 		this.name = name;
 		this.erfahren = erfahren;
@@ -43,15 +48,15 @@ public class Judge {
 	}
 	
 	public Boolean getKannZuZZ1() {
-		return kannZuZeit.get(1);
+		return kannZuZeit.get(0);
 	}
 	
 	public Boolean getKannZuZZ2() {
-		return kannZuZeit.get(2);
+		return kannZuZeit.get(1);
 	}
 	
 	public Boolean getKannZuZZ3() {
-		return kannZuZeit.get(3);
+		return kannZuZeit.get(2);
 	}
 	
 	public void setName(String name) {
