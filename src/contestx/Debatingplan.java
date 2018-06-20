@@ -32,6 +32,8 @@ public class Debatingplan {
 		this.gui = gui; //referenzieren (für Datenfluss später)
 		debatesJ = new ArrayList<Debate>(); //die nachher auszugebende Liste der Debates
 		debatesS = new ArrayList<Debate>();
+		teams_junior = new ArrayList<Team>();
+		teams_senior = new ArrayList<Team>();
 		teamJuniorNames = new ArrayList<String>(); 
 		teamSeniorNames = new ArrayList<String>();
 		schulen = new ArrayList<Schule>();
@@ -281,13 +283,13 @@ public class Debatingplan {
 		teamJuniorNames.clear();
 		teamSeniorNames.clear();
 		//erneuern der vom GUI abgerufenen Daten
-		teams_junior = this.gui.getJuniorTeams(); //Datenfluss: zur Liste der im GUI gespeicherten Teams wird hier referenziert
+		//teams_junior = this.gui.getJuniorTeams(); //Datenfluss: zur Liste der im GUI gespeicherten Teams wird hier referenziert
 		for(int i = 0; i < teams_junior.size(); i++) {
 			teamJuniorNames.add(teams_junior.get(i).getSchule().getName()); //Strings werden hier verwendet, da sie besser in der berechne()-Methode anwendbar sind, als Teams
 		Collections.shuffle(teamJuniorNames); //Reihenfolge randomisieren
 		dPTjunior = (int) teamJuniorNames.size()/2; //pro Zeitzone können nur die Hälfte (abgerundet) alles Teams in verschiedenen Debates sein, da zwei jener eins jenes besuchen
 		}
-		teams_senior = this.gui.getSeniorTeams();
+		//teams_senior = this.gui.getSeniorTeams();
 		for(int i1 = 0; i1 < teams_senior.size(); i1++) {
 			teamSeniorNames.add(teams_senior.get(i1).getSchule().getName());
 		}
@@ -317,6 +319,23 @@ public class Debatingplan {
 	public ArrayList<Speaker> getSpeaker() {
 		return speaker;
 	}
+	
+	public ArrayList<Team> getJuniorTeams() {
+		return teams_junior;
+	}
+	
+	public ArrayList<Team> getSeniorTeams() {
+		return teams_senior;
+	}
+	
+	public ArrayList<Debate> getJuniorDebates() {
+		return debatesJ;
+	}
+	
+	public ArrayList<Debate> getSeniorDebates() {
+		return debatesS;
+	}
+	
 }
 //Githubg ist beste
 
