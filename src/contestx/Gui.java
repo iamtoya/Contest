@@ -709,4 +709,4 @@ public class Gui extends JFrame {
 		return debates;
 	}
 }
-//Githubg ist beste
+//NEIN NEIN NEIN NEIN NEIN NEIN
