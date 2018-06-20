@@ -329,7 +329,6 @@ public class Verwaltung extends JFrame {
 			switch(was) {
 				case(SCHULEN): {
 					dp.getSchulen().remove(comboBox.getSelectedIndex()); break;
-					dp.
 				}
 				case(JUDGES): dp.getJudges().remove(comboBox.getSelectedIndex()); break;
 				case(SPEAKERS): dp.getSpeaker().remove(comboBox.getSelectedIndex()); break;				

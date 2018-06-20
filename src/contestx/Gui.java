@@ -35,13 +35,14 @@ import javax.swing.SwingConstants;
 
 public class Gui extends JFrame {
 
-	private JPanel contentPane;
-	private ArrayList<Schule> schulen;
-	private ArrayList<Team> teams_junior;
-	private ArrayList<Team> teams_senior;
-	private ArrayList<Judge> judges;
-	private ArrayList<Speaker> speaker;
+	
+	//private ArrayList<Schule> schulen;
+	//private ArrayList<Team> dp.getJuniorTeams();
+	//private ArrayList<Team> dp.getSeniorTeams();
+	//private ArrayList<Judge> judges;
+	//private ArrayList<Speaker> speaker;
 	private ArrayList<JPanel> debates; //die Debates werden hier vereinfacht als Panels betrachtet; Liste aller im Plan vorkommenden Debates als Panels
+	private JPanel contentPane;
 	private Debatingplan dp;
 	private Verwaltung verwaltung;
 	private JButton btnTimezone = new JButton("Timezone 1");
@@ -57,22 +58,22 @@ public class Gui extends JFrame {
 	private JTextField textField;
 	private JTextField textField_2;
 	private JTextField textField_3;
-	private final JLabel label = new JLabel(":");
-	private final JLabel label_1 = new JLabel(":");
-	private final JLabel label_2 = new JLabel(":");
 	private final JTextField textField_4 = new JTextField();
-	private final JLabel label_3 = new JLabel(":");
 	private final JTextField textField_5 = new JTextField();
 	private final JTextField textField_6 = new JTextField();
 	private final JTextField textField_7 = new JTextField();
-	private final JLabel label_4 = new JLabel(":");
-	private final JLabel label_5 = new JLabel("von:");
-	private final JLabel label_6 = new JLabel("bis:");
 	private final JTextField textField_8 = new JTextField();
-	private final JLabel label_7 = new JLabel(":");
 	private final JTextField textField_9 = new JTextField();
 	private final JTextField textField_10 = new JTextField();
 	private final JTextField textField_11 = new JTextField();
+	private final JLabel label = new JLabel(":");
+	private final JLabel label_1 = new JLabel(":");
+	private final JLabel label_2 = new JLabel(":");
+	private final JLabel label_3 = new JLabel(":");
+	private final JLabel label_4 = new JLabel(":");
+	private final JLabel label_5 = new JLabel("von:");
+	private final JLabel label_6 = new JLabel("bis:");
+	private final JLabel label_7 = new JLabel(":");
 	private final JLabel label_8 = new JLabel(":");
 	private final JLabel label_9 = new JLabel("von:");
 	private final JLabel label_10 = new JLabel("bis:");
@@ -110,35 +111,32 @@ public class Gui extends JFrame {
 		subFrame = new JFrame();
 		subFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE); //resettet sich beim Schlieﬂen
 		
-		teams_junior = new ArrayList<Team>();
-		teams_senior = new ArrayList<Team>();
+		//dp.getJuniorTeams() = new ArrayList<Team>();
+		//dp.getSeniorTeams() = new ArrayList<Team>();
 				
-		//breakStringIfTooLong(teams_junior.get(3));
-		teams_senior = new ArrayList<Team>();
+		//breakStringIfTooLong(dp.getJuniorTeams().get(3));
+		//dp.getSeniorTeams() = new ArrayList<Team>();
 		debates = new ArrayList<JPanel>();
 		
 		dp = new Debatingplan(this);
 		verwaltung = new Verwaltung(dp);
-		schulen = dp.getSchulen();
-		judges = dp.getJudges();
-		speaker = dp.getSpeaker();
-		schulen.add(new Schule("1"));
-		schulen.add(new Schule("2"));
-		schulen.add(new Schule("3"));
-		schulen.add(new Schule("4"));
-		schulen.add(new Schule("5"));
-		schulen.add(new Schule("6"));
-		schulen.add(new Schule("7"));
-		schulen.add(new Schule("8"));
-		for(int i = 0; i < schulen.size(); i++) {
-			teams_junior.add(new Team(schulen.get(i), true));
-			teams_junior.get(i).setSpeakerAt(0,new Speaker("Tim", teams_junior.get(i)));
-			teams_junior.get(i).setSpeakerAt(1,new Speaker("Joe", teams_junior.get(i)));
-			teams_junior.get(i).setSpeakerAt(2,new Speaker("Ann", teams_junior.get(i)));
-			teams_senior.add(new Team(schulen.get(i), false));
+		dp.getSchulen().add(new Schule("1")); 
+		dp.getSchulen().add(new Schule("2"));
+		dp.getSchulen().add(new Schule("3"));
+		dp.getSchulen().add(new Schule("4"));
+		dp.getSchulen().add(new Schule("5"));
+		dp.getSchulen().add(new Schule("6"));
+		dp.getSchulen().add(new Schule("7"));
+		dp.getSchulen().add(new Schule("8"));
+		for(int i = 0; i < dp.getSchulen().size(); i++) {
+			dp.getJuniorTeams().add(new Team(dp.getSchulen().get(i), true));
+			dp.getJuniorTeams().get(i).setSpeakerAt(0,new Speaker("Tim", dp.getJuniorTeams().get(i)));
+			dp.getJuniorTeams().get(i).setSpeakerAt(1,new Speaker("Joe", dp.getJuniorTeams().get(i)));
+			dp.getJuniorTeams().get(i).setSpeakerAt(2,new Speaker("Ann", dp.getJuniorTeams().get(i)));
+			dp.getSeniorTeams().add(new Team(dp.getSchulen().get(i), false));
 		}
 		//schulen problem gelˆst
-		teams_junior.get(2).setSpeakerAt(3, new Speaker("Hans", teams_junior.get(2)));
+		dp.getJuniorTeams().get(2).setSpeakerAt(3, new Speaker("Hans", dp.getJuniorTeams().get(2)));
 		
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -325,7 +323,7 @@ public class Gui extends JFrame {
 		JButton btnBerechne = new JButton("Calculate with insert data");
 		btnBerechne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(teams_junior.size()>5) {
+				if(dp.getJuniorTeams().size()>5) {
 					btnTimezone.setEnabled(true);
 					btnTimezone_1.setEnabled(true);
 					btnTimezone_2.setEnabled(true);
@@ -502,17 +500,17 @@ public class Gui extends JFrame {
 		chckbxs[1].setSelected(true);
 		Object[] options = {"Enter school name:", chckbxs};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options); //Schulname wird in "s" gespeichert
-		schulen.add(new Schule(s)); //und den "schulen" hinzugef¸gt
+		dp.getSchulen().add(new Schule(s)); //und den "schulen" hinzugef¸gt
 		if(s != null && s.length() > 0) { //der Fall, dass keine Schule eingegeben wurde wird hier abgefangen
 			if(chckbxs[0].isSelected() && chckbxs[1].isSelected()) { //unterschieden wird in der Anzahl der gew‰hlten Checkboxes
-				teams_junior.add(new Team(schulen.get(schulen.size()-1), true)); //die team-listen werden erweitert
-				teams_senior.add(new Team(schulen.get(schulen.size()-1), false));
+				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), true)); //die team-listen werden erweitert
+				dp.getSeniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), false));
 			}
 			else if (chckbxs[0].isSelected()) {
-				teams_junior.add(new Team(schulen.get(schulen.size()-1), true));
+				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), true));
 			}
 			else if (chckbxs[1].isSelected()) {
-				teams_junior.add(new Team(schulen.get(schulen.size()-1), false));
+				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), false));
 			}
 			else {
 			//keine Checkbox wurde ausgew‰hlt -> kein Team dieser Schule nimmt teil -> die Schule nimmt nicht teil
@@ -557,7 +555,7 @@ public class Gui extends JFrame {
 		Object[] options = {"Enter speaker name:"};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options);
 		if(s != null && s.length() > 0) {
-			speaker.add(new Speaker(s));
+			dp.getSpeaker().add(new Speaker(s));
 		}
 		try{ 
 			if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
@@ -681,10 +679,10 @@ public class Gui extends JFrame {
 		return fin.toString();
 	}
 	public ArrayList<Team> getJuniorTeams() {
-		return teams_junior;
+		return dp.getJuniorTeams();
 	}
 	public ArrayList<Team> getSeniorTeams() {
-		return teams_senior;
+		return dp.getSeniorTeams();
 	}
 	
 	public ArrayList<Debate> berechne(boolean junior) {
@@ -701,9 +699,6 @@ public class Gui extends JFrame {
 		//berechnen lassen
 		ArrayList<Debate> array = dp.berechne(junior);
 		return array;
-	}
-	public ArrayList<Schule> getSchools() {
-		return schulen;
 	}
 	
 	public void manage() {
