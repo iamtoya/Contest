@@ -188,6 +188,14 @@ public class Debatingplan {
 			}
 			Judge j1 = new Judge();
 			Judge j2 = new Judge();
+			JButton x = (JButton) this.gui.getDebates().get(i).getComponent(2);
+			JButton y = (JButton) this.gui.getDebates().get(i).getComponent(1);
+			String x1 = x.getText();
+			x1.replaceAll("<html>Con<br/>", "");
+			x1.replaceAll("</html>", "");
+			String y1 = y.getText();
+			y1.replaceAll("<html>Pro<br/>", "");
+			y1.replaceAll("</html>", "");
 			for(int j = 0; j < kannAktuell.size(); j++) {
 				if(j1.getName().equals("")) {
 					j1 = kannAktuell.get(j);
@@ -198,7 +206,11 @@ public class Debatingplan {
 					kannAktuell.remove(j);
 				}
 			}
-			b.setText(erfahren.get(i).getName() + ", " + j1.getName() + ", " + j2.getName());
+			
+			if(!j1.getSchule().getName().equals(x1) && !j1.getSchule().getName().equals(y1) && !j2.getSchule().getName().equals(x1) && !j2.getSchule().getName().equals(y1))
+				{
+					b.setText(erfahren.get(i).getName() + ", " + j1.getName() + ", " + j2.getName());
+				}
 			
 		}
 		

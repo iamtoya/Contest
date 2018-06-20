@@ -12,6 +12,7 @@ public class Judge {
 		name = "";
 		erfahren = false;
 		kannZuZeit = new ArrayList<>();
+		schule = new Schule("1");
 	}
 	public Judge(String name, boolean erfahren) {
 		this.name = name;
