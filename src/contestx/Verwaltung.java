@@ -320,6 +320,7 @@ public class Verwaltung extends JFrame {
 	
 	public void delete() {
 		int was;
+		int j = 0;
 		if(rdbtnNewSchools.isSelected()==true){ was = SCHULEN; }
 		else if(rdbtnNewJudges.isSelected()==true) {was = JUDGES;  }
 		else if(rdbtnNewSpeaker.isSelected()==true) {was = SPEAKERS;  }
@@ -328,7 +329,17 @@ public class Verwaltung extends JFrame {
 		if(i==0) {
 			switch(was) {
 				case(SCHULEN): {
-					dp.getSchulen().remove(comboBox.getSelectedIndex()); break;
+					while(j<dp.getJuniorTeams().size() && j > 0) {
+						if(dp.getJuniorTeams().get(j).getSchule() == dp.getSchulen().get(comboBox.getSelectedIndex())) {
+							dp.getJuniorTeams().remove(j);
+							j = -1;
+						}
+						else {
+							j++;
+						}
+					}
+					dp.getSchulen().remove(comboBox.getSelectedIndex()); 
+					break;
 				}
 				case(JUDGES): dp.getJudges().remove(comboBox.getSelectedIndex()); break;
 				case(SPEAKERS): dp.getSpeaker().remove(comboBox.getSelectedIndex()); break;				
