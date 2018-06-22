@@ -15,7 +15,7 @@ public class Schule {
 	public Schule(String name, boolean junior, boolean senior) {
 		this.name = name;
 		this.hasJuniorTeam = junior;
-		hasSeniorTeam = senior;
+		this.hasSeniorTeam = senior;
 		if(junior) juniorTeam = new Team(this, true);
 		if(senior) seniorTeam = new Team(this, false);
 	}

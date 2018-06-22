@@ -197,6 +197,12 @@ public class Verwaltung extends JFrame {
 			};
 		});
 		
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				untenAnzeigen();
+			};
+		});
+		
 		
 		
 		
@@ -346,5 +352,28 @@ public class Verwaltung extends JFrame {
 			}
 			aktualisierenMit(was);			
 		}		
+	}
+	
+	
+	
+	public void untenAnzeigen() {
+		int was;
+		if(rdbtnNewSchools.isSelected()==true){ was = SCHULEN; }
+		else if(rdbtnNewJudges.isSelected()==true) {was = JUDGES;  }
+		else if(rdbtnNewSpeaker.isSelected()==true) {was = SPEAKERS;  }
+		else { was = -1; }
+		switch(was) {
+			case(SCHULEN): {
+				chckbxSchools1.setSelected(dp.getSchulen().get(comboBox.getSelectedIndex()).getHasJuniorTeam());
+				chckbxSchools2.setSelected(dp.getSchulen().get(comboBox.getSelectedIndex()).getHasSeniorTeam());
+				textFieldSchools1.setText(dp.getSchulen().get(comboBox.getSelectedIndex()).getName());
+			}
+			case(JUDGES): {
+				
+			}
+			case(SPEAKERS): {
+				
+			}
+		}
 	}
 }
