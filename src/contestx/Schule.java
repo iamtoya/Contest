@@ -11,6 +11,15 @@ public class Schule {
 	public Schule(String name) {
 		this.name = name;
 	}
+	
+	public Schule(String name, boolean junior, boolean senior) {
+		this.name = name;
+		this.hasJuniorTeam = junior;
+		hasSeniorTeam = senior;
+		if(junior) juniorTeam = new Team(this, true);
+		if(senior) seniorTeam = new Team(this, false);
+	}
+	
 	public Schule(String name, boolean junior, boolean senior, Team juniorTeam, Team seniorTeam) {
 		this.name=name;
 		this.hasJuniorTeam=junior;
