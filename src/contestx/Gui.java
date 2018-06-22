@@ -172,11 +172,6 @@ public class Gui extends JFrame {
 		btnTimezone_2.setEnabled(false);
 		btnTimezone_2.setBounds(47, 463, 137, 52);
 		contentPane.add(btnTimezone_2);
-		btnTimezone_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				dp.judgesZuordnen();
-			}
-		});
 		
 		
 		//Add-SchoolButton
@@ -356,6 +351,15 @@ public class Gui extends JFrame {
 		btnAddSpeaker.setBounds(516, 47, 140, 51);
 		
 		contentPane.add(btnAddSpeaker);
+		
+		JButton btnNewButton = new JButton("Calculate judges");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dp.judgesZuordnen();
+			}
+		});
+		btnNewButton.setBounds(1168, 45, 140, 54);
+		contentPane.add(btnNewButton);
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
