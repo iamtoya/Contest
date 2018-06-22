@@ -699,7 +699,6 @@ public class Gui extends JFrame {
 		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
 		debates.clear();
-		dp.reset();
 		//berechnen lassen
 		ArrayList<Debate> array = dp.berechne(junior);
 		return array;
