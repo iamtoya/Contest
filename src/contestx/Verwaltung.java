@@ -37,6 +37,7 @@ public class Verwaltung extends JFrame {
 	private JTextField textFieldSpeaker;
 	private JLabel lblNewLabel_1;
 	private JButton btnDelete;
+	private boolean updateFinished = false;
 	
 	
 	
@@ -197,12 +198,12 @@ public class Verwaltung extends JFrame {
 			};
 		});
 		
+			
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				untenAnzeigen();
 			};
 		});
-		
 		
 		
 		
@@ -222,6 +223,7 @@ public class Verwaltung extends JFrame {
 	//aktualisiert das Fenster mit den Daten der mitgeteilten Gruppe "was"
 	public void aktualisierenMit(int was) {
 		int i = 0;
+		updateFinished=false;
 		comboBox.removeAllItems();
 		
 		switch(was) {
@@ -247,10 +249,11 @@ public class Verwaltung extends JFrame {
 			for(i = 0; i < dp.getSpeaker().size(); i++ ) {					//Alle Speaker werden in die Auswahlliste eingetragen
 				comboBox.addItem(dp.getSpeaker().get(i).getName());
 			}
-		this.lblNewLabel_1.setText("Choose the speaker to be changed:");
+			this.lblNewLabel_1.setText("Choose the speaker to be changed:");
 			nurAnzeigen(was);
 			break;
 		}
+		updateFinished=true;
 	}
 	
 	
@@ -358,21 +361,38 @@ public class Verwaltung extends JFrame {
 	
 	public void untenAnzeigen() {
 		int was;
+		int schulenIndex;
+		int schuleGefunden=0;
 		if(rdbtnNewSchools.isSelected()==true){ was = SCHULEN; }
 		else if(rdbtnNewJudges.isSelected()==true) {was = JUDGES;  }
 		else if(rdbtnNewSpeaker.isSelected()==true) {was = SPEAKERS;  }
 		else { was = -1; }
-		switch(was) {
-			case(SCHULEN): {
-				chckbxSchools1.setSelected(dp.getSchulen().get(comboBox.getSelectedIndex()).getHasJuniorTeam());
-				chckbxSchools2.setSelected(dp.getSchulen().get(comboBox.getSelectedIndex()).getHasSeniorTeam());
-				textFieldSchools1.setText(dp.getSchulen().get(comboBox.getSelectedIndex()).getName());
-			}
-			case(JUDGES): {
-				
-			}
-			case(SPEAKERS): {
-				
+		if(updateFinished) {
+			switch(was) {
+				case(SCHULEN): {
+					chckbxSchools1.setSelected(dp.getSchulen().get(comboBox.getSelectedIndex()).getHasJuniorTeam());
+					chckbxSchools2.setSelected(dp.getSchulen().get(comboBox.getSelectedIndex()).getHasSeniorTeam());
+					textFieldSchools1.setText(dp.getSchulen().get(comboBox.getSelectedIndex()).getName());
+					break;
+				}
+				case(JUDGES): {
+					textFieldJudges.setText(dp.getJudges().get(comboBox.getSelectedIndex()).getName());
+					chckbxIsExperienced.setSelected(dp.getJudges().get(comboBox.getSelectedIndex()).getErfahren());
+					chckbxJudgesZZ1.setSelected(dp.getJudges().get(comboBox.getSelectedIndex()).getKannZuZZ1());
+					chckbxJudgesZZ2.setSelected(dp.getJudges().get(comboBox.getSelectedIndex()).getKannZuZZ2());
+					chckbxJudgesZZ3.setSelected(dp.getJudges().get(comboBox.getSelectedIndex()).getKannZuZZ3());
+					for(schulenIndex = 0; schulenIndex < comboBox.getItemCount() && schuleGefunden == 0; schulenIndex++) {
+						if(dp.getSchulen().get(schulenIndex)==dp.getJudges().get(comboBox.getSelectedIndex()).getSchule()) {
+							schuleGefunden=1;
+						}
+					}
+					
+					break;
+				}
+				case(SPEAKERS): {
+
+					break;
+				}
 			}
 		}
 	}
