@@ -210,9 +210,9 @@ public class Debatingplan {
 			}
 			
 			if(!j1.getSchule().getName().equals(x1) && !j1.getSchule().getName().equals(y1) && !j2.getSchule().getName().equals(x1) && !j2.getSchule().getName().equals(y1))
-				{
-					b.setText(erfahren.get(i).getName() + ", " + j1.getName() + ", " + j2.getName());
-				}
+			{
+				b.setText(erfahren.get(i).getName() + ", " + j1.getName() + ", " + j2.getName());
+			}
 			
 		}
 		
