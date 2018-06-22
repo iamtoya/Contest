@@ -134,7 +134,8 @@ public class Debatingplan {
 				kannAktuell.add(judges.get(i));
 			}
 		}
-		kannAktuell = erfahrenFuellen(erfahren, kannAktuell);
+		erfahren = erfahrenFuellen(erfahren, kannAktuell);
+		kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
 		zuordnen(1, erfahren, kannAktuell);
 		
 		erfahren.clear();
@@ -169,10 +170,18 @@ public class Debatingplan {
 		while(erfahren.size() < (dPTjunior + dPTsenior)) {
 			if(kannAktuell.get(x).getErfahren()) {
 				erfahren.add(kannAktuell.get(x));
-				kannAktuell.remove(x);
-				x--;
 			}
 			x++;
+		}
+		return erfahren;
+	}
+	private ArrayList<Judge> kannAktuellKuerzen(ArrayList<Judge> erfahren, ArrayList<Judge> kannAktuell) {
+		Collections.shuffle(judges);
+		dPTsenior = 0; //erstmal wenn nur junior wichtig
+		for(int x = 0; x < kannAktuell.size(); x++) {
+			if(kannAktuell.get(x).getErfahren()) {
+				kannAktuell.remove(x);
+			}
 		}
 		return kannAktuell;
 	}
@@ -212,6 +221,10 @@ public class Debatingplan {
 			if(!j1.getSchule().getName().equals(x1) && !j1.getSchule().getName().equals(y1) && !j2.getSchule().getName().equals(x1) && !j2.getSchule().getName().equals(y1))
 			{
 				b.setText(erfahren.get(i).getName() + ", " + j1.getName() + ", " + j2.getName());
+			}
+			else
+			{
+				b.setText("Fehler: alle Judges gehören derselben Schule an");
 			}
 			
 		}
