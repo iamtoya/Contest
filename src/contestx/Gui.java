@@ -120,23 +120,23 @@ public class Gui extends JFrame {
 		
 		dp = new Debatingplan(this);
 		verwaltung = new Verwaltung(dp);
-		dp.getSchulen().add(new Schule("1")); 
-		dp.getSchulen().add(new Schule("2"));
-		dp.getSchulen().add(new Schule("3"));
-		dp.getSchulen().add(new Schule("4"));
-		dp.getSchulen().add(new Schule("5"));
-		dp.getSchulen().add(new Schule("6"));
-		dp.getSchulen().add(new Schule("7"));
-		dp.getSchulen().add(new Schule("8"));
+		dp.getSchulen().add(new Schule("1", true, true)); 
+		dp.getSchulen().add(new Schule("2", true, true));
+		dp.getSchulen().add(new Schule("3", true, true));
+		dp.getSchulen().add(new Schule("4", true, true));
+		dp.getSchulen().add(new Schule("5", true, true));
+		dp.getSchulen().add(new Schule("6", true, true));
+		dp.getSchulen().add(new Schule("7", true, true));
+		dp.getSchulen().add(new Schule("8", true, true));
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
-			dp.getJuniorTeams().add(new Team(dp.getSchulen().get(i), true));
-			dp.getJuniorTeams().get(i).setSpeakerAt(0,new Speaker("Tim", dp.getJuniorTeams().get(i)));
-			dp.getJuniorTeams().get(i).setSpeakerAt(1,new Speaker("Joe", dp.getJuniorTeams().get(i)));
-			dp.getJuniorTeams().get(i).setSpeakerAt(2,new Speaker("Ann", dp.getJuniorTeams().get(i)));
-			dp.getSeniorTeams().add(new Team(dp.getSchulen().get(i), false));
+			//dp.getJuniorTeams().add(new Team(dp.getSchulen().get(i), true));
+			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(0,new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam()));
+			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(1,new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam()));
+			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(1,new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam()));
+			//dp.getSeniorTeams().add(new Team(dp.getSchulen().get(i), false));
 		}
 		//schulen problem gelöst
-		dp.getJuniorTeams().get(2).setSpeakerAt(3, new Speaker("Hans", dp.getJuniorTeams().get(2)));
+		dp.getSchulen().get(2).getJuniorTeam().setSpeakerAt(1,new Speaker("Joe", dp.getSchulen().get(2).getJuniorTeam()));
 		
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -214,17 +214,17 @@ public class Gui extends JFrame {
 		
 		//Implementierung der 3 Panels ohne Border
 		panel_2.setBorder(null);
-		panel_2.setBounds(194, 449, 734, 150);
+		panel_2.setBounds(194, 449, 734, 100);
 		contentPane.add(panel_2);
 		
 		
 		panel_1.setBorder(null);
-		panel_1.setBounds(194, 295, 734, 150);
+		panel_1.setBounds(194, 295, 734, 100);
 		contentPane.add(panel_1);
 		
 		
 		panel.setBorder(null);
-		panel.setBounds(194, 139, 734, 150);
+		panel.setBounds(194, 139, 734, 100);
 		contentPane.add(panel);
 		
 		txtVon = new JTextField();
@@ -323,7 +323,7 @@ public class Gui extends JFrame {
 		JButton btnBerechne = new JButton("Calculate with insert data");
 		btnBerechne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(dp.getJuniorTeams().size()>5) {
+				if(dp.getSchulen().size()>5) {
 					btnTimezone.setEnabled(true);
 					btnTimezone_1.setEnabled(true);
 					btnTimezone_2.setEnabled(true);

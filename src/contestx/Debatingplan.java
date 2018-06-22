@@ -283,6 +283,14 @@ public class Debatingplan {
 		teamJuniorNames.clear();
 		teamSeniorNames.clear();
 		//erneuern der vom GUI abgerufenen Daten
+		for(int i = 0; i < schulen.size(); i++) {
+			if(schulen.get(i).getHasJuniorTeam()) {
+				teams_junior.add(new Team(schulen.get(i), true));
+			}
+			if(schulen.get(i).getHasSeniorTeam()) {
+				teams_senior.add(new Team(schulen.get(i), false));
+			}
+		}
 		//teams_junior = this.gui.getJuniorTeams(); //Datenfluss: zur Liste der im GUI gespeicherten Teams wird hier referenziert
 		for(int i = 0; i < teams_junior.size(); i++) {
 			teamJuniorNames.add(teams_junior.get(i).getSchule().getName()); //Strings werden hier verwendet, da sie besser in der berechne()-Methode anwendbar sind, als Teams
