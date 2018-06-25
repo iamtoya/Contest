@@ -465,9 +465,9 @@ public class Gui extends JFrame {
 				}
 			});
 			
-			 JButton southB = new JButton("Judge ?");
+			    JButton southB = new JButton("Judge ?");
 	            debates.get(i).add(southB, BorderLayout.SOUTH);
-	            southB.addActionListener(new ActionListener() {
+	        /*  southB.addActionListener(new ActionListener() {
 	            	public void actionPerformed(ActionEvent arg0) {
 	            		String s=JOptionPane.showInputDialog("Judge"); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man den Judge eingeben kann
 	               
@@ -490,6 +490,7 @@ public class Gui extends JFrame {
 	            		}
 	                }
 	            });
+	            */
 		}
 		for(int i = 0; i < debatesPerTime; i++) { //die in debates gespeicherten, oben modifizierten Panels werden den drei großen Panels hinzugefügt
 			panel.add(debates.get(i));
