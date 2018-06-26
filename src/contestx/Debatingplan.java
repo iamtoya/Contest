@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Debatingplan {
@@ -17,6 +18,10 @@ public class Debatingplan {
 	private ArrayList<Judge> judges;
 	private ArrayList<Schule> schulen;
 	private ArrayList<Speaker> speaker;
+	private ArrayList<Speaker> speakerSortiert; //nach Punkten
+	private ArrayList<Speaker> ersterS;
+	private ArrayList<Speaker> zweiterS;
+	private ArrayList<Speaker> dritterS;
 	private ArrayList<String> motions;	  
 	//  obiges nach Modellierung
 	private Gui gui;
@@ -41,6 +46,13 @@ public class Debatingplan {
 		schulen = new ArrayList<Schule>();
 		speaker = new ArrayList<Speaker>();
 		judges = new ArrayList<Judge>();
+		
+		speakerSortiert = new ArrayList<Speaker>();
+		ersterS = new ArrayList<Speaker>();
+		zweiterS = new ArrayList<Speaker>();
+		dritterS = new ArrayList<Speaker>();
+		
+		speakerSortiert.add(new Speaker());
 		
 		judges.add(new Judge("1", new Schule("2"), true));
 		judges.add(new Judge("2", new Schule("2"), true));
@@ -360,6 +372,79 @@ public class Debatingplan {
 		dPTsenior = (int) teamSeniorNames.size()/2;
 		usedCompsJunior = new String[dPTjunior*3][2];
 		usedCompsSenior = new String[dPTsenior*3][2];
+	}
+	
+	private void bestSpeaker()
+	{
+		sortSpeaker();
+		int i=0;
+		while(speakerSortiert.get(i).getHoechstePunkte()==speakerSortiert.get(0).getHoechstePunkte())
+		{
+			i++;
+		}
+		int j=i+1;
+		while(speakerSortiert.get(j).getHoechstePunkte()==speakerSortiert.get(i+1).getHoechstePunkte())
+		{
+			j++;
+		}
+		int k=j+1;
+		while(speakerSortiert.get(k).getHoechstePunkte()==speakerSortiert.get(j+1).getHoechstePunkte())
+		{
+			k++;
+		}
+		for(int a=0; a<i; a++)
+		{
+			ersterS.add(speakerSortiert.get(a));
+		}
+		for(int s=i+1; s<j; s++)
+		{
+			zweiterS.add(speakerSortiert.get(s));
+		}
+		for(int d=j+1; d<k; d++)
+		{
+			dritterS.add(speakerSortiert.get(d));
+		}
+	}
+	
+	private void sortSpeaker()
+	{
+		speakerSortiert.clear();
+		speakerSortiert.add(new Speaker());
+		ArrayList<Speaker> speaker1 = new ArrayList<Speaker>();
+		ArrayList<Speaker> temp = new ArrayList<Speaker>();
+		for(int y=0;y<speaker.size();y++)
+		{
+			speaker1.add(speaker.get(y));
+		}
+		for(int i=0; i<speaker1.size();i++)
+		{
+			speaker1.get(i).hoechstPunkteErmitteln();
+		}
+		while(speakerSortiert.size()<speaker1.size()+1)
+		{
+			temp.add(new Speaker());
+			for(int j=0; j<speaker1.size();j++)
+			{
+				if(speaker1.get(j).getHoechstePunkte()>temp.get(0).getHoechstePunkte())
+				{
+					temp.clear();
+					temp.add(speaker1.get(j));
+					speaker1.remove(j);
+				}
+				else if(speaker1.get(j).getHoechstePunkte()==temp.get(0).getHoechstePunkte())
+				{
+					temp.add(speaker1.get(j));
+					speaker1.remove(j);
+				}
+			}
+			for(int h=0; h<temp.size();h++)
+			{
+				speakerSortiert.add(temp.get(h));
+			}
+			temp.clear();
+			
+		}
+		if(speakerSortiert.get(0).getName().equals("")) speakerSortiert.remove(0);
 	}
 	
 	public ArrayList<Schule> getSchulen() {

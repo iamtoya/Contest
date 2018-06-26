@@ -9,7 +9,14 @@ public class Speaker {
 	private int hoechstPunkte;													//Bedeutung: Zeitzone1, 1. Speech;  Zeitzone 2, 1. Speech;  Zeitzone 3, 1. Speech;  Zeitzone 1, Reply;  Zeitzone 2, Reply;  Zeitzone 3, Reply
 	private Team team;
 	
-	
+	public Speaker() { //dummy-speaker
+		this.name = "";
+		hoechstPunkte = 0;
+		punkte = new ArrayList<Integer>();
+		for(int i = 0; i < 6; i++) { //verhindert durch setPunkteIn() ausgelöste IndexOutOfBoundsException
+			punkte.add(0);
+		}
+	}
 	
 	public Speaker(String name, Team team) {
 		hoechstPunkte = 0;
@@ -30,7 +37,7 @@ public class Speaker {
 		}
 		
 	}
-	private void hoechstPunkteErmitteln(Speaker speaker)
+	public void hoechstPunkteErmitteln()
 	{
 		for(int i=0; i<5; i++)
 		{
