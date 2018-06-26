@@ -138,7 +138,7 @@ public class Debatingplan {
 		}
 		erfahren = erfahrenFuellen(erfahren, kannAktuell);
 		kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		zuordnen(1, erfahren, kannAktuell);
+		zuordnen(1, erfahren, kannAktuell, new ArrayList<Judge>(), 0);
 		
 		erfahren.clear();
 		kannAktuell.clear();
@@ -151,7 +151,7 @@ public class Debatingplan {
 		}
 		erfahren = erfahrenFuellen(erfahren, kannAktuell);
 		kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		zuordnen(2, erfahren, kannAktuell);
+		zuordnen(2, erfahren, kannAktuell, new ArrayList<Judge>(), 0);
 		
 		erfahren.clear();
 		kannAktuell.clear();
@@ -164,7 +164,7 @@ public class Debatingplan {
 		}
 		erfahren = erfahrenFuellen(erfahren, kannAktuell);
 		kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		zuordnen(3, erfahren, kannAktuell);
+		zuordnen(3, erfahren, kannAktuell, new ArrayList<Judge>(), 0);
 	}
 	
 	private ArrayList<Judge> erfahrenFuellen(ArrayList<Judge> erfahren, ArrayList<Judge> kannAktuell) {
@@ -190,91 +190,7 @@ public class Debatingplan {
 		return kannAktuell;
 	}
 	private boolean zuordnen(int zeitzone, ArrayList<Judge> erfahren, ArrayList<Judge> kannAktuell, ArrayList<Judge> benutzt, int index) { //index steht für das index-te Debate der Zz.
-		/*for(int i = 0; i < erfahren.size(); i++) {
-			JButton b;
-			switch(zeitzone) {
-			case 1: b = (JButton) this.gui.getDebates().get(i).getComponent(3);
-			break;
-			case 2: b = (JButton) this.gui.getDebates().get(i+erfahren.size()).getComponent(3);
-			break;
-			case 3: b = (JButton) this.gui.getDebates().get(2*erfahren.size()+i).getComponent(3);
-			break;
-			default: b = (JButton) this.gui.getDebates().get(i).getComponent(3);
-			}
-			Judge erfahrenerJudge = erfahren.get(i);
-			Judge j1 = new Judge();
-			Judge j2 = new Judge();
-			JButton x = (JButton) this.gui.getDebates().get(i).getComponent(2);
-			JButton y = (JButton) this.gui.getDebates().get(i).getComponent(1);
-			String x1 = x.getText();
-			x1 = x1.replaceAll("<html>Con<br/>", "");
-			x1 = x1.replaceAll("</html>", "");
-			String y1 = y.getText();
-			y1 = y1.replaceAll("<html>Pro<br/>", "");
-			y1 = y1.replaceAll("</html>", "");
-			for(int j = 0; j < kannAktuell.size(); j++) {
-				if(j1.getName().equals("")) {
-					j1 = kannAktuell.get(j);
-					kannAktuell.remove(j);
-				}
-				if(j2.getName().equals("")) {
-					j2 = kannAktuell.get(j);
-					kannAktuell.remove(j);
-				}
-			}
-			ArrayList<Judge> aussortiert = new ArrayList<Judge>();
-			while(j1.getSchule().getName().equals(x1) || j1.getSchule().getName().equals(y1)) { //bis j1 korrekt
-				aussortiert.add(j1);
-				for(int j = 0; j < kannAktuell.size(); j++) { //nächstes j1 nehmen
-					j1 = kannAktuell.get(j);
-					kannAktuell.remove(j);
-				}
-			}
-			for(int j = 0; j < aussortiert.size(); j++) {
-				kannAktuell.add(aussortiert.get(j));
-			}
-			aussortiert.clear();
-			
-			while(j2.getSchule().getName().equals(x1) || j2.getSchule().getName().equals(y1)) { //bis j1 korrekt
-				aussortiert.add(j1);
-				for(int j = 0; j < kannAktuell.size(); j++) { //nächstes j1 nehmen
-					j2 = kannAktuell.get(j);
-					kannAktuell.remove(j);
-				}
-			}
-			for(int j = 0; j < aussortiert.size(); j++) {
-				kannAktuell.add(aussortiert.get(j));
-			}
-			aussortiert.clear();
-			
-			while(erfahren.get(i).getSchule().getName().equals(x1) || erfahren.get(i).getSchule().getName().equals(y1)) { //bis j1 korrekt
-				aussortiert.add(j1);
-				for(int j = 0; j < erfahren.size(); j++) { //nächstes j1 nehmen
-					erfahren.set(i, erfahren.get(j));
-					erfahren.remove(j);
-				}
-			}
-			for(int j = 0; j < aussortiert.size(); j++) {
-				kannAktuell.add(aussortiert.get(j));
-			}
-			aussortiert.clear();
-			if(!j1.getSchule().getName().equals(x1) 
-					&& !j1.getSchule().getName().equals(y1) 
-					&& !j2.getSchule().getName().equals(x1) 
-					&& !j2.getSchule().getName().equals(y1)
-					&& !erfahren.get(i).getName().equals(x1)
-					&& !erfahren.get(i).getName().equals(y1))
-			{
-				b.setText(erfahren.get(i).getName() + ", " + j1.getName() + ", " + j2.getName());
-			}
-			else
-			{
-				b.setText("Fehler: alle Judges gehören derselben Schule an");
-			}
-			
-		}*/
 		
-		//alternativ
 		ArrayList<Judge> bereitsVersucht = new ArrayList<Judge>();
 		if(index < dPTjunior + dPTsenior) {
 			JPanel b;
@@ -288,9 +204,8 @@ public class Debatingplan {
 			default: b = this.gui.getDebates().get(index);
 			}
 			Judge erfahrenerJudge;
-			Judge j1 = new Judge();
-			Judge j2 = new Judge();
 			
+			JButton judge_button = (JButton) b.getComponent(3);
 			JButton x = (JButton) b.getComponent(2);
 			JButton y = (JButton) b.getComponent(1);
 			String x1 = x.getText();
@@ -308,6 +223,7 @@ public class Debatingplan {
 			}
 			if(!(i == erfahren.size())) {
 				erfahrenerJudge = erfahren.get(i);
+				judge_button.setText(erfahrenerJudge.getName());
 				erfahren.remove(i);
 				bereitsVersucht.add(erfahrenerJudge);
 				while(!zuordnen(zeitzone, erfahren, kannAktuell, benutzt, index+1)) {
@@ -322,6 +238,7 @@ public class Debatingplan {
 					}
 					if(!(j == erfahren.size())) {
 						erfahrenerJudge = erfahren.get(j);
+						judge_button.setText(erfahrenerJudge.getName());
 						erfahren.remove(j);
 						bereitsVersucht.add(erfahrenerJudge);
 						erfahren.add(temp);
@@ -330,6 +247,7 @@ public class Debatingplan {
 						return false;
 					}
 				}
+				return true;
 			}
 			else {
 				return false;
@@ -338,6 +256,21 @@ public class Debatingplan {
 		else {
 			return true;
 		}
+	}
+	
+	public boolean zuordnenUnerfahren(ArrayList<Judge> kannAktuell, JPanel aktuellesDebate) {
+		Judge j1 = new Judge();
+		Judge j2 = new Judge();
+		
+		JButton x = (JButton) aktuellesDebate.getComponent(2);
+		JButton y = (JButton) aktuellesDebate.getComponent(1);
+		String x1 = x.getText();
+		x1 = x1.replaceAll("<html>Con<br/>", "");
+		x1 = x1.replaceAll("</html>", "");
+		String y1 = y.getText();
+		y1 = y1.replaceAll("<html>Pro<br/>", "");
+		y1 = y1.replaceAll("</html>", "");
+		
 	}
 	
 	public boolean entryDuplicated(String[][] array, int start, int end) { //sucht nach Duplikaten im String[][]

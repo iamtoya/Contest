@@ -6,12 +6,13 @@ import java.util.ArrayList;
 public class Speaker {
 	private String name;
 	private ArrayList<Integer> punkte; //Aufgebaut wie folgt: index: 		0			 ;			  1			 ;			2			 ;			3		 ;			4		 ;			5
-														//Bedeutung: Zeitzone1, 1. Speech;  Zeitzone 2, 1. Speech;  Zeitzone 3, 1. Speech;  Zeitzone 1, Reply;  Zeitzone 2, Reply;  Zeitzone 3, Reply
+	private int hoechstPunkte;													//Bedeutung: Zeitzone1, 1. Speech;  Zeitzone 2, 1. Speech;  Zeitzone 3, 1. Speech;  Zeitzone 1, Reply;  Zeitzone 2, Reply;  Zeitzone 3, Reply
 	private Team team;
 	
 	
 	
 	public Speaker(String name, Team team) {
+		hoechstPunkte = 0;
 		this.name=name;
 		this.team=team;
 		punkte = new ArrayList<Integer>();
@@ -22,13 +23,23 @@ public class Speaker {
 	
 	public Speaker(String name) {
 		this.name = name;
+		hoechstPunkte = 0;
 		punkte = new ArrayList<Integer>();
 		for(int i = 0; i < 6; i++) { //verhindert durch setPunkteIn() ausgelöste IndexOutOfBoundsException
 			punkte.add(0);
 		}
 		
 	}
-	
+	private void hoechstPunkteErmitteln(Speaker speaker)
+	{
+		for(int i=0; i<5; i++)
+		{
+			if(getPunkteIn(i)>hoechstPunkte)
+			{
+				hoechstPunkte=getPunkteIn(i);
+			}
+		}
+	}
 		
 	public String getName() {
 		return name;
@@ -55,5 +66,9 @@ public class Speaker {
 		this.team = team;
 	}
 		
+	public int getHoechstePunkte()
+	{
+		return hoechstPunkte;
+	}
 }
  
