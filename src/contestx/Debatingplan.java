@@ -132,12 +132,15 @@ public class Debatingplan {
 		//Zeitzone 1
 		for(int i = 0; i < judges.size(); i++)
 		{
-			if(judges.get(i).getKannZuZZ1()) {
+			if(judges.get(i).getKannZuZZ1() && !judges.get(i).getErfahren()) {
 				kannAktuell.add(judges.get(i));
 			}
+			if(judges.get(i).getKannZuZZ1() && judges.get(i).getErfahren()) {
+				erfahren.add(judges.get(i));
+			}
 		}
-		erfahren = erfahrenFuellen(erfahren, kannAktuell);
-		kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
+		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
+		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
 		zuordnen(1, erfahren, kannAktuell, new ArrayList<Judge>(), 0);
 		
 		erfahren.clear();
@@ -145,12 +148,15 @@ public class Debatingplan {
 		//Zeitzone 2
 		for(int i = 0; i < judges.size(); i++)
 		{
-			if(judges.get(i).getKannZuZZ2()) {
+			if(judges.get(i).getKannZuZZ2() && !judges.get(i).getErfahren()) {
 				kannAktuell.add(judges.get(i));
 			}
+			if(judges.get(i).getKannZuZZ2() && judges.get(i).getErfahren()) {
+				erfahren.add(judges.get(i));
+			}
 		}
-		erfahren = erfahrenFuellen(erfahren, kannAktuell);
-		kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
+		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
+		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
 		zuordnen(2, erfahren, kannAktuell, new ArrayList<Judge>(), 0);
 		
 		erfahren.clear();
@@ -158,12 +164,15 @@ public class Debatingplan {
 		//Zeitzone 3
 		for(int i = 0; i < judges.size(); i++)
 		{
-			if(judges.get(i).getKannZuZZ3()) {
+			if(judges.get(i).getKannZuZZ3() && !judges.get(i).getErfahren()) {
 				kannAktuell.add(judges.get(i));
 			}
+			if(judges.get(i).getKannZuZZ3() && judges.get(i).getErfahren()) {
+				erfahren.add(judges.get(i));
+			}
 		}
-		erfahren = erfahrenFuellen(erfahren, kannAktuell);
-		kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
+		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
+		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
 		zuordnen(3, erfahren, kannAktuell, new ArrayList<Judge>(), 0);
 	}
 	
@@ -335,6 +344,8 @@ public class Debatingplan {
 		//Zurücksetzen der Listen
 		debatesJ.clear();
 		debatesS.clear();
+		teams_junior.clear();
+		teams_senior.clear();
 		teamJuniorNames.clear();
 		teamSeniorNames.clear();
 		//erneuern der vom GUI abgerufenen Daten
@@ -358,6 +369,7 @@ public class Debatingplan {
 		}
 		Collections.shuffle(teamSeniorNames); //Reihenfolge randomisieren
 		dPTsenior = (int) teamSeniorNames.size()/2;
+		dPTsenior = 0; //erstmal, noch zu ändern!
 		usedCompsJunior = new String[dPTjunior*3][2];
 		usedCompsSenior = new String[dPTsenior*3][2];
 	}
