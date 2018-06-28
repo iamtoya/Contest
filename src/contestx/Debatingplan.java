@@ -841,6 +841,7 @@ public class Debatingplan {
 					teamS3=nachPunkten.get(1);
 			}
 		}
+		}
 	}
 	private void sortSpeaker()
 	{

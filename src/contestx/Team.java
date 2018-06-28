@@ -53,7 +53,7 @@ public class Team {
 		this.punkte.set(timeperiod, z);
 		
 	}
-	
+	//
 	public int getHoechstPunkte()
 	{
 		return hoechstPunkte;
