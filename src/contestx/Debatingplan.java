@@ -33,7 +33,7 @@ public class Debatingplan {
 	private int dPTsenior;
 	private String[][] usedCompsJunior; //hier werden die verwendeten Kompositionen gespeichert
 	private String[][] usedCompsSenior;
-	private ArrayList<Judge> benutzt;
+	private ArrayList<Judge> unbenutzt;
 	
 	public Debatingplan(Gui gui) {
 		this.gui = gui; //referenzieren (für Datenfluss später)
@@ -46,6 +46,8 @@ public class Debatingplan {
 		schulen = new ArrayList<Schule>();
 		speaker = new ArrayList<Speaker>();
 		judges = new ArrayList<Judge>();
+		
+		unbenutzt = new ArrayList<Judge>();
 		
 		speakerSortiert = new ArrayList<Speaker>();
 		ersterS = new ArrayList<Speaker>();
@@ -144,16 +146,20 @@ public class Debatingplan {
 		//Zeitzone 1
 		for(int i = 0; i < judges.size(); i++)
 		{
-			if(judges.get(i).getKannZuZZ1() && !judges.get(i).getErfahren()) {
+			if(judges.get(i).getKannZuZZ1() && !judges.get(i).getErfahren()) { //alle unerfahrenen werden zu kannAktuell hinzugefügt
 				kannAktuell.add(judges.get(i));
 			}
-			if(judges.get(i).getKannZuZZ1() && judges.get(i).getErfahren()) {
+			if(judges.get(i).getKannZuZZ1() && judges.get(i).getErfahren()) { //alle erfahrenen werden zu erfahren hinzugefügt
 				erfahren.add(judges.get(i));
 			}
 		}
 		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
 		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		zuordnen(1, erfahren, kannAktuell, new ArrayList<Judge>(), 0);
+		zuordnen(1, erfahren, 0, true);
+		for(int i = 0; i < unbenutzt.size(); i++) {
+			kannAktuell.add(unbenutzt.get(i));
+		}
+		zuordnen(1, kannAktuell, 0, false);
 		
 		erfahren.clear();
 		kannAktuell.clear();
@@ -169,7 +175,11 @@ public class Debatingplan {
 		}
 		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
 		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		zuordnen(2, erfahren, kannAktuell, new ArrayList<Judge>(), 0);
+		zuordnen(2, erfahren, 0, true);
+		for(int i = 0; i < unbenutzt.size(); i++) {
+			kannAktuell.add(unbenutzt.get(i));
+		}
+		zuordnen(2, kannAktuell, 0, false);
 		
 		erfahren.clear();
 		kannAktuell.clear();
@@ -185,114 +195,108 @@ public class Debatingplan {
 		}
 		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
 		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		zuordnen(3, erfahren, kannAktuell, new ArrayList<Judge>(), 0);
+		zuordnen(3, erfahren, 0, true);
+		for(int i = 0; i < unbenutzt.size(); i++) {
+			kannAktuell.add(unbenutzt.get(i));
+		}
+		zuordnen(3, kannAktuell, 0, false);
 	}
 	
-	private ArrayList<Judge> erfahrenFuellen(ArrayList<Judge> erfahren, ArrayList<Judge> kannAktuell) {
-		Collections.shuffle(judges);
-		int x = 0;
-		dPTsenior = 0; //erstmal wenn nur junior wichtig
-		while(erfahren.size() < (dPTjunior + dPTsenior)) {
-			if(kannAktuell.get(x).getErfahren()) {
-				erfahren.add(kannAktuell.get(x));
-			}
-			x++;
-		}
-		return erfahren;
-	}
-	private ArrayList<Judge> kannAktuellKuerzen(ArrayList<Judge> erfahren, ArrayList<Judge> kannAktuell) {
-		Collections.shuffle(judges);
-		dPTsenior = 0; //erstmal wenn nur junior wichtig
-		for(int x = 0; x < kannAktuell.size(); x++) {
-			if(kannAktuell.get(x).getErfahren()) {
-				kannAktuell.remove(x);
-			}
-		}
-		return kannAktuell;
-	}
-	private boolean zuordnen(int zeitzone, ArrayList<Judge> erfahren, ArrayList<Judge> kannAktuell, ArrayList<Judge> benutzt, int index) { //index steht für das index-te Debate der Zz.
-		
+	private boolean zuordnen(int zeitzone, ArrayList<Judge> kannAktuell, int index, boolean erfahren) { //index steht für das index-te Debate der Zz.
+
 		ArrayList<Judge> bereitsVersucht = new ArrayList<Judge>();
-		if(index < dPTjunior + dPTsenior) {
-			JPanel b;
-			switch(zeitzone) {
-			case 1: b = this.gui.getDebates().get(index);
-			break;
-			case 2: b = this.gui.getDebates().get(index+dPTjunior+dPTsenior);
-			break;
-			case 3: b = this.gui.getDebates().get(2*(dPTjunior+dPTsenior)+index);
-			break;
-			default: b = this.gui.getDebates().get(index);
-			}
-			Judge erfahrenerJudge;
-			
-			JButton judge_button = (JButton) b.getComponent(3);
-			JButton x = (JButton) b.getComponent(2);
-			JButton y = (JButton) b.getComponent(1);
-			String x1 = x.getText();
-			x1 = x1.replaceAll("<html>Con<br/>", "");
-			x1 = x1.replaceAll("</html>", "");
-			String y1 = y.getText();
-			y1 = y1.replaceAll("<html>Pro<br/>", "");
-			y1 = y1.replaceAll("</html>", "");
-			
-			erfahrenerJudge = new Judge();
-			int i = 0;
-			while(i < erfahren.size() && (erfahren.get(i).getSchule().getName().equals(x1) 
-					|| erfahren.get(i).getSchule().getName().equals(y1))) {
-				i++;
-			}
-			if(!(i == erfahren.size())) {
-				erfahrenerJudge = erfahren.get(i);
-				judge_button.setText(erfahrenerJudge.getName());
-				erfahren.remove(i);
-				bereitsVersucht.add(erfahrenerJudge);
-				while(!zuordnen(zeitzone, erfahren, kannAktuell, benutzt, index+1)) {
-					
-					Judge temp = erfahrenerJudge;
-					
-					int j = 0;
-					while(j < erfahren.size() && (erfahren.get(j).getSchule().getName().equals(x1) 
-							|| erfahren.get(j).getSchule().getName().equals(y1)
-							|| bereitsVersucht.contains(erfahren.get(j)))) {
-						j++;
-					}
-					if(!(j == erfahren.size())) {
-						erfahrenerJudge = erfahren.get(j);
-						judge_button.setText(erfahrenerJudge.getName());
-						erfahren.remove(j);
-						bereitsVersucht.add(erfahrenerJudge);
-						erfahren.add(temp);
-					}
-					else {
-						return false;
-					}
+		if(erfahren) {
+			if(!(index < dPTjunior + dPTsenior)) { //wenn Limit überschritten, erster Erfolg
+				for(int i = 0; i < kannAktuell.size(); i++) { //unbenutzte Judges speichern
+					unbenutzt.add(kannAktuell.get(i));
 				}
 				return true;
 			}
-			else {
-				return false;
-			}
 		}
 		else {
-			return true;
+			if(!(index < 2*(dPTjunior + dPTsenior))) { //wenn Limit überschritten, erster Erfolg
+				for(int i = 0; i < kannAktuell.size(); i++) { //unbenutzte Judges speichern
+					unbenutzt.add(kannAktuell.get(i));
+				}
+				return true;
+			}
+			if(index > (dPTjunior + dPTsenior)) { //wenn bereits beim 2. Durchlauf
+				index = index - dPTjunior - dPTsenior;
+			}
 		}
-	}
-	
-	public boolean zuordnenUnerfahren(ArrayList<Judge> kannAktuell, JPanel aktuellesDebate) {
-		Judge j1 = new Judge();
-		Judge j2 = new Judge();
 		
-		JButton x = (JButton) aktuellesDebate.getComponent(2);
-		JButton y = (JButton) aktuellesDebate.getComponent(1);
+		JPanel b;
+		switch(zeitzone) {
+			case 1: b = this.gui.getDebates().get(index);
+				break;
+			case 2: b = this.gui.getDebates().get(index+dPTjunior+dPTsenior);
+				break;
+			case 3: b = this.gui.getDebates().get(2*(dPTjunior+dPTsenior)+index);
+				break;
+			default: b = this.gui.getDebates().get(index);
+				break;
+		}
+		Judge erfahrenerJudge;
+			
+		JButton judge_button = (JButton) b.getComponent(3);
+		JButton x = (JButton) b.getComponent(2);
+		JButton y = (JButton) b.getComponent(1);
 		String x1 = x.getText();
 		x1 = x1.replaceAll("<html>Con<br/>", "");
 		x1 = x1.replaceAll("</html>", "");
 		String y1 = y.getText();
 		y1 = y1.replaceAll("<html>Pro<br/>", "");
 		y1 = y1.replaceAll("</html>", "");
-		
-	}
+			
+		erfahrenerJudge = new Judge();
+		int i = 0;
+		while(i < kannAktuell.size() && (kannAktuell.get(i).getSchule().getName().equals(x1) 
+				|| kannAktuell.get(i).getSchule().getName().equals(y1))) {
+			i++;
+		}
+		if(!(i == kannAktuell.size())) {
+			erfahrenerJudge = kannAktuell.get(i);
+			
+			if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
+			else judge_button.setText(erfahrenerJudge.getName());
+			
+			kannAktuell.remove(i); //Liste wird gekürzt, damit der benutzte Judge nicht mehr verwendet werden kann
+			bereitsVersucht.add(erfahrenerJudge); //damit ein Judge nicht mehrmals für dieselbe Position versucht wird
+			while(!zuordnen(zeitzone, kannAktuell, index+1, erfahren)) {
+					
+				Judge temp = erfahrenerJudge; //zusätzliche Variable für den verlustfreien Austausch des gewählten Judges
+					
+				int j = 0;
+				while(j < kannAktuell.size() && (kannAktuell.get(j).getSchule().getName().equals(x1) //neuen verfügbaren Judge finden
+						|| kannAktuell.get(j).getSchule().getName().equals(y1)
+						|| bereitsVersucht.contains(kannAktuell.get(j)))) {
+					j++;
+				}
+				if(!(j == kannAktuell.size())) { //wenn gefunden
+					erfahrenerJudge = kannAktuell.get(j);
+					
+					if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
+					else judge_button.setText(erfahrenerJudge.getName());
+					
+					kannAktuell.remove(j);
+					bereitsVersucht.add(erfahrenerJudge);
+					kannAktuell.add(temp);
+				}
+				else { //wenn keiner mehr verfügbar
+					judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(",")-1)); //kürzt den String um das nicht-mögliche Ende
+					return false; //kein Judge kann zugeordnet werden
+				}
+			} //hier konnten alle Judges zugeordnet werden
+			return true;
+		} 
+		else { //wenn kein Judge verfügbar ist
+			judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(",")-1)); //kürzt den String um das nicht-mögliche Ende
+			return false; //kein Judge kann zugeordnet werden
+		}
+
+	} 
+	
+	
 	
 	public boolean entryDuplicated(String[][] array, int start, int end) { //sucht nach Duplikaten im String[][]
 		String[][] set = new String[array.length][array[0].length];
