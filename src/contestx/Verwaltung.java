@@ -38,6 +38,7 @@ public class Verwaltung extends JFrame {
 	private JLabel lblNewLabel_1;
 	private JButton btnDelete;
 	private boolean updateFinished = false;
+	private boolean keineSchulenAdded = false;
 	
 	
 	
@@ -177,18 +178,21 @@ public class Verwaltung extends JFrame {
 		rdbtnNewSchools.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				aktualisierenMit(SCHULEN);
+				untenAnzeigen();
 			};
 		});
 				
 		rdbtnNewJudges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				aktualisierenMit(JUDGES);
+				untenAnzeigen();
 			};
 		});
 			
 		rdbtnNewSpeaker.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				aktualisierenMit(SPEAKERS);
+				untenAnzeigen();
 			};
 		});
 				
@@ -225,7 +229,6 @@ public class Verwaltung extends JFrame {
 		int i = 0;
 		updateFinished=false;
 		comboBox.removeAllItems();
-		
 		switch(was) {
 		case(0): //Schulen			
 			for(i = 0; i < dp.getSchulen().size(); i++ ) {					//Alle Schulen werden in die Auswahlliste eingetragen
@@ -242,8 +245,9 @@ public class Verwaltung extends JFrame {
 			for(i = 0; i < dp.getSchulen().size(); i++ ) {					//Schulen werden zusätzlich geaddet, da benötigt für Judges
 				comboBoxJudgesSchools.addItem(dp.getSchulen().get(i).getName());
 			}
-			this.lblNewLabel_1.setText("Choose the judge to be changed:");	
+			this.lblNewLabel_1.setText("Choose the judge to be changed:");
 			nurAnzeigen(was);
+			keineSchulenAdded=false;
 			break;
 		case(2): //Speaker
 			for(i = 0; i < dp.getSpeaker().size(); i++ ) {					//Alle Speaker werden in die Auswahlliste eingetragen
@@ -324,6 +328,7 @@ public class Verwaltung extends JFrame {
 			dp.getSpeaker().get(comboBox.getSelectedIndex()).setName(textFieldSpeaker.getText());
 			aktualisierenMit(SPEAKERS);
 		}
+		untenAnzeigen();
 	}
 	
 	
@@ -361,12 +366,14 @@ public class Verwaltung extends JFrame {
 	
 	public void untenAnzeigen() {
 		int was;
-		int schulenIndex;
-		int schuleGefunden=0;
+		int schulenIndex = 0;
+		int schuleGefunden = 0;
+		
 		if(rdbtnNewSchools.isSelected()==true){ was = SCHULEN; }
 		else if(rdbtnNewJudges.isSelected()==true) {was = JUDGES;  }
-		else if(rdbtnNewSpeaker.isSelected()==true) {was = SPEAKERS;  }
+		else if(rdbtnNewSpeaker.isSelected()==true) {was = SPEAKERS;  }		
 		else { was = -1; }
+		
 		if(updateFinished) {
 			switch(was) {
 				case(SCHULEN): {
@@ -381,16 +388,35 @@ public class Verwaltung extends JFrame {
 					chckbxJudgesZZ1.setSelected(dp.getJudges().get(comboBox.getSelectedIndex()).getKannZuZZ1());
 					chckbxJudgesZZ2.setSelected(dp.getJudges().get(comboBox.getSelectedIndex()).getKannZuZZ2());
 					chckbxJudgesZZ3.setSelected(dp.getJudges().get(comboBox.getSelectedIndex()).getKannZuZZ3());
-					for(schulenIndex = 0; schulenIndex < comboBox.getItemCount() && schuleGefunden == 0; schulenIndex++) {
-						if(dp.getSchulen().get(schulenIndex)==dp.getJudges().get(comboBox.getSelectedIndex()).getSchule()) {
+					schulenIndex=0;
+					while(schuleGefunden==0) {
+						if(dp.getJudges().get(comboBox.getSelectedIndex()).getSchule()==dp.getSchulen().get(schulenIndex)) {
 							schuleGefunden=1;
 						}
+						else {
+							if(schulenIndex<(dp.getSchulen().size()-1)) {
+							schulenIndex++;
+							}
+							else {
+								schuleGefunden=1;
+								schulenIndex=-1;
+							}
+						}
 					}
-					
+					if(schulenIndex>=0) {
+						comboBoxJudgesSchools.setSelectedIndex(schulenIndex);
+					}
+					else {
+						if(keineSchulenAdded==false) {
+							comboBoxJudgesSchools.addItem("keine Schule");
+							keineSchulenAdded= true;
+						}
+						comboBoxJudgesSchools.setSelectedIndex((comboBoxJudgesSchools.getItemCount()-1));
+					}
 					break;
 				}
 				case(SPEAKERS): {
-
+					textFieldSpeaker.setText(dp.getSpeaker().get(comboBox.getSelectedIndex()).getName());
 					break;
 				}
 			}
