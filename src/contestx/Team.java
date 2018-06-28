@@ -6,8 +6,10 @@ import java.util.ArrayList;
 public class Team {
 	private Schule schule;
 	private ArrayList<Speaker> speaker;
-	private Boolean isJunior;
-	private ArrayList<Teambewertung> bewertungen;
+	private boolean isJunior;
+	private ArrayList<Integer> punkte;
+	private int hoechstPunkte;
+	private ArrayList<Boolean> wins;
 	
 
 	public Team(Schule schule, boolean isJunior) {
@@ -17,7 +19,9 @@ public class Team {
 		for(int i = 0; i < 9; i++) { //9 = max Anzahl Speaker pro Team
 			speaker.add(new Speaker("", this)); //verhindert durch setSpeakerAt() ausgelöste IndexOutOfBoundsException
 		}
-		bewertungen = new ArrayList<Teambewertung>();
+		punkte = new ArrayList<Integer>();
+		this.hoechstPunkte=0;
+		wins = new ArrayList<Boolean>();
 	}
 
 	
@@ -25,24 +29,68 @@ public class Team {
 		this.schule=schule;
 		this.speaker=speaker;
 		this.isJunior=isJunior;
+		this.hoechstPunkte=0;
+		wins = new ArrayList<Boolean>();
 	}
 	
+	public void teampunkte(int timeperiod)
+	{
+		int z=0;
+		for(int i=0; i<speaker.size();i++)
+		{
+			z=z+this.getSpeaker(i).getPunkteIn(timeperiod);
+			z=z+this.getSpeaker(i).getPunkteIn(timeperiod+3);
+		}
+		this.punkte.set(timeperiod, z);
+		
+	}
 	
+	public void setHoechstPunkte()
+	{
+		hoechstPunkte=punkte.get(1);
+		if(punkte.get(2)>hoechstPunkte)
+		{
+			hoechstPunkte=punkte.get(2);
+		}
+		else if(punkte.get(3)>hoechstPunkte)
+		{
+			hoechstPunkte=punkte.get(3);
+		}
+	}
 	
 	public Schule getSchule() {
 		return schule;
+	}
+	
+	public int getPunkteAt(int index)
+	{
+		return punkte.get(index);
+	}
+	
+	public void setWin(int index, boolean win)
+	{
+		wins.set(index, win);
+	}
+	
+	public void setWinner(int index)
+	{
+		wins.set(index, true);
 	}
 	
 	public ArrayList<Speaker> getAllSpeaker() {
 		return speaker;
 	}
 	
-	public Boolean getIsJunior() {
+	public Speaker getSpeaker(int index) {
+		return speaker.get(index);
+	}
+	
+	public boolean getIsJunior() {
 		return isJunior;
 	}
 	
-	public ArrayList<Teambewertung> getTeambewertungen() {
-		return bewertungen;
+	public ArrayList<Integer> getPunkte() {
+		return punkte;
 	}
 	//funktionierende Methode ohne Teambewertung, gesaved als backup
 	//public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone) {
@@ -59,7 +107,7 @@ public class Team {
 	
 	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone, boolean pro, boolean win) {
 		int teampunkteGesamt = 0;					// Variable die Punkte eines Teamsspeichert
-		Teambewertung tb = new Teambewertung();		// neues Teambewertungsobjekt
+		//Teambewertung tb = new Teambewertung();		// neues Teambewertungsobjekt
 		
 		for(int i = 0; i < speakers.length; i++) { //i = 1.,2.,3.,Reply-Speaker
 			int j = 0;
@@ -73,7 +121,7 @@ public class Team {
 		for(int k = 0; k < punkte.length; k++) {				// geht Punktearray durch
 			teampunkteGesamt = punkte[k] + teampunkteGesamt;	// addiert die Punkte der Spieler um Teampunktzahl zu erhalten
 			}
-		
+		/*
 		tb.setGesamtpunkte(teampunkteGesamt);					// Punkte werden gespeichert in Teambewertung
 		tb.setIsPro(pro);										// das Team ist pro
 		tb.setHaveWon(win);										// das Team hat gewonnen
@@ -83,7 +131,7 @@ public class Team {
 			tb.setSpeakerAt(z, speakers[z]);
 		}
 		this.setTeambewertung(tb);
-		//this.setTeambewertungAt(index, teambewertung);
+		//this.setTeambewertungAt(index, teambewertung); */
 	}
 	
 	
@@ -98,7 +146,7 @@ public class Team {
 	public void setIsJunior(Boolean isJunior) {
 		this.isJunior = isJunior;
 	}
-	
+/*	
 	public void setTeambewertungAt(int index, Teambewertung teambewertung) {
 		if(index<3) {
 			this.bewertungen.set(index, teambewertung);
@@ -108,7 +156,7 @@ public class Team {
 	public void setTeambewertung(Teambewertung teambewertung) {
 		this.bewertungen.add(teambewertung);
 	}
-	
+	*/
 
 	
 }
