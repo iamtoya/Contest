@@ -132,11 +132,11 @@ public class Gui extends JFrame {
 			//dp.getJuniorTeams().add(new Team(dp.getSchulen().get(i), true));
 			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(0,new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam()));
 			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(1,new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam()));
-			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(1,new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam()));
+			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(2,new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam()));
 			//dp.getSeniorTeams().add(new Team(dp.getSchulen().get(i), false));
 		}
 		//schulen problem gelöst
-		dp.getSchulen().get(2).getJuniorTeam().setSpeakerAt(1,new Speaker("Joe", dp.getSchulen().get(2).getJuniorTeam()));
+		dp.getSchulen().get(2).getJuniorTeam().setSpeakerAt(3,new Speaker("Hans", dp.getSchulen().get(2).getJuniorTeam()));
 		
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -465,7 +465,7 @@ public class Gui extends JFrame {
 				}
 			});
 			
-			    JButton southB = new JButton("Judge ?");
+			    JButton southB = new JButton("");
 	            debates.get(i).add(southB, BorderLayout.SOUTH);
 	        /*  southB.addActionListener(new ActionListener() {
 	            	public void actionPerformed(ActionEvent arg0) {
@@ -505,16 +505,19 @@ public class Gui extends JFrame {
 		chckbxs[1].setSelected(true);
 		Object[] options = {"Enter school name:", chckbxs};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options); //Schulname wird in "s" gespeichert
-		dp.getSchulen().add(new Schule(s)); //und den "schulen" hinzugefügt
+		
 		if(s != null && s.length() > 0) { //der Fall, dass keine Schule eingegeben wurde wird hier abgefangen
 			if(chckbxs[0].isSelected() && chckbxs[1].isSelected()) { //unterschieden wird in der Anzahl der gewählten Checkboxes
+				dp.getSchulen().add(new Schule(s, true, true));
 				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), true)); //die team-listen werden erweitert
 				dp.getSeniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), false));
 			}
 			else if (chckbxs[0].isSelected()) {
+				dp.getSchulen().add(new Schule(s, true, false));
 				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), true));
 			}
 			else if (chckbxs[1].isSelected()) {
+				dp.getSchulen().add(new Schule(s, false, true));
 				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), false));
 			}
 			else {
@@ -538,21 +541,26 @@ public class Gui extends JFrame {
 		JCheckBox[] chckbx = {new JCheckBox("is experienced")};
 		Object[] options = {"Enter judge name:", chckbx};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options);
-		if(s != null && s.length() > 0) {
-			if(chckbx[0].isSelected()) {
-				dp.addJudge(new Judge(s, true));
+		if(s != null && !s.contains(",")) {
+			if(s != null && s.length() > 0) {
+				if(chckbx[0].isSelected()) {
+					dp.addJudge(new Judge(s, true));
+				}
+				else {
+					dp.addJudge(new Judge(s, false));
+				}			
 			}
-			else {
-				dp.addJudge(new Judge(s, false));
-			}			
-		}
-		try{ 
-			if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
-				JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
+			try{ 
+				if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
+					JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			catch(NullPointerException e) {
+				
 			}
 		}
-		catch(NullPointerException e) {
-			
+		else {
+			JOptionPane.showMessageDialog(subFrame, "Judge names can't contain a ','", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	

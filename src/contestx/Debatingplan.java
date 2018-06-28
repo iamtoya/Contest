@@ -58,23 +58,23 @@ public class Debatingplan {
 		
 		judges.add(new Judge("1", new Schule("2"), true));
 		judges.add(new Judge("2", new Schule("2"), true));
-		judges.add(new Judge("3", new Schule("2"), true));
-		judges.add(new Judge("4", new Schule("2"), true));
-		judges.add(new Judge("5", new Schule("2"), true));
+		judges.add(new Judge("3", new Schule("2"), false));
+		judges.add(new Judge("4", new Schule("2"), false));
+		judges.add(new Judge("5", new Schule("2"), false));
 		judges.add(new Judge("6", true));
 		judges.add(new Judge("7", true));
-		judges.add(new Judge("8", true));
-		judges.add(new Judge("9", true));
-		judges.add(new Judge("10", true));
-		judges.add(new Judge("11", true));
-		judges.add(new Judge("12", true));
-		judges.add(new Judge("13", true));
-		judges.add(new Judge("14", true));
-		judges.add(new Judge("15", true));
-		judges.add(new Judge("16", true));
-		judges.add(new Judge("17", true));
-		judges.add(new Judge("18", true));
-		judges.add(new Judge("19", true));
+		judges.add(new Judge("8", false));
+		judges.add(new Judge("9", false));
+		judges.add(new Judge("10", false));
+		judges.add(new Judge("11", false));
+		judges.add(new Judge("12", false));
+		judges.add(new Judge("13", false));
+		judges.add(new Judge("14", false));
+		judges.add(new Judge("15", false));
+		judges.add(new Judge("16", false));
+		judges.add(new Judge("17", false));
+		judges.add(new Judge("18", false));
+		judges.add(new Judge("19", false));
 
 		
 	}
@@ -140,6 +140,12 @@ public class Debatingplan {
 	
 	public void judgesZuordnen()
 	{
+		//Judge-Button-Texte resetten
+		for(int i = 0; i < gui.getDebates().size(); i++) {
+			JButton b = (JButton) gui.getDebates().get(i).getComponent(3);
+			b.setText("");
+		}
+		
 		Collections.shuffle(judges);
 		ArrayList<Judge> erfahren = new ArrayList<Judge>();
 		ArrayList<Judge> kannAktuell = new ArrayList<Judge>();
@@ -161,6 +167,7 @@ public class Debatingplan {
 		}
 		zuordnen(1, kannAktuell, 0, false);
 		
+		unbenutzt.clear();
 		erfahren.clear();
 		kannAktuell.clear();
 		//Zeitzone 2
@@ -181,6 +188,7 @@ public class Debatingplan {
 		}
 		zuordnen(2, kannAktuell, 0, false);
 		
+		unbenutzt.clear();
 		erfahren.clear();
 		kannAktuell.clear();
 		//Zeitzone 3
@@ -200,14 +208,16 @@ public class Debatingplan {
 			kannAktuell.add(unbenutzt.get(i));
 		}
 		zuordnen(3, kannAktuell, 0, false);
+		
+		unbenutzt.clear();
 	}
 	
 	private boolean zuordnen(int zeitzone, ArrayList<Judge> kannAktuell, int index, boolean erfahren) { //index steht für das index-te Debate der Zz.
-
+		boolean letzterDurchlauf = false;
 		ArrayList<Judge> bereitsVersucht = new ArrayList<Judge>();
 		if(erfahren) {
 			if(!(index < dPTjunior + dPTsenior)) { //wenn Limit überschritten, erster Erfolg
-				for(int i = 0; i < kannAktuell.size(); i++) { //unbenutzte Judges speichern
+				for(int i = 0; i < kannAktuell.size(); i++) { //unbenutzte erfahrene Judges speichern
 					unbenutzt.add(kannAktuell.get(i));
 				}
 				return true;
@@ -215,12 +225,10 @@ public class Debatingplan {
 		}
 		else {
 			if(!(index < 2*(dPTjunior + dPTsenior))) { //wenn Limit überschritten, erster Erfolg
-				for(int i = 0; i < kannAktuell.size(); i++) { //unbenutzte Judges speichern
-					unbenutzt.add(kannAktuell.get(i));
-				}
 				return true;
 			}
-			if(index > (dPTjunior + dPTsenior)) { //wenn bereits beim 2. Durchlauf
+			if(index >= (dPTjunior + dPTsenior)) { //wenn bereits beim 2. Durchlauf
+				letzterDurchlauf = true;
 				index = index - dPTjunior - dPTsenior;
 			}
 		}
@@ -256,12 +264,25 @@ public class Debatingplan {
 		}
 		if(!(i == kannAktuell.size())) {
 			erfahrenerJudge = kannAktuell.get(i);
-			
+			String s = "";
+			if(letzterDurchlauf) {
+				if(judge_button.getText().contains(",")) {
+					s = judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","));
+					if(s.contains(",")) {
+						judge_button.setText(s);
+					}
+				}
+			}
+			else {
+				if(judge_button.getText().contains(",")) judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
+			}
 			if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
 			else judge_button.setText(erfahrenerJudge.getName());
 			
 			kannAktuell.remove(i); //Liste wird gekürzt, damit der benutzte Judge nicht mehr verwendet werden kann
 			bereitsVersucht.add(erfahrenerJudge); //damit ein Judge nicht mehrmals für dieselbe Position versucht wird
+			Collections.shuffle(kannAktuell); //more randomness
+			if(letzterDurchlauf) index = index + dPTjunior + dPTsenior;
 			while(!zuordnen(zeitzone, kannAktuell, index+1, erfahren)) {
 					
 				Judge temp = erfahrenerJudge; //zusätzliche Variable für den verlustfreien Austausch des gewählten Judges
@@ -274,7 +295,17 @@ public class Debatingplan {
 				}
 				if(!(j == kannAktuell.size())) { //wenn gefunden
 					erfahrenerJudge = kannAktuell.get(j);
-					
+					if(letzterDurchlauf) {
+						if(judge_button.getText().contains(",")) {
+							s = judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","));
+							if(s.contains(",")) {
+								judge_button.setText(s);
+							}
+						}
+					}
+					else {
+						if(judge_button.getText().contains(",")) judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
+					}
 					if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
 					else judge_button.setText(erfahrenerJudge.getName());
 					
@@ -283,14 +314,12 @@ public class Debatingplan {
 					kannAktuell.add(temp);
 				}
 				else { //wenn keiner mehr verfügbar
-					judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(",")-1)); //kürzt den String um das nicht-mögliche Ende
 					return false; //kein Judge kann zugeordnet werden
 				}
 			} //hier konnten alle Judges zugeordnet werden
 			return true;
 		} 
 		else { //wenn kein Judge verfügbar ist
-			judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(",")-1)); //kürzt den String um das nicht-mögliche Ende
 			return false; //kein Judge kann zugeordnet werden
 		}
 
