@@ -156,7 +156,7 @@ public class Team {
 	public void setTeambewertung(Teambewertung teambewertung) {
 		this.bewertungen.add(teambewertung);
 	}
-	*/
+	*///
 
 	
 }

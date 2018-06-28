@@ -38,7 +38,7 @@ public class Debate {
 		}
 	}
 	
-	
+	//
 	
 	
 	public Team getTeamPro() {
