@@ -23,6 +23,15 @@ public class Team {
 		this.hoechstPunkte=0;
 		wins = new ArrayList<Boolean>();
 	}
+	
+	public Team()
+	{
+		this.schule=new Schule("");
+		speaker.add(new Speaker());
+		this.isJunior=true;
+		this.hoechstPunkte=0;
+		wins = new ArrayList<Boolean>();
+	}
 
 	
 	public Team(Schule schule, ArrayList<Speaker> speaker, Boolean isJunior) {
@@ -45,6 +54,25 @@ public class Team {
 		
 	}
 	
+	public int getHoechstPunkte()
+	{
+		return hoechstPunkte;
+	}
+	
+	public Speaker getBestenSpeaker()
+	{
+		Speaker x = new Speaker();
+		for(int i=0; i<speaker.size();i++)
+		{
+			speaker.get(i).hoechstPunkteErmitteln();
+			if(speaker.get(i).getHoechstePunkte()>x.getHoechstePunkte())
+			{
+				x=speaker.get(i);
+			}
+		}
+		return x;
+	}
+	
 	public void setHoechstPunkte()
 	{
 		hoechstPunkte=punkte.get(1);
@@ -65,6 +93,24 @@ public class Team {
 	public int getPunkteAt(int index)
 	{
 		return punkte.get(index);
+	}
+	
+	public boolean getWinAt(int index)
+	{
+		return wins.get(index);
+	}
+	
+	public int getWinAmount()
+	{
+		int x=0;
+		for(int i=0; i<3; i++)
+		{
+			if(getWinAt(i))
+			{
+				x=x+1;
+			}
+		}
+		return x;
 	}
 	
 	public void setWin(int index, boolean win)

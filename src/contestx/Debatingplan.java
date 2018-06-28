@@ -22,6 +22,14 @@ public class Debatingplan {
 	private ArrayList<Speaker> ersterS;
 	private ArrayList<Speaker> zweiterS;
 	private ArrayList<Speaker> dritterS;
+	private ArrayList<Team> teamsSSortiert; //nach Siegen
+	private Team teamS1;
+	private Team teamS2;
+	private Team teamS3;
+	private ArrayList<Team> teamsJSortiert; //nach Siegen
+	private Team teamJ1;
+	private Team teamJ2;
+	private Team teamJ3;
 	private ArrayList<String> motions;	  
 	//  obiges nach Modellierung
 	private Gui gui;
@@ -54,7 +62,8 @@ public class Debatingplan {
 		zweiterS = new ArrayList<Speaker>();
 		dritterS = new ArrayList<Speaker>();
 		
-		speakerSortiert.add(new Speaker());
+		teamsSSortiert = new ArrayList<Team>();
+		teamsJSortiert = new ArrayList<Team>();
 		
 		judges.add(new Judge("1", new Schule("2"), true));
 		judges.add(new Judge("2", new Schule("2"), true));
@@ -422,6 +431,417 @@ public class Debatingplan {
 		}
 	}
 	
+	private void sortTeams(boolean junior)
+	{
+		ArrayList<Team> teams1 = new ArrayList<Team>();
+		ArrayList<Team> temp = new ArrayList<Team>();
+		if(junior)
+		{
+			teamsJSortiert.clear();
+			teamsJSortiert.add(new Team());
+			for(int y=0;y<teams_junior.size();y++)		
+			{
+				teams1.add(teams_junior.get(y));
+			}
+			for(int i=0; i<teams1.size();i++)
+			{
+				teams1.get(i).setHoechstPunkte();
+			}
+			while(teamsJSortiert.size()<teams_junior.size())
+			{
+				temp.add(new Team());
+				for(int j=0; j<teams1.size();j++)
+				{
+					if(teams1.get(j).getWinAmount()>temp.get(0).getWinAmount())
+					{
+						temp.clear();
+						temp.add(teams1.get(j));
+						teams1.remove(j);
+					}
+					else if(teams1.get(j).getWinAmount()==temp.get(0).getWinAmount())
+					{
+						temp.add(teams1.get(j));
+						teams1.remove(j);
+					}
+					for(int h=0; h<temp.size();h++)
+					{
+						teamsJSortiert.add(temp.get(h));
+					}
+					temp.clear();
+				}
+				if(teamsSSortiert.get(0).getSchule().getName().equals("")) teamsSSortiert.remove(0);
+			}
+		}
+		else
+		{
+			teamsSSortiert.clear();
+			teamsSSortiert.add(new Team());
+			for(int y=0;y<teams_senior.size();y++)		
+			{
+				teams1.add(teams_senior.get(y));
+			}
+			for(int i=0; i<teams1.size();i++)
+			{
+				teams1.get(i).setHoechstPunkte();
+			}
+			while(teamsSSortiert.size()<teams_senior.size())
+			{
+				temp.add(new Team());
+				for(int j=0; j<teams1.size();j++)
+				{
+					if(teams1.get(j).getWinAmount()>temp.get(0).getWinAmount())
+					{
+						temp.clear();
+						temp.add(teams1.get(j));
+						teams1.remove(j);
+					}
+					else if(teams1.get(j).getWinAmount()==temp.get(0).getWinAmount())
+					{
+						temp.add(teams1.get(j));
+						teams1.remove(j);
+					}
+				}
+				for(int h=0; h<temp.size();h++)
+				{
+					teamsSSortiert.add(temp.get(h));
+				}
+				temp.clear();
+			}
+			if(teamsSSortiert.get(0).getSchule().getName().equals("")) teamsSSortiert.remove(0);
+		}
+	}
+	
+	public void bestTeams(boolean junior)
+	{
+		sortTeams(junior);
+		ArrayList<Team> teams1 = new ArrayList<Team>();
+		ArrayList<Team> temp = new ArrayList<Team>();
+		ArrayList<Team> nachPunkten = new ArrayList<Team>();
+		nachPunkten.clear();
+		nachPunkten.add(new Team());
+		if(junior)
+		{
+			for(int y=0;y<teamsJSortiert.size();y++)		
+			{
+				teams1.add(teamsJSortiert.get(y));
+			}
+			int i=0;
+			while(teamsJSortiert.get(i).getWinAmount()==teamsJSortiert.get(0).getWinAmount())
+			{
+				i++;
+			}
+			if(i>=3)
+			{
+				while(nachPunkten.size()<teamsJSortiert.size())
+				{
+					for(int x=0;x<i;x++)
+					{
+						if(teams1.get(x).getHoechstPunkte()>nachPunkten.get(0).getHoechstPunkte())
+						{
+							nachPunkten.clear();
+							nachPunkten.add(teams1.get(x));
+							teams1.remove(x);
+						}
+						else if(teams1.get(x).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+						{
+							nachPunkten.add(teams1.get(x));
+							teams1.remove(x);
+						}
+					}
+					for(int h=0; h<temp.size();h++)
+					{
+						nachPunkten.add(temp.get(h));
+					}
+					temp.clear();
+				}
+				int o=0;
+				while(nachPunkten.get(o).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+				{
+					o++;
+				}
+				if(o!=0)
+				{
+					Team besterSpeaker=new Team();
+					besterSpeaker=nachPunkten.get(0);
+					for(int z=0;z<o;z++)
+					{
+						if(besterSpeaker.getBestenSpeaker().getHoechstePunkte()<nachPunkten.get(o).getBestenSpeaker().getHoechstePunkte())
+						{
+							besterSpeaker=nachPunkten.get(o);
+						}
+					}
+					teamJ1=besterSpeaker;
+				}
+				else
+				{
+					while(nachPunkten.get(o).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+					{
+						o++;
+					}
+					if(o!=0)
+					{
+						Team besterSpeaker=new Team();
+						besterSpeaker=nachPunkten.get(0);
+						for(int z=0;z<o;z++)
+						{
+							if(besterSpeaker.getBestenSpeaker().getHoechstePunkte()<nachPunkten.get(o).getBestenSpeaker().getHoechstePunkte())
+							{
+								besterSpeaker=nachPunkten.get(o);
+							}
+						}
+						teamJ2=besterSpeaker;
+					}
+					else
+					{
+						while(nachPunkten.get(o).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+						{
+							o++;
+						}
+						if(o!=0)
+						{
+							Team besterSpeaker=new Team();
+							besterSpeaker=nachPunkten.get(0);
+							for(int z=0;z<o;z++)
+							{
+								if(besterSpeaker.getBestenSpeaker().getHoechstePunkte()<nachPunkten.get(o).getBestenSpeaker().getHoechstePunkte())
+								{
+									besterSpeaker=nachPunkten.get(o);
+								}
+							}
+						teamJ3=besterSpeaker;
+						}
+					}
+				}
+			}
+			//ab hier weniger abgefangen
+			else if(i==2)
+			{
+				if(teamsJSortiert.get(0).getHoechstPunkte()>teamsJSortiert.get(1).getHoechstPunkte())
+				{
+					teamJ1=teamsJSortiert.get(0);
+					teamJ2=teamsJSortiert.get(1);
+				}
+				else
+				{
+					teamJ2=teamsJSortiert.get(0);
+					teamJ1=teamsJSortiert.get(1);
+				}
+				//aus den Teams mit weniger Punkten
+				while(nachPunkten.size()<teamsJSortiert.size()-2)
+				{
+					for(int x=0;x<i;x++)
+					{
+						if(teams1.get(x).getHoechstPunkte()>nachPunkten.get(0).getHoechstPunkte())
+						{
+							nachPunkten.clear();
+							nachPunkten.add(teams1.get(x));
+							teams1.remove(x);
+						}
+						else if(teams1.get(x).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+						{
+							nachPunkten.add(teams1.get(x));
+							teams1.remove(x);
+						}
+					}
+					for(int h=0; h<temp.size();h++)
+					{
+						nachPunkten.add(temp.get(h));
+					}
+					temp.clear();
+				}
+				teamJ3=nachPunkten.get(0);
+			}
+			else if(i==1)
+			{
+				teamJ1=teamsJSortiert.get(0);
+				while(nachPunkten.size()<teamsJSortiert.size()-1)
+				{
+					for(int x=0;x<i;x++)
+					{
+						if(teams1.get(x).getHoechstPunkte()>nachPunkten.get(0).getHoechstPunkte())
+						{
+							nachPunkten.clear();
+							nachPunkten.add(teams1.get(x));
+							teams1.remove(x);
+						}
+						else if(teams1.get(x).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+						{
+							nachPunkten.add(teams1.get(x));
+							teams1.remove(x);
+						}
+					}
+					for(int h=0; h<temp.size();h++)
+					{
+						nachPunkten.add(temp.get(h));
+					}
+					temp.clear();
+				}
+				teamJ2=nachPunkten.get(0);
+				teamJ3=nachPunkten.get(1);
+			}
+		}
+		else
+		{
+			{
+				for(int y=0;y<teamsSSortiert.size();y++)		
+				{
+					teams1.add(teamsSSortiert.get(y));
+				}
+				int i=0;
+				while(teamsSSortiert.get(i).getWinAmount()==teamsSSortiert.get(0).getWinAmount())
+				{
+					i++;
+				}
+				if(i>=3)
+				{
+					while(nachPunkten.size()<teamsJSortiert.size())
+					{
+						for(int x=0;x<i;x++)
+						{
+							if(teams1.get(x).getHoechstPunkte()>nachPunkten.get(0).getHoechstPunkte())
+							{
+								nachPunkten.clear();
+								nachPunkten.add(teams1.get(x));
+								teams1.remove(x);
+							}
+							else if(teams1.get(x).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+							{
+								nachPunkten.add(teams1.get(x));
+								teams1.remove(x);
+							}
+						}
+						for(int h=0; h<temp.size();h++)
+						{
+							nachPunkten.add(temp.get(h));
+						}
+						temp.clear();
+					}
+					int o=0;
+					while(nachPunkten.get(o).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+					{
+						o++;
+					}
+					if(o!=0)
+					{
+						Team besterSpeaker=new Team();
+						besterSpeaker=nachPunkten.get(0);
+						for(int z=0;z<o;z++)
+						{
+							if(besterSpeaker.getBestenSpeaker().getHoechstePunkte()<nachPunkten.get(o).getBestenSpeaker().getHoechstePunkte())
+							{
+								besterSpeaker=nachPunkten.get(o);
+							}
+						}
+						teamS1=besterSpeaker;
+					}
+					else
+					{
+						while(nachPunkten.get(o).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+						{
+							o++;
+						}
+						if(o!=0)
+						{
+							Team besterSpeaker=new Team();
+							besterSpeaker=nachPunkten.get(0);
+							for(int z=0;z<o;z++)
+							{
+								if(besterSpeaker.getBestenSpeaker().getHoechstePunkte()<nachPunkten.get(o).getBestenSpeaker().getHoechstePunkte())
+								{
+									besterSpeaker=nachPunkten.get(o);
+								}
+							}
+							teamS2=besterSpeaker;
+						}
+						else
+						{
+							while(nachPunkten.get(o).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+							{
+								o++;
+							}
+							if(o!=0)
+							{
+								Team besterSpeaker=new Team();
+								besterSpeaker=nachPunkten.get(0);
+								for(int z=0;z<o;z++)
+								{
+									if(besterSpeaker.getBestenSpeaker().getHoechstePunkte()<nachPunkten.get(o).getBestenSpeaker().getHoechstePunkte())
+									{
+										besterSpeaker=nachPunkten.get(o);
+									}
+								}
+							teamS3=besterSpeaker;
+							}
+						}
+					}
+				}
+				else if(i==2)
+				{
+					if(teamsSSortiert.get(0).getHoechstPunkte()>teamsSSortiert.get(1).getHoechstPunkte())
+					{
+						teamS1=teamsSSortiert.get(0);
+						teamS2=teamsSSortiert.get(1);
+					}
+					else
+					{
+						teamS2=teamsSSortiert.get(0);
+						teamS1=teamsSSortiert.get(1);
+					}
+					//aus den Teams mit weniger Punkten
+					while(nachPunkten.size()<teamsSSortiert.size()-2)
+					{
+						for(int x=0;x<i;x++)
+						{
+							if(teams1.get(x).getHoechstPunkte()>nachPunkten.get(0).getHoechstPunkte())
+							{
+								nachPunkten.clear();
+								nachPunkten.add(teams1.get(x));
+								teams1.remove(x);
+							}
+							else if(teams1.get(x).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+							{
+								nachPunkten.add(teams1.get(x));
+								teams1.remove(x);
+							}
+						}
+						for(int h=0; h<temp.size();h++)
+						{
+							nachPunkten.add(temp.get(h));
+						}
+						temp.clear();
+					}
+					teamS3=nachPunkten.get(0);
+				}
+				else if(i==1)
+				{
+					teamS1=teamsSSortiert.get(0);
+					while(nachPunkten.size()<teamsSSortiert.size()-1)
+					{
+						for(int x=0;x<i;x++)
+						{
+							if(teams1.get(x).getHoechstPunkte()>nachPunkten.get(0).getHoechstPunkte())
+							{
+								nachPunkten.clear();
+								nachPunkten.add(teams1.get(x));
+								teams1.remove(x);
+							}
+							else if(teams1.get(x).getHoechstPunkte()==nachPunkten.get(0).getHoechstPunkte())
+							{
+								nachPunkten.add(teams1.get(x));
+								teams1.remove(x);
+							}
+						}
+						for(int h=0; h<temp.size();h++)
+						{
+							nachPunkten.add(temp.get(h));
+						}
+						temp.clear();
+					}
+					teamS2=nachPunkten.get(0);
+					teamS3=nachPunkten.get(1);
+			}
+		}
+	}
 	private void sortSpeaker()
 	{
 		speakerSortiert.clear();
@@ -436,7 +856,7 @@ public class Debatingplan {
 		{
 			speaker1.get(i).hoechstPunkteErmitteln();
 		}
-		while(speakerSortiert.size()<speaker1.size()+1)
+		while(speakerSortiert.size()<speaker.size()+1)
 		{
 			temp.add(new Speaker());
 			for(int j=0; j<speaker1.size();j++)
