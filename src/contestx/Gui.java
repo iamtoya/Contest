@@ -27,6 +27,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import com.sun.xml.internal.ws.api.Component;
+
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -120,14 +122,7 @@ public class Gui extends JFrame {
 		
 		dp = new Debatingplan(this);
 		verwaltung = new Verwaltung(dp);
-		dp.getSchulen().add(new Schule("1", true, true)); 
-		dp.getSchulen().add(new Schule("2", true, true));
-		dp.getSchulen().add(new Schule("3", true, true));
-		dp.getSchulen().add(new Schule("4", true, true));
-		dp.getSchulen().add(new Schule("5", true, true));
-		dp.getSchulen().add(new Schule("6", true, true));
-		dp.getSchulen().add(new Schule("7", true, true));
-		dp.getSchulen().add(new Schule("8", true, true));
+
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			//dp.getJuniorTeams().add(new Team(dp.getSchulen().get(i), true));
 			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(0,new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam()));
@@ -390,15 +385,16 @@ public class Gui extends JFrame {
 			JButton northB = new JButton("Room Nr. ?");
 			debates.get(i).add(northB, BorderLayout.NORTH);
 			northB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				String s=JOptionPane.showInputDialog("Room Nr."); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man die Raumnummer eingeben kann
-				if(s=="")
-				{
-					JOptionPane.showMessageDialog(subFrame, "No room entered", "Error Message", JOptionPane.ERROR_MESSAGE);
-				}
-				else
-				{
-					northB.setText("Room Nr. " + s);				}
+				public void actionPerformed(ActionEvent arg0) {
+					String s=JOptionPane.showInputDialog("Room Nr."); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man die Raumnummer eingeben kann
+					if(s=="")
+					{
+						JOptionPane.showMessageDialog(subFrame, "No room entered", "Error Message", JOptionPane.ERROR_MESSAGE);
+					}
+					else
+					{
+						northB.setText("Room Nr. " + s);				
+					}
 				}
 			});
 			
@@ -539,15 +535,34 @@ public class Gui extends JFrame {
 	
 	public void showEnterJudgeDialog() {
 		JCheckBox[] chckbx = {new JCheckBox("is experienced")};
-		Object[] options = {"Enter judge name:", chckbx};
+		chckbx[0].setSelected(true);
+		JComboBox combo = new JComboBox();
+
+		for(int i = 0; i < dp.getSchulen().size(); i++) {
+			combo.addItem(dp.getSchulen().get(i).getName());
+		}
+		combo.addItem("keine Schule");
+		Object[] options = {"Select judge's school:", combo, "Enter judge's name:", chckbx};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options);
-		if(s != null && !s.contains(",")) {
-			if(s != null && s.length() > 0) {
+		boolean judgeAlreadyExisting = false;
+		for(int i = 0; i < dp.getJudges().size(); i++) {
+			if(dp.getJudgeAt(i).getName().equals(s)) judgeAlreadyExisting = true;
+		}
+		
+		int index = combo.getSelectedIndex();
+		if(s != null && !s.contains(",") && !judgeAlreadyExisting) {
+			if(s.length() > 0) {
 				if(chckbx[0].isSelected()) {
-					dp.addJudge(new Judge(s, true));
+					if(index+1 != combo.getItemCount()) dp.addJudge(new Judge(s, dp.getSchulen().get(index), true));
+					else { //wenn "keine Schule" ausgewählt
+						dp.addJudge(new Judge(s, true)); //Dummy-Schule noch hinzuzufügen
+					}
 				}
 				else {
-					dp.addJudge(new Judge(s, false));
+					if(index+1 != combo.getItemCount()) dp.addJudge(new Judge(s, dp.getSchulen().get(index), false));
+					else {
+						dp.addJudge(new Judge(s, false)); //Dummy-Schule noch hinzuzufügen
+					}
 				}			
 			}
 			try{ 
@@ -560,7 +575,8 @@ public class Gui extends JFrame {
 			}
 		}
 		else {
-			JOptionPane.showMessageDialog(subFrame, "Judge names can't contain a ','", "Error Message", JOptionPane.ERROR_MESSAGE);
+			if(!judgeAlreadyExisting) JOptionPane.showMessageDialog(subFrame, "Judge names can't contain a comma or be empty.", "Error Message", JOptionPane.ERROR_MESSAGE);
+			else JOptionPane.showMessageDialog(subFrame, "Judge already exists.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
