@@ -153,18 +153,18 @@ public class Gui extends JFrame {
 		contentPane.setLayout(null);
 		
 		//Timezone 1-Button impl.
-		btnTimezone.setEnabled(false);
+		btnTimezone.setEnabled(true);
 		btnTimezone.setBounds(47, 152, 137, 52);
 		contentPane.add(btnTimezone);
 		
 		
 		//Timezone 2-Button impl.
-		btnTimezone_1.setEnabled(false);
+		btnTimezone_1.setEnabled(true);
 		btnTimezone_1.setBounds(47, 309, 137, 52);
 		contentPane.add(btnTimezone_1);
 		
 		//Timezone 3-Button impl.
-		btnTimezone_2.setEnabled(false);
+		btnTimezone_2.setEnabled(true);
 		btnTimezone_2.setBounds(47, 463, 137, 52);
 		contentPane.add(btnTimezone_2);
 		
@@ -188,6 +188,7 @@ public class Gui extends JFrame {
 		
 		//Add-Speaker Button
 		JButton btnAddSpeaker = new JButton("Add Speaker");
+		btnAddSpeaker.setEnabled(false);
 		btnAddSpeaker.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showEnterSpeakerDialog();
