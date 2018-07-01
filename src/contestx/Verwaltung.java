@@ -397,21 +397,10 @@ public class Verwaltung extends JFrame {
 							if(schulenIndex<(dp.getSchulen().size()-1)) {
 							schulenIndex++;
 							}
-							else {
-								schuleGefunden=1;
-								schulenIndex=-1;
-							}
 						}
 					}
 					if(schulenIndex>=0) {
 						comboBoxJudgesSchools.setSelectedIndex(schulenIndex);
-					}
-					else {
-						if(keineSchulenAdded==false) {
-							comboBoxJudgesSchools.addItem("keine Schule");
-							keineSchulenAdded= true;
-						}
-						comboBoxJudgesSchools.setSelectedIndex((comboBoxJudgesSchools.getItemCount()-1));
 					}
 					break;
 				}

@@ -28,7 +28,15 @@ public class Schule {
 		this.seniorTeam=seniorTeam;
 	}
 	
-	
+	public Schule(boolean keineSchule) {
+		if(keineSchule) {
+			name="Keine Schule";
+			hasJuniorTeam=false;
+			hasSeniorTeam=false;
+			juniorTeam = new Team(this, true);
+			seniorTeam = new Team(this, false);
+		}
+	}
 	
 	public String getName() {
 		return name;

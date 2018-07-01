@@ -66,6 +66,7 @@ public class Debatingplan {
 		schulen.add(new Schule("6", true, true));
 		schulen.add(new Schule("7", true, true));
 		schulen.add(new Schule("8", true, true));
+		schulen.add(new Schule(true));
 		
 		//Dummy-Judges
 		judges.add(new Judge("1", schulen.get(1), true));
