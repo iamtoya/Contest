@@ -9,11 +9,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -34,6 +40,14 @@ import java.awt.Dimension;
 
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+/**
+ * Still existing errors:
+ * Panels und Berechnen nur für Junior-Teams
+ * judgeZuordnen: erfahrene Zuordnung und restl. Zuordnung kommunizieren nicht!
+ * Daten Speichern und Laden (außer das Bild des Plans) 
+ * @author Games
+ *
+ */
 
 public class Gui extends JFrame {
 
@@ -333,7 +347,7 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-		btnBerechne.setBounds(986, 45, 169, 54);
+		btnBerechne.setBounds(671, 45, 209, 54);
 		contentPane.add(btnBerechne);
 		
 		JButton btnManage = new JButton("Manage");
@@ -342,7 +356,7 @@ public class Gui extends JFrame {
 				manage();
 			}
 		});
-		btnManage.setBounds(701, 32, 156, 81);
+		btnManage.setBounds(28, 32, 156, 81);
 		contentPane.add(btnManage);
 		btnAddSpeaker.setBounds(516, 47, 140, 51);
 		
@@ -354,12 +368,52 @@ public class Gui extends JFrame {
 				dp.judgesZuordnen();
 			}
 		});
-		btnNewButton.setBounds(1168, 45, 140, 54);
+		btnNewButton.setBounds(895, 45, 147, 54);
 		contentPane.add(btnNewButton);
+		
+		JButton btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser c = new JFileChooser();
+				c.showSaveDialog(subFrame);
+				File f = c.getSelectedFile();
+				imagescreen(f);
+			}
+		});
+		btnSave.setBounds(1057, 45, 130, 54);
+		contentPane.add(btnSave);
+		
+		
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
 	
+	public void imagescreen(File f) {
+		//Versuch des Speicherns des Frames als Bild
+		int h1 = textField_9.getHeight() + (textField_9.getY()-panel.getY()) + 10;
+		int h2 = panel_2.getHeight() + (panel_2.getY()-panel.getY()) + 10;
+		int h;
+		if(h1 > h2) h = h1;
+		else h = h2;
+		
+		Rectangle r = new Rectangle(btnTimezone.getX()-5, panel.getY()-5, panel.getWidth() + (panel.getX()-btnTimezone.getX()) + 10, h);
+		BufferedImage bi = ScreenImage.createImage(contentPane, r);
+		try {
+			ScreenImage.writeImage(bi, f, false);
+		} catch (IOException e1) {
+			if(!e1.getMessage().equals("File already exists.")) JOptionPane.showMessageDialog(subFrame, e1.getMessage());
+			else {
+				int i = JOptionPane.showConfirmDialog(subFrame, "File already exists. Override it?");
+				if(i == JOptionPane.YES_OPTION) { //wenn ja gewählt
+					try {
+						ScreenImage.writeImage(bi, f, true);
+					} catch (IOException e) {
+						JOptionPane.showMessageDialog(subFrame, e1.getMessage());
+					}
+				}
+			}
+		}
+	}
 	public void cutPanels(int pieces) {
 		panel.setLayout(new GridLayout(0, pieces, 0, 0));
 		panel_1.setLayout(new GridLayout(0, pieces, 0, 0));
