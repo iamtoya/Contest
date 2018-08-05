@@ -474,7 +474,7 @@ public class Debatingplan {
 		{
 			dritterS.add(speakerSortiert.get(d));
 		}
-	}
+	}//geil
 	
 	private void sortSpeaker()
 	{
