@@ -1,9 +1,11 @@
 package contestx;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 //neu Andy
 
-public class Team {
+public class Team implements Serializable {
+	private static final long serialVersionUID = -4720434346042715094L;
 	private Schule schule;
 	private ArrayList<Speaker> speaker;
 	private boolean isJunior;

@@ -1,4 +1,5 @@
 package contestx;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,7 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Debatingplan {
+public class Debatingplan implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Debate> debatesJ;
 	private ArrayList<Debate> debatesS;
 	private Zeitzone zeitzone1;
@@ -248,7 +250,7 @@ public class Debatingplan {
 			}
 			if(index >= (dPTjunior + dPTsenior)) { //wenn bereits beim 2. Durchlauf
 				letzterDurchlauf = true;
-				index = index - dPTjunior - dPTsenior;
+				index = index - dPTjunior - dPTsenior; //index verringern, damit er gleich behandelt werden kann
 			}
 		}
 		
@@ -278,10 +280,10 @@ public class Debatingplan {
 		erfahrenerJudge = new Judge();
 		int i = 0;
 		while(i < kannAktuell.size() && (kannAktuell.get(i).getSchule().getName().equals(x1) 
-				|| kannAktuell.get(i).getSchule().getName().equals(y1))) {
+				|| kannAktuell.get(i).getSchule().getName().equals(y1))) { //i erhöhen bis möglicher Judge gefunden
 			i++;
 		}
-		if(!(i == kannAktuell.size())) {
+		if(!(i == kannAktuell.size())) { //wenn möglicher Judge gefunden
 			erfahrenerJudge = kannAktuell.get(i);
 			String s = "";
 			if(letzterDurchlauf) {
@@ -299,8 +301,8 @@ public class Debatingplan {
 			kannAktuell.remove(i); //Liste wird gekürzt, damit der benutzte Judge nicht mehr verwendet werden kann
 			bereitsVersucht.add(erfahrenerJudge); //damit ein Judge nicht mehrmals für dieselbe Position versucht wird
 			Collections.shuffle(kannAktuell); //more randomness
-			if(letzterDurchlauf) index = index + dPTjunior + dPTsenior;
-			while(!zuordnen(zeitzone, kannAktuell, index+1, erfahren)) {
+			if(letzterDurchlauf) index = index + dPTjunior + dPTsenior; //index wieder erhöhen
+			while(!zuordnen(zeitzone, kannAktuell, index+1, erfahren)) { //alle darunterliegenden Äste durchprobieren
 					
 				Judge temp = erfahrenerJudge; //zusätzliche Variable für den verlustfreien Austausch des gewählten Judges
 					
@@ -313,14 +315,15 @@ public class Debatingplan {
 				if(!(j == kannAktuell.size())) { //wenn gefunden
 					erfahrenerJudge = kannAktuell.get(j);
 					if(letzterDurchlauf) {
-						if(containsDoubleComma(judge_button.getText())) {
+						if(containsDoubleComma(judge_button.getText())) { //Button-Text kürzen wenn zu lang
 							s = judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","));
 							judge_button.setText(s);
 						}
 					}
-					else {
+					else { //Button-Text kürzen wenn zu lang
 						if(judge_button.getText().contains(",")) judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
 					}
+					//Judge auf Button schreiben
 					if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
 					else judge_button.setText(erfahrenerJudge.getName());
 					
@@ -553,7 +556,9 @@ public class Debatingplan {
 	public ArrayList<Debate> getSeniorDebates() {
 		return debatesS;
 	}
-	
+	public void setGui(Gui g) {
+		this.gui = g;
+	}
 }
 //Githubg ist beste
 

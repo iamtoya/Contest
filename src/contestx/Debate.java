@@ -1,11 +1,14 @@
 package contestx;
 
+import java.io.Serializable;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
 //neu Andy
-public class Debate {
+public class Debate implements Serializable {
+	private static final long serialVersionUID = -7586576858743587740L;
 	private Team teamPro;
 	private Team teamCon;
 	private Zeitzone zeit;

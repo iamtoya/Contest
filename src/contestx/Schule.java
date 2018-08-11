@@ -1,7 +1,10 @@
 package contestx;
 
+import java.io.Serializable;
+
 //neu Andy
-public class Schule {
+public class Schule implements Serializable {
+	private static final long serialVersionUID = -9093385497921031366L;
 	private String name;
 	private Boolean hasJuniorTeam;
 	private Boolean hasSeniorTeam;

@@ -19,7 +19,12 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -51,7 +56,7 @@ import javax.swing.SwingConstants;
 
 public class Gui extends JFrame {
 
-	
+	private static final long serialVersionUID = -7824597793488283555L;
 	//private ArrayList<Schule> schulen;
 	//private ArrayList<Team> dp.getJuniorTeams();
 	//private ArrayList<Team> dp.getSeniorTeams();
@@ -96,6 +101,7 @@ public class Gui extends JFrame {
 	
 	//Attribute für showEnterPointsDialog (für den ActionListener)
 	private Team selectedTeam;
+	private final JButton btnLoadPlan = new JButton("Load plan");
 
 	/**
 	 * Launch the application.
@@ -371,7 +377,7 @@ public class Gui extends JFrame {
 		btnNewButton.setBounds(895, 45, 147, 54);
 		contentPane.add(btnNewButton);
 		
-		JButton btnSave = new JButton("Save");
+		JButton btnSave = new JButton("Export");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser c = new JFileChooser();
@@ -382,6 +388,38 @@ public class Gui extends JFrame {
 		});
 		btnSave.setBounds(1057, 45, 130, 54);
 		contentPane.add(btnSave);
+		
+		JButton btnSavePlan = new JButton("Save plan");
+		btnSavePlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				writeToFile(dp, "debatingplan.ser");
+			}
+		});
+		btnSavePlan.setBounds(1202, 15, 130, 39);
+		contentPane.add(btnSavePlan);
+		btnLoadPlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//Panels zurücksetzen(mehrfaches drücken)
+				panel.removeAll();
+				panel_1.removeAll();
+				panel_2.removeAll();
+				panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
+				panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+				panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+				panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+				debates.clear();
+				
+				dp = (Debatingplan) readFromFile("debatingplan.ser");
+				setDPGui();
+				ArrayList<Debate> debatesJ = dp.getJuniorDebates();
+				int dPTjunior = debatesJ.size()/3;
+				createRelativeSubpanels(dPTjunior, debatesJ);
+				dPTjunior = 0;
+			}
+		});
+		btnLoadPlan.setBounds(1202, 70, 130, 29);
+		
+		contentPane.add(btnLoadPlan);
 		
 		
 		
@@ -790,6 +828,41 @@ public class Gui extends JFrame {
 	
 	public ArrayList<JPanel> getDebates() {
 		return debates;
+	}
+	public void writeToFile(Object obj, String filepath) {
+		try {
+			// write object to file
+			FileOutputStream fos = new FileOutputStream(filepath);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(obj);
+			oos.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public Object readFromFile(String filepath) {
+		Object result = null;
+		try {
+			// read object from file
+						FileInputStream fis = new FileInputStream(filepath);
+						ObjectInputStream ois = new ObjectInputStream(fis);
+						result = ois.readObject();
+						ois.close();
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public void setDPGui() {
+		dp.setGui(this);
 	}
 }
 //NEIN NEIN NEIN NEIN NEIN NEIN
