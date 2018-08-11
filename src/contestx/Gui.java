@@ -75,6 +75,7 @@ public class Gui extends JFrame {
 	private JPanel panel_2 = new JPanel();
 	
 	private JFrame subFrame; //für alle möglichen Dialogfelder
+	
 	private JTextField txtVon;
 	private JTextField textField;
 	private JTextField textField_2;
@@ -475,7 +476,7 @@ public class Gui extends JFrame {
 			debates.get(i).setBorder(new LineBorder(new Color(0, 0, 0))); //Grenzen werden gezeichnet
 			BorderLayout layout = new BorderLayout(1, 1);
 			debates.get(i).setLayout(layout); //BorderLayout wird festgelegt
-			JButton northB = new JButton("Room Nr. ?");
+			JButton northB = new JButton("Room Nr. " + array.get(i).getRaum());
 			debates.get(i).add(northB, BorderLayout.NORTH);
 			northB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -553,8 +554,12 @@ public class Gui extends JFrame {
 					}
 				}
 			});
-			
-			    JButton southB = new JButton("");
+			String text = "";
+			for(int j = 0; j < array.get(i).getJudgeList().size(); j++) {
+				if(text != "") text = text + ", " + array.get(i).getJudge(j).getName();
+				else text = array.get(i).getJudge(j).getName();
+			}
+			    JButton southB = new JButton(text);
 	            debates.get(i).add(southB, BorderLayout.SOUTH);
 	        /*  southB.addActionListener(new ActionListener() {
 	            	public void actionPerformed(ActionEvent arg0) {

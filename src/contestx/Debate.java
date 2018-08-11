@@ -1,6 +1,7 @@
 package contestx;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -14,13 +15,15 @@ public class Debate implements Serializable {
 	private Zeitzone zeit;
 	private String raum;
 	private JFrame subFrame;
+	private ArrayList<Judge> judges;
 	
 	
 	public Debate(Team pro, Team con) {
 		this.teamCon = con;
 		this.teamPro = pro;
 		//zeit = new Zeitzone(0,0,1,0);
-		raum = "";
+		raum = "?";
+		judges = new ArrayList<Judge>();
 		subFrame = new JFrame();
 	}
 	
@@ -41,8 +44,25 @@ public class Debate implements Serializable {
 		}
 	}
 	
-	//
+	public void addJudge(Judge j) {
+		judges.add(j);
+	}
 	
+	public void removeJudge(Judge j) {
+		judges.remove(j);
+	}
+	
+	public void removeJudge(int index) {
+		judges.remove(index);
+	}
+	
+	public Judge getJudge(int index) {
+		return judges.get(index);
+	}
+	
+	public ArrayList<Judge> getJudgeList() {
+		return judges;
+	}
 	
 	public Team getTeamPro() {
 		return teamPro;

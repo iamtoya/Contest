@@ -37,6 +37,7 @@ public class Debatingplan implements Serializable{
 	private String[][] usedCompsJunior; //hier werden die verwendeten Kompositionen gespeichert
 	private String[][] usedCompsSenior;
 	private ArrayList<Judge> unbenutzt;
+	private ArrayList<Debate> debatesAll;
 	
 	public Debatingplan(Gui gui) {
 		this.gui = gui; //referenzieren (für Datenfluss später)
@@ -51,6 +52,8 @@ public class Debatingplan implements Serializable{
 		judges = new ArrayList<Judge>();
 		
 		unbenutzt = new ArrayList<Judge>();
+		
+		debatesAll = new ArrayList<Debate>();
 		
 		speakerSortiert = new ArrayList<Speaker>();
 		ersterS = new ArrayList<Speaker>();
@@ -155,6 +158,16 @@ public class Debatingplan implements Serializable{
 	
 	public void judgesZuordnen()
 	{
+		dPTjunior = debatesJ.size()/3;
+		dPTsenior = debatesS.size()/3;
+		for(int i = 0; i < 3; i++) {
+			for (int j = 0; j < dPTjunior; j++) {
+				debatesAll.add(debatesJ.get((i*dPTjunior) + j));
+			}
+			for (int j = 0; j < dPTsenior; j++) {
+				debatesAll.add(debatesS.get((i*dPTsenior) + j));
+			}
+		}
 		//Judge-Button-Texte resetten
 		for(int i = 0; i < gui.getDebates().size(); i++) {
 			JButton b = (JButton) gui.getDebates().get(i).getComponent(3);
@@ -255,14 +268,19 @@ public class Debatingplan implements Serializable{
 		}
 		
 		JPanel b;
+		Debate d;
 		switch(zeitzone) {
 			case 1: b = this.gui.getDebates().get(index);
+				d = debatesAll.get(index);
 				break;
 			case 2: b = this.gui.getDebates().get(index+dPTjunior+dPTsenior);
+				d = debatesAll.get(dPTjunior + dPTsenior + index);
 				break;
 			case 3: b = this.gui.getDebates().get(2*(dPTjunior+dPTsenior)+index);
+				d = debatesAll.get(2*(dPTjunior + dPTsenior) + index);
 				break;
 			default: b = this.gui.getDebates().get(index);
+				d = debatesAll.get(index);
 				break;
 		}
 		Judge erfahrenerJudge;
@@ -290,13 +308,18 @@ public class Debatingplan implements Serializable{
 				if(containsDoubleComma(judge_button.getText())) {
 					s = judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","));
 					judge_button.setText(s);
+					d.removeJudge(2);
 				}
 			}
 			else {
-				if(judge_button.getText().contains(",")) judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
+				if(judge_button.getText().contains(",")) {
+					judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
+					d.removeJudge(1);
+				}
 			}
 			if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
 			else judge_button.setText(erfahrenerJudge.getName());
+			d.addJudge(erfahrenerJudge);
 			
 			kannAktuell.remove(i); //Liste wird gekürzt, damit der benutzte Judge nicht mehr verwendet werden kann
 			bereitsVersucht.add(erfahrenerJudge); //damit ein Judge nicht mehrmals für dieselbe Position versucht wird
@@ -318,15 +341,19 @@ public class Debatingplan implements Serializable{
 						if(containsDoubleComma(judge_button.getText())) { //Button-Text kürzen wenn zu lang
 							s = judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","));
 							judge_button.setText(s);
+							d.removeJudge(2);
 						}
 					}
 					else { //Button-Text kürzen wenn zu lang
-						if(judge_button.getText().contains(",")) judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
+						if(judge_button.getText().contains(",")) {
+							judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
+							d.removeJudge(1);
+						}
 					}
 					//Judge auf Button schreiben
 					if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
 					else judge_button.setText(erfahrenerJudge.getName());
-					
+					d.addJudge(erfahrenerJudge);
 					kannAktuell.remove(j);
 					bereitsVersucht.add(erfahrenerJudge);
 					kannAktuell.add(temp);
