@@ -2,6 +2,8 @@ package contestx;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import org.eclipse.swt.SWT;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -393,29 +395,36 @@ public class Gui extends JFrame {
 		JButton btnSavePlan = new JButton("Save plan");
 		btnSavePlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				writeToFile(dp, "debatingplan.ser");
+				SWTdialog d = new SWTdialog(SWT.SAVE);
+				String path = (String) d.open();
+				if(path != null) writeToFile(dp, path);
 			}
 		});
 		btnSavePlan.setBounds(1202, 15, 130, 39);
 		contentPane.add(btnSavePlan);
 		btnLoadPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//Panels zurücksetzen(mehrfaches drücken)
-				panel.removeAll();
-				panel_1.removeAll();
-				panel_2.removeAll();
-				panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
-				panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-				panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-				panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-				debates.clear();
+				SWTdialog s = new SWTdialog(SWT.OPEN);
+				String path = s.open();
 				
-				dp = (Debatingplan) readFromFile("debatingplan.ser");
-				setDPGui();
-				ArrayList<Debate> debatesJ = dp.getJuniorDebates();
-				int dPTjunior = debatesJ.size()/3;
-				createRelativeSubpanels(dPTjunior, debatesJ);
-				dPTjunior = 0;
+				if(path != null) {
+					//Panels zurücksetzen
+					panel.removeAll();
+					panel_1.removeAll();
+					panel_2.removeAll();
+					panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
+					panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+					debates.clear();
+					
+					dp = (Debatingplan) readFromFile(path);
+					setDPGui(); //im gespeicherten dp ist ebenfalls ein GUI referenziert, doch es ist nicht dieses hier
+					ArrayList<Debate> debatesJ = dp.getJuniorDebates();
+					int dPTjunior = debatesJ.size()/3;
+					createRelativeSubpanels(dPTjunior, debatesJ);
+					dPTjunior = 0;
+				}
 			}
 		});
 		btnLoadPlan.setBounds(1202, 70, 130, 29);
@@ -555,36 +564,12 @@ public class Gui extends JFrame {
 				}
 			});
 			String text = "";
-			for(int j = 0; j < array.get(i).getJudgeList().size(); j++) {
+			for(int j = 0; j < array.get(i).getJudgeList().size(); j++) { //String aus den Judges bilden
 				if(text != "") text = text + ", " + array.get(i).getJudge(j).getName();
 				else text = array.get(i).getJudge(j).getName();
 			}
 			    JButton southB = new JButton(text);
 	            debates.get(i).add(southB, BorderLayout.SOUTH);
-	        /*  southB.addActionListener(new ActionListener() {
-	            	public void actionPerformed(ActionEvent arg0) {
-	            		String s=JOptionPane.showInputDialog("Judge"); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man den Judge eingeben kann
-	               
-	            		boolean e=false;
-	            		for(int i=0; i<dp.getJudges().size();i++)
-	            		{
-	            			if(dp.getJudgeAt(i).getName().equals(s))
-	            			{
-	            				if(dp.getJudgeAt(i).getErfahren())
-	            				{
-	            					e=true;
-	            				}
-	            			}
-	            		}
-	            		if(e){
-	            			southB.setText("Judge" + s);
-	            		}
-	            		else{
-	            			JOptionPane.showMessageDialog(subFrame, "No experienced judge entered", "Error Message", JOptionPane.ERROR_MESSAGE);
-	            		}
-	                }
-	            });
-	            */
 		}
 		for(int i = 0; i < debatesPerTime; i++) { //die in debates gespeicherten, oben modifizierten Panels werden den drei großen Panels hinzugefügt
 			panel.add(debates.get(i));
