@@ -1,10 +1,15 @@
 package contestx;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -585,6 +590,51 @@ public class Debatingplan implements Serializable{
 	}
 	public void setGui(Gui g) {
 		this.gui = g;
+	}
+	
+	//Methode um die Höhe der Panels abhängig von dem benötigten Platz für Schulnamen zu bestimmen
+	public int getRecommendedPanelWidth(FontMetrics fm) {
+		return getPanelWidth(getLongestSchoolName(), fm);
+	}
+	private String getLongestSchoolName() {
+		String rs = "";
+		String loc = "";
+		for(int i = 0; i < schulen.size(); i++) {
+			loc = schulen.get(i).getName();
+			Pattern pattern = Pattern.compile("\\s");
+			Matcher matcher = pattern.matcher(loc);
+			if(matcher.find() && !loc.equals("Keine Schule")) {
+				String[] s = loc.split("\\s");
+				for(int j = 0; j < s.length; j++) {
+					if(rs.length() < s[j].length()) {
+						rs = s[j];
+					}
+				}
+			}
+			else if(rs.length() < loc.length() && !loc.equals("Keine Schule")) {
+				rs = loc;
+			}
+		}
+		return rs;
+	}
+	public int getPanelWidth(String s, FontMetrics fm) {
+		int rs = 0;
+		Pattern pattern = Pattern.compile("\\s");
+		Matcher matcher = pattern.matcher(s);
+		if(matcher.find()) {
+			String[] strings = s.split("\\s");
+			for(int i = 0; i < strings.length; i++) {
+				if(rs < fm.stringWidth(strings[i])*2 + 50) {
+					rs = fm.stringWidth(strings[i])*2 + 50;
+				}
+			}
+		}
+		else rs = fm.stringWidth(s)*2 + 50;
+		if(rs < 150) rs = 150; //Mindestgröße
+		if(rs > 250) { //Maximalgröße
+			rs = -1;
+		}
+		return rs;
 	}
 }
 //Githubg ist beste

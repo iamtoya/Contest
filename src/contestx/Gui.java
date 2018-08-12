@@ -1,6 +1,8 @@
 package contestx;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.FontMetrics;
 
 import org.eclipse.swt.SWT;
 
@@ -68,9 +70,9 @@ public class Gui extends JFrame {
 	private JPanel contentPane;
 	private Debatingplan dp;
 	private Verwaltung verwaltung;
-	private JButton btnTimezone = new JButton("Timezone 1");
-	private JButton btnTimezone_1 = new JButton("Timezone 2");
-	private JButton btnTimezone_2 = new JButton("Timezone 3");
+	private JButton btnTimezone = new JButton("Motion 1");
+	private JButton btnTimezone_1 = new JButton("Motion 2");
+	private JButton btnTimezone_2 = new JButton("Motion 3");
 	
 	private JPanel panel = new JPanel();
 	private JPanel panel_1 = new JPanel();
@@ -174,6 +176,12 @@ public class Gui extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		btnTimezone.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String s = (String)JOptionPane.showInputDialog("Enter a new motion");
+				btnTimezone.setText(s);
+			}
+		});
 		
 		//Timezone 1-Button impl.
 		btnTimezone.setEnabled(true);
@@ -383,10 +391,10 @@ public class Gui extends JFrame {
 		JButton btnSave = new JButton("Export");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser c = new JFileChooser();
-				c.showSaveDialog(subFrame);
-				File f = c.getSelectedFile();
-				imagescreen(f);
+				SWTdialog d = new SWTdialog(SWT.SAVE);
+				
+				File f = d.setFile();
+				if(f != null) imagescreen(f);
 			}
 		});
 		btnSave.setBounds(1057, 45, 130, 54);
@@ -396,7 +404,7 @@ public class Gui extends JFrame {
 		btnSavePlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SWTdialog d = new SWTdialog(SWT.SAVE);
-				String path = (String) d.open();
+				String path = d.open();
 				if(path != null) writeToFile(dp, path);
 			}
 		});
@@ -475,10 +483,18 @@ public class Gui extends JFrame {
 	}
 	
 	public void createRelativeSubpanels(int debatesPerTime, ArrayList<Debate> array) {
-		
-		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*150, panel.getHeight()); //Länge der 3 großen Panels wird entsprechen der Zahl der Debates angepasst
-		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*150, panel_1.getHeight());
-		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*150, panel_2.getHeight());
+		//Länge der 3 großen Panels wird entsprechen der Zahl der Debates angepasst
+		Font f = new Font("Tahoma", Font.PLAIN, 16);
+		FontMetrics m = btnTimezone.getFontMetrics(f);
+		int width = dp.getRecommendedPanelWidth(m);
+		while(width == -1) { //Error Code: String zu lang
+			f = new Font("Tahoma", Font.PLAIN, f.getSize()-1);
+			width = dp.getRecommendedPanelWidth(btnTimezone.getFontMetrics(f));
+		}
+		System.out.println(width);
+		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*width, 110);
+		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*width, 110);
+		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*width, 110);
 		cutPanels(debatesPerTime); //Panels werden in Subpanels zerschnitten
 		for(int i = 0; i < debatesPerTime*3; i++) {
 			debates.add(new JPanel());
@@ -487,6 +503,7 @@ public class Gui extends JFrame {
 			debates.get(i).setLayout(layout); //BorderLayout wird festgelegt
 			JButton northB = new JButton("Room Nr. " + array.get(i).getRaum());
 			debates.get(i).add(northB, BorderLayout.NORTH);
+			layout.getLayoutComponent(BorderLayout.NORTH).setPreferredSize(new Dimension(width, 22)); 
 			northB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					String s=JOptionPane.showInputDialog("Room Nr."); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man die Raumnummer eingeben kann
@@ -500,11 +517,17 @@ public class Gui extends JFrame {
 					}
 				}
 			});
-			
+			//String schoolname = breakStringIfTooLong(array.get(i).getTeamPro().getSchule().getName());
+			//System.out.println(schoolname);
 			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
+			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
+			while(dp.getPanelWidth(array.get(i).getTeamPro().getSchule().getName(), westB.getFontMetrics(individualF)) == -1) {
+				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
+			}
+				westB.setFont(individualF);
 			debates.get(i).add(westB, BorderLayout.WEST);
-			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
+			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(width/2, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
 			//TeamPro-button clicked
 			westB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -534,8 +557,13 @@ public class Gui extends JFrame {
 			});
 			JButton eastB = new JButton("<html>Con<br/>" + array.get(i).getTeamCon().getSchule().getName() + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
+			individualF = new Font("Tahoma", Font.PLAIN, 16);
+			while(dp.getPanelWidth(array.get(i).getTeamCon().getSchule().getName(), westB.getFontMetrics(individualF)) == -1) {
+				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
+			}
+			eastB.setFont(individualF);
 			debates.get(i).add(eastB, BorderLayout.EAST);
-			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(75, 150)); 
+			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(width/2, 150)); 
 			//TeamPro-button clicked
 			eastB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -568,8 +596,9 @@ public class Gui extends JFrame {
 				if(text != "") text = text + ", " + array.get(i).getJudge(j).getName();
 				else text = array.get(i).getJudge(j).getName();
 			}
-			    JButton southB = new JButton(text);
-	            debates.get(i).add(southB, BorderLayout.SOUTH);
+			JButton southB = new JButton(text);
+	        debates.get(i).add(southB, BorderLayout.SOUTH);
+	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, 22)); 
 		}
 		for(int i = 0; i < debatesPerTime; i++) { //die in debates gespeicherten, oben modifizierten Panels werden den drei großen Panels hinzugefügt
 			panel.add(debates.get(i));
@@ -770,25 +799,22 @@ public class Gui extends JFrame {
 	 	
 	}
 	
-	public String breakStringIfTooLong(String s) { //funktioniert noch nicht!
-		
-		String temp = "";
-		char[] str = s.toCharArray();
-		int pieces = (int)Math.floor(s.length()/6);
-		String[] fin = new String[pieces+2];
-		fin[0] = "<html>";
-		for(int i = 1; i <= pieces; i++) {
-			for(int j = 1; j <= 6; j++) {
-				temp = temp + str[i*j-1];
-			}
-			fin[i] = temp;
-			temp = "";
+	public String breakStringIfTooLong(String s, double length) { //funktioniert noch nicht!
+		int pieces = (int) Math.ceil(s.length()/length);
+		int l = (int) length;
+		String[] final_string = new String[pieces + 1];
+		for(int i = 0; i < pieces; i++) {
+			if(((i*l) + l) > s.length() - 1) final_string[i] = s.substring(i * l, s.length()) + "<br/>";
+			else final_string[i] = s.substring(i * l, (i*l) + l) + "<br/>";
+			System.out.println(final_string[i]);
 		}
-		fin[pieces+1] = "</html>";
-		for(int i = 0; i < fin.length; i++){
-			System.out.println(fin[i]);
+		final_string[pieces - 1] = final_string[pieces - 1].replaceAll("<br/>", "");
+		final_string[pieces] = "</html>";
+		String str = new String();
+		for(int i = 0; i < final_string.length; i++) {
+			str = str + final_string[i];
 		}
-		return fin.toString();
+		return str;
 	}
 	public ArrayList<Team> getJuniorTeams() {
 		return dp.getJuniorTeams();

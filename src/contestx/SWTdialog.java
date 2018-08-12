@@ -1,4 +1,6 @@
 package contestx;
+import java.io.File;
+
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -22,7 +24,19 @@ public class SWTdialog {
 	}
 	
 	public String open() {
+		String[] stringarray = {"*.ser"};
+		f.setFilterExtensions(stringarray);
 		String s = f.open();
 		return s;
+	}
+	public File setFile() {
+		String[] stringarray = {"*.png", "*.jpg"};
+		f.setFilterExtensions(stringarray);
+		String s = f.open();
+		File file = null;
+		if(s != null) {
+			file = new File(s);
+		}
+		return file;
 	}
 }
