@@ -228,12 +228,14 @@ public class Verwaltung extends JFrame {
 	public void aktualisierenMit(int was) {
 		int i = 0;
 		updateFinished=false;
+		int k = comboBox.getSelectedIndex();
 		comboBox.removeAllItems();
 		switch(was) {
 		case(0): //Schulen			
 			for(i = 0; i < dp.getSchulen().size(); i++ ) {					//Alle Schulen werden in die Auswahlliste eingetragen
 				comboBox.addItem(dp.getSchulen().get(i).getName());
 			}
+			comboBox.setSelectedIndex(k);
 			this.lblNewLabel_1.setText("Choose the school to be changed:");
 			nurAnzeigen(was);			
 			break;
