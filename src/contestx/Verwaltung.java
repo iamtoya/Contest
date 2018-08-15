@@ -5,9 +5,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+
+import com.sun.glass.events.KeyEvent;
+
 import javax.swing.JRadioButton;
+
+import java.awt.Component;
 import java.awt.Font;
 
 public class Verwaltung extends JFrame {
@@ -51,7 +57,8 @@ public class Verwaltung extends JFrame {
 		comboBox = new JComboBox();
 		textFieldSchools1 = new JTextField();
 		
-		
+		contentPane = new JPanel();
+		setContentPane(contentPane);
 		
 		
 		
@@ -208,9 +215,23 @@ public class Verwaltung extends JFrame {
 				untenAnzeigen();
 			};
 		});
+		//alle Components des Fensters werden in JComponents umgewandelt (für KeyListener) und in ArrayList gespeichert
+		ArrayList<JComponent> jcomps = new ArrayList<JComponent>();
+		for(Component comp : this.getContentPane().getComponents()) {
+			if(comp instanceof JComponent) {
+				jcomps.add((JComponent) comp);
+			}
+		}
 		
-		
-		
+		//von jedem Component aus kann per ENTER (KeyListener) die change()-Methode aufgerufen werden
+		for(int i = 0; i < jcomps.size(); i++) {
+			jcomps.get(i).getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "doSomething");
+			jcomps.get(i).getActionMap().put("doSomething", new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					change();
+				}
+			});
+		}
 		//am Ende wird das Fenster auf den voreingestellten Button  Schule angepasst und Daten derselben Gruppe mit "aktualisierenMit()" aktualisiert
 		aktualisierenMit(SCHULEN);		
 	}
