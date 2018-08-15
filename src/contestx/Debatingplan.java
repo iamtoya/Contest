@@ -178,6 +178,10 @@ public class Debatingplan implements Serializable{
 			JButton b = (JButton) gui.getDebates().get(i).getComponent(3);
 			b.setText("");
 		}
+		//Judges in den Debates zurücksetzen
+		for(int i = 0; i < debatesAll.size(); i++) {
+			debatesAll.get(i).removeAllJudges();
+		}
 		
 		Collections.shuffle(judges);
 		ArrayList<Judge> erfahren = new ArrayList<Judge>();

@@ -483,7 +483,8 @@ public class Gui extends JFrame {
 	}
 	
 	public void createRelativeSubpanels(int debatesPerTime, ArrayList<Debate> array) {
-		//L‰nge der 3 groﬂen Panels wird entsprechen der Zahl der Debates angepasst
+		//L‰nge der 3 groﬂen Panels wird entsprechen der Zahl der Debates
+		//und der empfohlenen Panel-Breite entsprechend des l‰ngsten Namens angepasst
 		Font f = new Font("Tahoma", Font.PLAIN, 16);
 		FontMetrics m = btnTimezone.getFontMetrics(f);
 		int width = dp.getRecommendedPanelWidth(m);

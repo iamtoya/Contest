@@ -52,6 +52,12 @@ public class Debate implements Serializable {
 		judges.remove(j);
 	}
 	
+	public void removeAllJudges() {
+		for(int i = 0; i < judges.size(); i++) {
+			judges.remove(i);
+		}
+	}
+	
 	public void removeJudge(int index) {
 		judges.remove(index);
 	}
