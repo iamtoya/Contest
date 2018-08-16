@@ -1062,5 +1062,4 @@ public class Debatingplan implements Serializable{
 		return rs;
 	}
 }
-//Githubg ist beste
 
