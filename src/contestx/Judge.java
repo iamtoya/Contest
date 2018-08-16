@@ -1,8 +1,10 @@
 package contestx;
+import java.io.Serializable;
 import java.util.ArrayList;
 //neu Andy
 
-public class Judge {
+public class Judge implements Serializable {
+	private static final long serialVersionUID = 2371325362221598149L;
 	private String name;
 	private Schule schule;
 	private boolean erfahren;

@@ -1,15 +1,23 @@
 package contestx;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Debatingplan {
+public class Debatingplan implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Debate> debatesJ;
 	private ArrayList<Debate> debatesS;
 	private Zeitzone zeitzone1;
@@ -42,6 +50,7 @@ public class Debatingplan {
 	private String[][] usedCompsJunior; //hier werden die verwendeten Kompositionen gespeichert
 	private String[][] usedCompsSenior;
 	private ArrayList<Judge> unbenutzt;
+	private ArrayList<Debate> debatesAll;
 	
 	public Debatingplan(Gui gui) {
 		this.gui = gui; //referenzieren (für Datenfluss später)
@@ -57,6 +66,8 @@ public class Debatingplan {
 		
 		unbenutzt = new ArrayList<Judge>();
 		
+		debatesAll = new ArrayList<Debate>();
+		
 		speakerSortiert = new ArrayList<Speaker>();
 		ersterS = new ArrayList<Speaker>();
 		zweiterS = new ArrayList<Speaker>();
@@ -65,25 +76,37 @@ public class Debatingplan {
 		teamsSSortiert = new ArrayList<Team>();
 		teamsJSortiert = new ArrayList<Team>();
 		
-		judges.add(new Judge("1", new Schule("2"), true));
-		judges.add(new Judge("2", new Schule("2"), true));
-		judges.add(new Judge("3", new Schule("2"), true));
-		judges.add(new Judge("4", new Schule("2"), true));
-		judges.add(new Judge("5", new Schule("2"), true));
-		judges.add(new Judge("6", true));
-		judges.add(new Judge("7", true));
-		judges.add(new Judge("8", true));
-		judges.add(new Judge("9", true));
-		judges.add(new Judge("10", true));
-		judges.add(new Judge("11", true));
-		judges.add(new Judge("12", true));
-		judges.add(new Judge("13", true));
-		judges.add(new Judge("14", true));
-		judges.add(new Judge("15", true));
-		judges.add(new Judge("16", true));
-		judges.add(new Judge("17", true));
-		judges.add(new Judge("18", true));
-		judges.add(new Judge("19", true));
+		//Dummy-Schulen
+		schulen.add(new Schule("1", true, true));
+		schulen.add(new Schule("2", true, true));
+		schulen.add(new Schule("3", true, true));
+		schulen.add(new Schule("4", true, true));
+		schulen.add(new Schule("5", true, true));
+		schulen.add(new Schule("6", true, true));
+		schulen.add(new Schule("7", true, true));
+		schulen.add(new Schule("8", true, true));
+		schulen.add(new Schule(true));
+		
+		//Dummy-Judges
+		judges.add(new Judge("1", schulen.get(1), true));
+		judges.add(new Judge("2", schulen.get(1), true));
+		judges.add(new Judge("3", schulen.get(1), false));
+		judges.add(new Judge("4", schulen.get(1), false));
+		judges.add(new Judge("5", schulen.get(1), false));
+		judges.add(new Judge("6", schulen.get(0), true));
+		judges.add(new Judge("7", schulen.get(0), true));
+		judges.add(new Judge("8", schulen.get(0), false));
+		judges.add(new Judge("9", schulen.get(0), false));
+		judges.add(new Judge("10", schulen.get(0), false));
+		judges.add(new Judge("11", schulen.get(0), false));
+		judges.add(new Judge("12", schulen.get(0), false));
+		judges.add(new Judge("13", schulen.get(0), false));
+		judges.add(new Judge("14", schulen.get(0), false));
+		judges.add(new Judge("15", schulen.get(0), false));
+		judges.add(new Judge("16", schulen.get(0), false));
+		judges.add(new Judge("17", schulen.get(0), false));
+		judges.add(new Judge("18", schulen.get(0), false));
+		judges.add(new Judge("19", schulen.get(0), false));
 
 		
 	}
@@ -149,6 +172,26 @@ public class Debatingplan {
 	
 	public void judgesZuordnen()
 	{
+		dPTjunior = debatesJ.size()/3;
+		dPTsenior = debatesS.size()/3;
+		for(int i = 0; i < 3; i++) {
+			for (int j = 0; j < dPTjunior; j++) {
+				debatesAll.add(debatesJ.get((i*dPTjunior) + j));
+			}
+			for (int j = 0; j < dPTsenior; j++) {
+				debatesAll.add(debatesS.get((i*dPTsenior) + j));
+			}
+		}
+		//Judge-Button-Texte resetten
+		for(int i = 0; i < gui.getDebates().size(); i++) {
+			JButton b = (JButton) gui.getDebates().get(i).getComponent(3);
+			b.setText("");
+		}
+		//Judges in den Debates zurücksetzen
+		for(int i = 0; i < debatesAll.size(); i++) {
+			debatesAll.get(i).removeAllJudges();
+		}
+		
 		Collections.shuffle(judges);
 		ArrayList<Judge> erfahren = new ArrayList<Judge>();
 		ArrayList<Judge> kannAktuell = new ArrayList<Judge>();
@@ -164,12 +207,15 @@ public class Debatingplan {
 		}
 		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
 		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		zuordnen(1, erfahren, 0, true);
-		for(int i = 0; i < unbenutzt.size(); i++) {
-			kannAktuell.add(unbenutzt.get(i));
+		if(!zuordnen(1, erfahren, 0, true)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
+		else {
+			for(int i = 0; i < unbenutzt.size(); i++) {
+				kannAktuell.add(unbenutzt.get(i));
+			}
+			if(!zuordnen(1, kannAktuell, 0, false)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
-		zuordnen(1, kannAktuell, 0, false);
 		
+		unbenutzt.clear();
 		erfahren.clear();
 		kannAktuell.clear();
 		//Zeitzone 2
@@ -184,12 +230,15 @@ public class Debatingplan {
 		}
 		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
 		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		zuordnen(2, erfahren, 0, true);
-		for(int i = 0; i < unbenutzt.size(); i++) {
-			kannAktuell.add(unbenutzt.get(i));
+		if(!zuordnen(2, erfahren, 0, true)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
+		else {
+			for(int i = 0; i < unbenutzt.size(); i++) {
+				kannAktuell.add(unbenutzt.get(i));
+			}
+			if(!zuordnen(2, kannAktuell, 0, false)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
-		zuordnen(2, kannAktuell, 0, false);
 		
+		unbenutzt.clear();
 		erfahren.clear();
 		kannAktuell.clear();
 		//Zeitzone 3
@@ -204,19 +253,23 @@ public class Debatingplan {
 		}
 		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
 		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		zuordnen(3, erfahren, 0, true);
-		for(int i = 0; i < unbenutzt.size(); i++) {
-			kannAktuell.add(unbenutzt.get(i));
+		if(!zuordnen(3, erfahren, 0, true)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
+		else {
+			for(int i = 0; i < unbenutzt.size(); i++) {
+				kannAktuell.add(unbenutzt.get(i));
+			}
+			if(!zuordnen(3, kannAktuell, 0, false)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
-		zuordnen(3, kannAktuell, 0, false);
+		
+		unbenutzt.clear();
 	}
 	
 	private boolean zuordnen(int zeitzone, ArrayList<Judge> kannAktuell, int index, boolean erfahren) { //index steht für das index-te Debate der Zz.
-
+		boolean letzterDurchlauf = false;
 		ArrayList<Judge> bereitsVersucht = new ArrayList<Judge>();
 		if(erfahren) {
 			if(!(index < dPTjunior + dPTsenior)) { //wenn Limit überschritten, erster Erfolg
-				for(int i = 0; i < kannAktuell.size(); i++) { //unbenutzte Judges speichern
+				for(int i = 0; i < kannAktuell.size(); i++) { //unbenutzte erfahrene Judges speichern
 					unbenutzt.add(kannAktuell.get(i));
 				}
 				return true;
@@ -224,25 +277,28 @@ public class Debatingplan {
 		}
 		else {
 			if(!(index < 2*(dPTjunior + dPTsenior))) { //wenn Limit überschritten, erster Erfolg
-				for(int i = 0; i < kannAktuell.size(); i++) { //unbenutzte Judges speichern
-					unbenutzt.add(kannAktuell.get(i));
-				}
 				return true;
 			}
-			if(index > (dPTjunior + dPTsenior)) { //wenn bereits beim 2. Durchlauf
-				index = index - dPTjunior - dPTsenior;
+			if(index >= (dPTjunior + dPTsenior)) { //wenn bereits beim 2. Durchlauf
+				letzterDurchlauf = true;
+				index = index - dPTjunior - dPTsenior; //index verringern, damit er gleich behandelt werden kann
 			}
 		}
 		
 		JPanel b;
+		Debate d;
 		switch(zeitzone) {
 			case 1: b = this.gui.getDebates().get(index);
+				d = debatesAll.get(index);
 				break;
 			case 2: b = this.gui.getDebates().get(index+dPTjunior+dPTsenior);
+				d = debatesAll.get(dPTjunior + dPTsenior + index);
 				break;
 			case 3: b = this.gui.getDebates().get(2*(dPTjunior+dPTsenior)+index);
+				d = debatesAll.get(2*(dPTjunior + dPTsenior) + index);
 				break;
 			default: b = this.gui.getDebates().get(index);
+				d = debatesAll.get(index);
 				break;
 		}
 		Judge erfahrenerJudge;
@@ -260,18 +316,34 @@ public class Debatingplan {
 		erfahrenerJudge = new Judge();
 		int i = 0;
 		while(i < kannAktuell.size() && (kannAktuell.get(i).getSchule().getName().equals(x1) 
-				|| kannAktuell.get(i).getSchule().getName().equals(y1))) {
+				|| kannAktuell.get(i).getSchule().getName().equals(y1))) { //i erhöhen bis möglicher Judge gefunden
 			i++;
 		}
-		if(!(i == kannAktuell.size())) {
+		if(!(i == kannAktuell.size())) { //wenn möglicher Judge gefunden
 			erfahrenerJudge = kannAktuell.get(i);
-			
+			String s = "";
+			if(letzterDurchlauf) {
+				if(containsDoubleComma(judge_button.getText())) {
+					s = judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","));
+					judge_button.setText(s);
+					d.removeJudge(2);
+				}
+			}
+			else {
+				if(judge_button.getText().contains(",")) {
+					judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
+					d.removeJudge(1);
+				}
+			}
 			if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
 			else judge_button.setText(erfahrenerJudge.getName());
+			d.addJudge(erfahrenerJudge);
 			
 			kannAktuell.remove(i); //Liste wird gekürzt, damit der benutzte Judge nicht mehr verwendet werden kann
 			bereitsVersucht.add(erfahrenerJudge); //damit ein Judge nicht mehrmals für dieselbe Position versucht wird
-			while(!zuordnen(zeitzone, kannAktuell, index+1, erfahren)) {
+			Collections.shuffle(kannAktuell); //more randomness
+			if(letzterDurchlauf) index = index + dPTjunior + dPTsenior; //index wieder erhöhen
+			while(!zuordnen(zeitzone, kannAktuell, index+1, erfahren)) { //alle darunterliegenden Äste durchprobieren
 					
 				Judge temp = erfahrenerJudge; //zusätzliche Variable für den verlustfreien Austausch des gewählten Judges
 					
@@ -283,29 +355,50 @@ public class Debatingplan {
 				}
 				if(!(j == kannAktuell.size())) { //wenn gefunden
 					erfahrenerJudge = kannAktuell.get(j);
-					
+					if(letzterDurchlauf) {
+						if(containsDoubleComma(judge_button.getText())) { //Button-Text kürzen wenn zu lang
+							s = judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","));
+							judge_button.setText(s);
+							d.removeJudge(2);
+						}
+					}
+					else { //Button-Text kürzen wenn zu lang
+						if(judge_button.getText().contains(",")) {
+							judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
+							d.removeJudge(1);
+						}
+					}
+					//Judge auf Button schreiben
 					if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
 					else judge_button.setText(erfahrenerJudge.getName());
-					
+					d.addJudge(erfahrenerJudge);
 					kannAktuell.remove(j);
 					bereitsVersucht.add(erfahrenerJudge);
 					kannAktuell.add(temp);
 				}
 				else { //wenn keiner mehr verfügbar
-					judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(",")-1)); //kürzt den String um das nicht-mögliche Ende
+					kannAktuell.add(temp);
 					return false; //kein Judge kann zugeordnet werden
 				}
 			} //hier konnten alle Judges zugeordnet werden
 			return true;
 		} 
 		else { //wenn kein Judge verfügbar ist
-			judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(",")-1)); //kürzt den String um das nicht-mögliche Ende
 			return false; //kein Judge kann zugeordnet werden
 		}
 
 	} 
 	
-	
+	public boolean containsDoubleComma(String t) {
+		if(t.contains(",")) {
+			String s = t.substring(0, t.lastIndexOf(","));
+			if(s.contains(",")) {
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+	}
 	
 	public boolean entryDuplicated(String[][] array, int start, int end) { //sucht nach Duplikaten im String[][]
 		String[][] set = new String[array.length][array[0].length];
@@ -376,10 +469,10 @@ public class Debatingplan {
 		//erneuern der vom GUI abgerufenen Daten
 		for(int i = 0; i < schulen.size(); i++) {
 			if(schulen.get(i).getHasJuniorTeam()) {
-				teams_junior.add(new Team(schulen.get(i), true));
+				teams_junior.add(schulen.get(i).getJuniorTeam());
 			}
 			if(schulen.get(i).getHasSeniorTeam()) {
-				teams_senior.add(new Team(schulen.get(i), false));
+				teams_senior.add(schulen.get(i).getSeniorTeam());
 			}
 		}
 		//teams_junior = this.gui.getJuniorTeams(); //Datenfluss: zur Liste der im GUI gespeicherten Teams wird hier referenziert
@@ -920,7 +1013,54 @@ public class Debatingplan {
 	public ArrayList<Debate> getSeniorDebates() {
 		return debatesS;
 	}
+	public void setGui(Gui g) {
+		this.gui = g;
+	}
 	
+	//Methode um die Höhe der Panels abhängig von dem benötigten Platz für Schulnamen zu bestimmen
+	public int getRecommendedPanelWidth(FontMetrics fm) {
+		return getPanelWidth(getLongestSchoolName(), fm);
+	}
+	private String getLongestSchoolName() {
+		String rs = "";
+		String loc = "";
+		for(int i = 0; i < schulen.size(); i++) {
+			loc = schulen.get(i).getName();
+			Pattern pattern = Pattern.compile("\\s");
+			Matcher matcher = pattern.matcher(loc);
+			if(matcher.find() && !loc.equals("Keine Schule")) {
+				String[] s = loc.split("\\s");
+				for(int j = 0; j < s.length; j++) {
+					if(rs.length() < s[j].length()) {
+						rs = s[j];
+					}
+				}
+			}
+			else if(rs.length() < loc.length() && !loc.equals("Keine Schule")) {
+				rs = loc;
+			}
+		}
+		return rs;
+	}
+	public int getPanelWidth(String s, FontMetrics fm) {
+		int rs = 0;
+		Pattern pattern = Pattern.compile("\\s");
+		Matcher matcher = pattern.matcher(s);
+		if(matcher.find()) {
+			String[] strings = s.split("\\s");
+			for(int i = 0; i < strings.length; i++) {
+				if(rs < fm.stringWidth(strings[i])*2 + 50) {
+					rs = fm.stringWidth(strings[i])*2 + 50;
+				}
+			}
+		}
+		else rs = fm.stringWidth(s)*2 + 50;
+		if(rs < 150) rs = 150; //Mindestgröße
+		if(rs > 250) { //Maximalgröße
+			rs = -1;
+		}
+		return rs;
+	}
 }
 //Githubg ist beste
 

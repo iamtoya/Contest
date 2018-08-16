@@ -1,6 +1,10 @@
 package contestx;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.FontMetrics;
+
+import org.eclipse.swt.SWT;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -9,11 +13,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -27,15 +42,25 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import com.sun.xml.internal.ws.api.Component;
+
 import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+/**
+ * Still existing errors:
+ * Panels und Berechnen nur für Junior-Teams
+ * judgeZuordnen: erfahrene Zuordnung und restl. Zuordnung kommunizieren nicht!
+ * Daten Speichern und Laden (außer das Bild des Plans) 
+ * @author Games
+ *
+ */
 
 public class Gui extends JFrame {
 
-	
+	private static final long serialVersionUID = -7824597793488283555L;
 	//private ArrayList<Schule> schulen;
 	//private ArrayList<Team> dp.getJuniorTeams();
 	//private ArrayList<Team> dp.getSeniorTeams();
@@ -45,15 +70,16 @@ public class Gui extends JFrame {
 	private JPanel contentPane;
 	private Debatingplan dp;
 	private Verwaltung verwaltung;
-	private JButton btnTimezone = new JButton("Timezone 1");
-	private JButton btnTimezone_1 = new JButton("Timezone 2");
-	private JButton btnTimezone_2 = new JButton("Timezone 3");
+	private JButton btnTimezone = new JButton("Motion 1");
+	private JButton btnTimezone_1 = new JButton("Motion 2");
+	private JButton btnTimezone_2 = new JButton("Motion 3");
 	
 	private JPanel panel = new JPanel();
 	private JPanel panel_1 = new JPanel();
 	private JPanel panel_2 = new JPanel();
 	
 	private JFrame subFrame; //für alle möglichen Dialogfelder
+	
 	private JTextField txtVon;
 	private JTextField textField;
 	private JTextField textField_2;
@@ -80,6 +106,7 @@ public class Gui extends JFrame {
 	
 	//Attribute für showEnterPointsDialog (für den ActionListener)
 	private Team selectedTeam;
+	private final JButton btnLoadPlan = new JButton("Load plan");
 
 	/**
 	 * Launch the application.
@@ -120,23 +147,16 @@ public class Gui extends JFrame {
 		
 		dp = new Debatingplan(this);
 		verwaltung = new Verwaltung(dp);
-		dp.getSchulen().add(new Schule("1", true, true)); 
-		dp.getSchulen().add(new Schule("2", true, true));
-		dp.getSchulen().add(new Schule("3", true, true));
-		dp.getSchulen().add(new Schule("4", true, true));
-		dp.getSchulen().add(new Schule("5", true, true));
-		dp.getSchulen().add(new Schule("6", true, true));
-		dp.getSchulen().add(new Schule("7", true, true));
-		dp.getSchulen().add(new Schule("8", true, true));
+
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			//dp.getJuniorTeams().add(new Team(dp.getSchulen().get(i), true));
 			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(0,new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam()));
 			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(1,new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam()));
-			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(1,new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam()));
+			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(2,new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam()));
 			//dp.getSeniorTeams().add(new Team(dp.getSchulen().get(i), false));
 		}
 		//schulen problem gelöst
-		dp.getSchulen().get(2).getJuniorTeam().setSpeakerAt(1,new Speaker("Joe", dp.getSchulen().get(2).getJuniorTeam()));
+		dp.getSchulen().get(2).getJuniorTeam().setSpeakerAt(3,new Speaker("Hans", dp.getSchulen().get(2).getJuniorTeam()));
 		
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -156,20 +176,26 @@ public class Gui extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		btnTimezone.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String s = (String)JOptionPane.showInputDialog("Enter a new motion");
+				btnTimezone.setText(s);
+			}
+		});
 		
 		//Timezone 1-Button impl.
-		btnTimezone.setEnabled(false);
+		btnTimezone.setEnabled(true);
 		btnTimezone.setBounds(47, 152, 137, 52);
 		contentPane.add(btnTimezone);
 		
 		
 		//Timezone 2-Button impl.
-		btnTimezone_1.setEnabled(false);
+		btnTimezone_1.setEnabled(true);
 		btnTimezone_1.setBounds(47, 309, 137, 52);
 		contentPane.add(btnTimezone_1);
 		
 		//Timezone 3-Button impl.
-		btnTimezone_2.setEnabled(false);
+		btnTimezone_2.setEnabled(true);
 		btnTimezone_2.setBounds(47, 463, 137, 52);
 		contentPane.add(btnTimezone_2);
 		
@@ -193,6 +219,7 @@ public class Gui extends JFrame {
 		
 		//Add-Speaker Button
 		JButton btnAddSpeaker = new JButton("Add Speaker");
+		btnAddSpeaker.setEnabled(false);
 		btnAddSpeaker.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showEnterSpeakerDialog();
@@ -337,7 +364,7 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-		btnBerechne.setBounds(986, 45, 169, 54);
+		btnBerechne.setBounds(671, 45, 209, 54);
 		contentPane.add(btnBerechne);
 		
 		JButton btnManage = new JButton("Manage");
@@ -346,7 +373,7 @@ public class Gui extends JFrame {
 				manage();
 			}
 		});
-		btnManage.setBounds(701, 32, 156, 81);
+		btnManage.setBounds(28, 32, 156, 81);
 		contentPane.add(btnManage);
 		btnAddSpeaker.setBounds(516, 47, 140, 51);
 		
@@ -358,12 +385,91 @@ public class Gui extends JFrame {
 				dp.judgesZuordnen();
 			}
 		});
-		btnNewButton.setBounds(1168, 45, 140, 54);
+		btnNewButton.setBounds(895, 45, 147, 54);
 		contentPane.add(btnNewButton);
+		
+		JButton btnSave = new JButton("Export");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				SWTdialog d = new SWTdialog(SWT.SAVE);
+				
+				File f = d.setFile();
+				if(f != null) imagescreen(f);
+			}
+		});
+		btnSave.setBounds(1057, 45, 130, 54);
+		contentPane.add(btnSave);
+		
+		JButton btnSavePlan = new JButton("Save plan");
+		btnSavePlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				SWTdialog d = new SWTdialog(SWT.SAVE);
+				String path = d.open();
+				if(path != null) writeToFile(dp, path);
+			}
+		});
+		btnSavePlan.setBounds(1202, 15, 130, 39);
+		contentPane.add(btnSavePlan);
+		btnLoadPlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				SWTdialog s = new SWTdialog(SWT.OPEN);
+				String path = s.open();
+				
+				if(path != null) {
+					//Panels zurücksetzen
+					panel.removeAll();
+					panel_1.removeAll();
+					panel_2.removeAll();
+					panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
+					panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+					debates.clear();
+					
+					dp = (Debatingplan) readFromFile(path);
+					setDPGui(); //im gespeicherten dp ist ebenfalls ein GUI referenziert, doch es ist nicht dieses hier
+					ArrayList<Debate> debatesJ = dp.getJuniorDebates();
+					int dPTjunior = debatesJ.size()/3;
+					createRelativeSubpanels(dPTjunior, debatesJ);
+					dPTjunior = 0;
+				}
+			}
+		});
+		btnLoadPlan.setBounds(1202, 70, 130, 29);
+		
+		contentPane.add(btnLoadPlan);
+		
+		
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
 	
+	public void imagescreen(File f) {
+		//Versuch des Speicherns des Frames als Bild
+		int h1 = textField_9.getHeight() + (textField_9.getY()-panel.getY()) + 10;
+		int h2 = panel_2.getHeight() + (panel_2.getY()-panel.getY()) + 10;
+		int h;
+		if(h1 > h2) h = h1;
+		else h = h2;
+		
+		Rectangle r = new Rectangle(btnTimezone.getX()-5, panel.getY()-5, panel.getWidth() + (panel.getX()-btnTimezone.getX()) + 10, h);
+		BufferedImage bi = ScreenImage.createImage(contentPane, r);
+		try {
+			ScreenImage.writeImage(bi, f, false);
+		} catch (IOException e1) {
+			if(!e1.getMessage().equals("File already exists.")) JOptionPane.showMessageDialog(subFrame, e1.getMessage());
+			else {
+				int i = JOptionPane.showConfirmDialog(subFrame, "File already exists. Override it?");
+				if(i == JOptionPane.YES_OPTION) { //wenn ja gewählt
+					try {
+						ScreenImage.writeImage(bi, f, true);
+					} catch (IOException e) {
+						JOptionPane.showMessageDialog(subFrame, e1.getMessage());
+					}
+				}
+			}
+		}
+	}
 	public void cutPanels(int pieces) {
 		panel.setLayout(new GridLayout(0, pieces, 0, 0));
 		panel_1.setLayout(new GridLayout(0, pieces, 0, 0));
@@ -377,35 +483,52 @@ public class Gui extends JFrame {
 	}
 	
 	public void createRelativeSubpanels(int debatesPerTime, ArrayList<Debate> array) {
-		
-		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*150, panel.getHeight()); //Länge der 3 großen Panels wird entsprechen der Zahl der Debates angepasst
-		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*150, panel_1.getHeight());
-		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*150, panel_2.getHeight());
+		//Länge der 3 großen Panels wird entsprechen der Zahl der Debates
+		//und der empfohlenen Panel-Breite entsprechend des längsten Namens angepasst
+		Font f = new Font("Tahoma", Font.PLAIN, 16);
+		FontMetrics m = btnTimezone.getFontMetrics(f);
+		int width = dp.getRecommendedPanelWidth(m);
+		while(width == -1) { //Error Code: String zu lang
+			f = new Font("Tahoma", Font.PLAIN, f.getSize()-1);
+			width = dp.getRecommendedPanelWidth(btnTimezone.getFontMetrics(f));
+		}
+		System.out.println(width);
+		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*width, 110);
+		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*width, 110);
+		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*width, 110);
 		cutPanels(debatesPerTime); //Panels werden in Subpanels zerschnitten
 		for(int i = 0; i < debatesPerTime*3; i++) {
 			debates.add(new JPanel());
 			debates.get(i).setBorder(new LineBorder(new Color(0, 0, 0))); //Grenzen werden gezeichnet
 			BorderLayout layout = new BorderLayout(1, 1);
 			debates.get(i).setLayout(layout); //BorderLayout wird festgelegt
-			JButton northB = new JButton("Room Nr. ?");
+			JButton northB = new JButton("Room Nr. " + array.get(i).getRaum());
 			debates.get(i).add(northB, BorderLayout.NORTH);
+			layout.getLayoutComponent(BorderLayout.NORTH).setPreferredSize(new Dimension(width, 22)); 
 			northB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				String s=JOptionPane.showInputDialog("Room Nr."); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man die Raumnummer eingeben kann
-				if(s=="")
-				{
-					JOptionPane.showMessageDialog(subFrame, "No room entered", "Error Message", JOptionPane.ERROR_MESSAGE);
-				}
-				else
-				{
-					northB.setText("Room Nr. " + s);				}
+				public void actionPerformed(ActionEvent arg0) {
+					String s=JOptionPane.showInputDialog("Room Nr."); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man die Raumnummer eingeben kann
+					if(s=="")
+					{
+						JOptionPane.showMessageDialog(subFrame, "No room entered", "Error Message", JOptionPane.ERROR_MESSAGE);
+					}
+					else
+					{
+						northB.setText("Room Nr. " + s);				
+					}
 				}
 			});
-			
+			//String schoolname = breakStringIfTooLong(array.get(i).getTeamPro().getSchule().getName());
+			//System.out.println(schoolname);
 			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
+			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
+			while(dp.getPanelWidth(array.get(i).getTeamPro().getSchule().getName(), westB.getFontMetrics(individualF)) == -1) {
+				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
+			}
+				westB.setFont(individualF);
 			debates.get(i).add(westB, BorderLayout.WEST);
-			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(75, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
+			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(width/2, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
 			//TeamPro-button clicked
 			westB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -435,8 +558,13 @@ public class Gui extends JFrame {
 			});
 			JButton eastB = new JButton("<html>Con<br/>" + array.get(i).getTeamCon().getSchule().getName() + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
+			individualF = new Font("Tahoma", Font.PLAIN, 16);
+			while(dp.getPanelWidth(array.get(i).getTeamCon().getSchule().getName(), westB.getFontMetrics(individualF)) == -1) {
+				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
+			}
+			eastB.setFont(individualF);
 			debates.get(i).add(eastB, BorderLayout.EAST);
-			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(75, 150)); 
+			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(width/2, 150)); 
 			//TeamPro-button clicked
 			eastB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -464,33 +592,14 @@ public class Gui extends JFrame {
 					}
 				}
 			});
-			
-			    JButton southB = new JButton("Judge ?");
-	            debates.get(i).add(southB, BorderLayout.SOUTH);
-	        /*  southB.addActionListener(new ActionListener() {
-	            	public void actionPerformed(ActionEvent arg0) {
-	            		String s=JOptionPane.showInputDialog("Judge"); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man den Judge eingeben kann
-	               
-	            		boolean e=false;
-	            		for(int i=0; i<dp.getJudges().size();i++)
-	            		{
-	            			if(dp.getJudgeAt(i).getName().equals(s))
-	            			{
-	            				if(dp.getJudgeAt(i).getErfahren())
-	            				{
-	            					e=true;
-	            				}
-	            			}
-	            		}
-	            		if(e){
-	            			southB.setText("Judge" + s);
-	            		}
-	            		else{
-	            			JOptionPane.showMessageDialog(subFrame, "No experienced judge entered", "Error Message", JOptionPane.ERROR_MESSAGE);
-	            		}
-	                }
-	            });
-	            */
+			String text = "";
+			for(int j = 0; j < array.get(i).getJudgeList().size(); j++) { //String aus den Judges bilden
+				if(text != "") text = text + ", " + array.get(i).getJudge(j).getName();
+				else text = array.get(i).getJudge(j).getName();
+			}
+			JButton southB = new JButton(text);
+	        debates.get(i).add(southB, BorderLayout.SOUTH);
+	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, 22)); 
 		}
 		for(int i = 0; i < debatesPerTime; i++) { //die in debates gespeicherten, oben modifizierten Panels werden den drei großen Panels hinzugefügt
 			panel.add(debates.get(i));
@@ -505,16 +614,19 @@ public class Gui extends JFrame {
 		chckbxs[1].setSelected(true);
 		Object[] options = {"Enter school name:", chckbxs};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options); //Schulname wird in "s" gespeichert
-		dp.getSchulen().add(new Schule(s)); //und den "schulen" hinzugefügt
+		
 		if(s != null && s.length() > 0) { //der Fall, dass keine Schule eingegeben wurde wird hier abgefangen
 			if(chckbxs[0].isSelected() && chckbxs[1].isSelected()) { //unterschieden wird in der Anzahl der gewählten Checkboxes
+				dp.getSchulen().add(new Schule(s, true, true));
 				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), true)); //die team-listen werden erweitert
 				dp.getSeniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), false));
 			}
 			else if (chckbxs[0].isSelected()) {
+				dp.getSchulen().add(new Schule(s, true, false));
 				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), true));
 			}
 			else if (chckbxs[1].isSelected()) {
+				dp.getSchulen().add(new Schule(s, false, true));
 				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), false));
 			}
 			else {
@@ -536,23 +648,48 @@ public class Gui extends JFrame {
 	
 	public void showEnterJudgeDialog() {
 		JCheckBox[] chckbx = {new JCheckBox("is experienced")};
-		Object[] options = {"Enter judge name:", chckbx};
+		chckbx[0].setSelected(true);
+		JComboBox combo = new JComboBox();
+
+		for(int i = 0; i < dp.getSchulen().size(); i++) {
+			combo.addItem(dp.getSchulen().get(i).getName());
+		}
+		combo.addItem("keine Schule");
+		Object[] options = {"Select judge's school:", combo, "Enter judge's name:", chckbx};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options);
-		if(s != null && s.length() > 0) {
-			if(chckbx[0].isSelected()) {
-				dp.addJudge(new Judge(s, true));
-			}
-			else {
-				dp.addJudge(new Judge(s, false));
-			}			
+		boolean judgeAlreadyExisting = false;
+		for(int i = 0; i < dp.getJudges().size(); i++) {
+			if(dp.getJudgeAt(i).getName().equals(s)) judgeAlreadyExisting = true;
 		}
-		try{ 
-			if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
-				JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
+		
+		int index = combo.getSelectedIndex();
+		if(s != null && !s.contains(",") && !judgeAlreadyExisting) {
+			if(s.length() > 0) {
+				if(chckbx[0].isSelected()) {
+					if(index+1 != combo.getItemCount()) dp.addJudge(new Judge(s, dp.getSchulen().get(index), true));
+					else { //wenn "keine Schule" ausgewählt
+						dp.addJudge(new Judge(s, true)); //Dummy-Schule noch hinzuzufügen
+					}
+				}
+				else {
+					if(index+1 != combo.getItemCount()) dp.addJudge(new Judge(s, dp.getSchulen().get(index), false));
+					else {
+						dp.addJudge(new Judge(s, false)); //Dummy-Schule noch hinzuzufügen
+					}
+				}			
+			}
+			try{ 
+				if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
+					JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			catch(NullPointerException e) {
+				
 			}
 		}
-		catch(NullPointerException e) {
-			
+		else {
+			if(!judgeAlreadyExisting) JOptionPane.showMessageDialog(subFrame, "Judge names can't contain a comma or be empty.", "Error Message", JOptionPane.ERROR_MESSAGE);
+			else JOptionPane.showMessageDialog(subFrame, "Judge already exists.", "Error Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -663,25 +800,22 @@ public class Gui extends JFrame {
 	 	
 	}
 	
-	public String breakStringIfTooLong(String s) { //funktioniert noch nicht!
-		
-		String temp = "";
-		char[] str = s.toCharArray();
-		int pieces = (int)Math.floor(s.length()/6);
-		String[] fin = new String[pieces+2];
-		fin[0] = "<html>";
-		for(int i = 1; i <= pieces; i++) {
-			for(int j = 1; j <= 6; j++) {
-				temp = temp + str[i*j-1];
-			}
-			fin[i] = temp;
-			temp = "";
+	public String breakStringIfTooLong(String s, double length) { //funktioniert noch nicht!
+		int pieces = (int) Math.ceil(s.length()/length);
+		int l = (int) length;
+		String[] final_string = new String[pieces + 1];
+		for(int i = 0; i < pieces; i++) {
+			if(((i*l) + l) > s.length() - 1) final_string[i] = s.substring(i * l, s.length()) + "<br/>";
+			else final_string[i] = s.substring(i * l, (i*l) + l) + "<br/>";
+			System.out.println(final_string[i]);
 		}
-		fin[pieces+1] = "</html>";
-		for(int i = 0; i < fin.length; i++){
-			System.out.println(fin[i]);
+		final_string[pieces - 1] = final_string[pieces - 1].replaceAll("<br/>", "");
+		final_string[pieces] = "</html>";
+		String str = new String();
+		for(int i = 0; i < final_string.length; i++) {
+			str = str + final_string[i];
 		}
-		return fin.toString();
+		return str;
 	}
 	public ArrayList<Team> getJuniorTeams() {
 		return dp.getJuniorTeams();
@@ -711,6 +845,41 @@ public class Gui extends JFrame {
 	
 	public ArrayList<JPanel> getDebates() {
 		return debates;
+	}
+	public void writeToFile(Object obj, String filepath) {
+		try {
+			// write object to file
+			FileOutputStream fos = new FileOutputStream(filepath);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(obj);
+			oos.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public Object readFromFile(String filepath) {
+		Object result = null;
+		try {
+			// read object from file
+						FileInputStream fis = new FileInputStream(filepath);
+						ObjectInputStream ois = new ObjectInputStream(fis);
+						result = ois.readObject();
+						ois.close();
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public void setDPGui() {
+		dp.setGui(this);
 	}
 }
 //NEIN NEIN NEIN NEIN NEIN NEIN

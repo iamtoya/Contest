@@ -5,9 +5,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+
+import com.sun.glass.events.KeyEvent;
+
 import javax.swing.JRadioButton;
+
+import java.awt.Component;
 import java.awt.Font;
 
 public class Verwaltung extends JFrame {
@@ -38,6 +44,7 @@ public class Verwaltung extends JFrame {
 	private JLabel lblNewLabel_1;
 	private JButton btnDelete;
 	private boolean updateFinished = false;
+	private boolean keineSchulenAdded = false;
 	
 	
 	
@@ -50,7 +57,8 @@ public class Verwaltung extends JFrame {
 		comboBox = new JComboBox();
 		textFieldSchools1 = new JTextField();
 		
-		
+		contentPane = new JPanel();
+		setContentPane(contentPane);
 		
 		
 		
@@ -177,18 +185,21 @@ public class Verwaltung extends JFrame {
 		rdbtnNewSchools.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				aktualisierenMit(SCHULEN);
+				untenAnzeigen();
 			};
 		});
 				
 		rdbtnNewJudges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				aktualisierenMit(JUDGES);
+				untenAnzeigen();
 			};
 		});
 			
 		rdbtnNewSpeaker.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				aktualisierenMit(SPEAKERS);
+				untenAnzeigen();
 			};
 		});
 				
@@ -204,9 +215,23 @@ public class Verwaltung extends JFrame {
 				untenAnzeigen();
 			};
 		});
+		//alle Components des Fensters werden in JComponents umgewandelt (für KeyListener) und in ArrayList gespeichert
+		ArrayList<JComponent> jcomps = new ArrayList<JComponent>();
+		for(Component comp : this.getContentPane().getComponents()) {
+			if(comp instanceof JComponent) {
+				jcomps.add((JComponent) comp);
+			}
+		}
 		
-		
-		
+		//von jedem Component aus kann per ENTER (KeyListener) die change()-Methode aufgerufen werden
+		for(int i = 0; i < jcomps.size(); i++) {
+			jcomps.get(i).getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "doSomething");
+			jcomps.get(i).getActionMap().put("doSomething", new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					change();
+				}
+			});
+		}
 		//am Ende wird das Fenster auf den voreingestellten Button  Schule angepasst und Daten derselben Gruppe mit "aktualisierenMit()" aktualisiert
 		aktualisierenMit(SCHULEN);		
 	}
@@ -224,13 +249,14 @@ public class Verwaltung extends JFrame {
 	public void aktualisierenMit(int was) {
 		int i = 0;
 		updateFinished=false;
+		int k = comboBox.getSelectedIndex();
 		comboBox.removeAllItems();
-		
 		switch(was) {
 		case(0): //Schulen			
 			for(i = 0; i < dp.getSchulen().size(); i++ ) {					//Alle Schulen werden in die Auswahlliste eingetragen
 				comboBox.addItem(dp.getSchulen().get(i).getName());
 			}
+			comboBox.setSelectedIndex(k);
 			this.lblNewLabel_1.setText("Choose the school to be changed:");
 			nurAnzeigen(was);			
 			break;
@@ -242,8 +268,9 @@ public class Verwaltung extends JFrame {
 			for(i = 0; i < dp.getSchulen().size(); i++ ) {					//Schulen werden zusätzlich geaddet, da benötigt für Judges
 				comboBoxJudgesSchools.addItem(dp.getSchulen().get(i).getName());
 			}
-			this.lblNewLabel_1.setText("Choose the judge to be changed:");	
+			this.lblNewLabel_1.setText("Choose the judge to be changed:");
 			nurAnzeigen(was);
+			keineSchulenAdded=false;
 			break;
 		case(2): //Speaker
 			for(i = 0; i < dp.getSpeaker().size(); i++ ) {					//Alle Speaker werden in die Auswahlliste eingetragen
@@ -324,6 +351,7 @@ public class Verwaltung extends JFrame {
 			dp.getSpeaker().get(comboBox.getSelectedIndex()).setName(textFieldSpeaker.getText());
 			aktualisierenMit(SPEAKERS);
 		}
+		untenAnzeigen();
 	}
 	
 	
@@ -361,12 +389,14 @@ public class Verwaltung extends JFrame {
 	
 	public void untenAnzeigen() {
 		int was;
-		int schulenIndex;
-		int schuleGefunden=0;
+		int schulenIndex = 0;
+		int schuleGefunden = 0;
+		
 		if(rdbtnNewSchools.isSelected()==true){ was = SCHULEN; }
 		else if(rdbtnNewJudges.isSelected()==true) {was = JUDGES;  }
-		else if(rdbtnNewSpeaker.isSelected()==true) {was = SPEAKERS;  }
+		else if(rdbtnNewSpeaker.isSelected()==true) {was = SPEAKERS;  }		
 		else { was = -1; }
+		
 		if(updateFinished) {
 			switch(was) {
 				case(SCHULEN): {
@@ -381,16 +411,24 @@ public class Verwaltung extends JFrame {
 					chckbxJudgesZZ1.setSelected(dp.getJudges().get(comboBox.getSelectedIndex()).getKannZuZZ1());
 					chckbxJudgesZZ2.setSelected(dp.getJudges().get(comboBox.getSelectedIndex()).getKannZuZZ2());
 					chckbxJudgesZZ3.setSelected(dp.getJudges().get(comboBox.getSelectedIndex()).getKannZuZZ3());
-					for(schulenIndex = 0; schulenIndex < comboBox.getItemCount() && schuleGefunden == 0; schulenIndex++) {
-						if(dp.getSchulen().get(schulenIndex)==dp.getJudges().get(comboBox.getSelectedIndex()).getSchule()) {
+					schulenIndex=0;
+					while(schuleGefunden==0) {
+						if(dp.getJudges().get(comboBox.getSelectedIndex()).getSchule()==dp.getSchulen().get(schulenIndex)) {
 							schuleGefunden=1;
 						}
+						else {
+							if(schulenIndex<(dp.getSchulen().size()-1)) {
+							schulenIndex++;
+							}
+						}
 					}
-					
+					if(schulenIndex>=0) {
+						comboBoxJudgesSchools.setSelectedIndex(schulenIndex);
+					}
 					break;
 				}
 				case(SPEAKERS): {
-
+					textFieldSpeaker.setText(dp.getSpeaker().get(comboBox.getSelectedIndex()).getName());
 					break;
 				}
 			}
