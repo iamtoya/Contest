@@ -107,6 +107,13 @@ public class Gui extends JFrame {
 	//Attribute für showEnterPointsDialog (für den ActionListener)
 	private Team selectedTeam;
 	private final JButton btnLoadPlan = new JButton("Load plan");
+	private final JButton btnFirstPlace = new JButton("first place");
+	private final JButton btnSecondPlace = new JButton("second place");
+	private final JButton btnNewButton_2 = new JButton("third place");
+	private final JButton btnFindBestTeams = new JButton("Find best teams");
+	private final JButton button_1 = new JButton("first place");
+	private final JButton button_2 = new JButton("second place");
+	private final JButton button_3 = new JButton("third place");
 
 	/**
 	 * Launch the application.
@@ -438,6 +445,31 @@ public class Gui extends JFrame {
 		btnLoadPlan.setBounds(1202, 70, 130, 29);
 		
 		contentPane.add(btnLoadPlan);
+		
+		JButton btnNewButton_1 = new JButton("Find best speakers");
+		btnNewButton_1.setBounds(286, 609, 123, 39);
+		contentPane.add(btnNewButton_1);
+		btnFirstPlace.setBounds(419, 582, 110, 23);
+		
+		contentPane.add(btnFirstPlace);
+		btnSecondPlace.setBounds(419, 609, 110, 23);
+		
+		contentPane.add(btnSecondPlace);
+		btnNewButton_2.setBounds(419, 635, 110, 23);
+		
+		contentPane.add(btnNewButton_2);
+		btnFindBestTeams.setBounds(557, 609, 123, 39);
+		
+		contentPane.add(btnFindBestTeams);
+		button_1.setBounds(690, 582, 110, 23);
+		
+		contentPane.add(button_1);
+		button_2.setBounds(690, 609, 110, 23);
+		
+		contentPane.add(button_2);
+		button_3.setBounds(690, 635, 110, 23);
+		
+		contentPane.add(button_3);
 		
 		
 		
@@ -882,4 +914,4 @@ public class Gui extends JFrame {
 		dp.setGui(this);
 	}
 }
-//NEIN NEIN NEIN NEIN NEIN NEIN
+//NEIN NEIN NEIN NEIN NEIN
