@@ -393,6 +393,9 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(dp.judgesZuordnen2()) {
 					int dpt = (dp.getJuniorDebates().size()/3) + (dp.getSeniorDebates().size()/3);
+					Judge[][] cjudges1 = reshape(dp.getCalculatedJudges(1), 4, 3);
+					Judge[][] cjudges2 = reshape(dp.getCalculatedJudges(2), 4, 3);
+					Judge[][] cjudges3 = reshape(dp.getCalculatedJudges(3), 4, 3);
 					for(int i = 0; i < debates.size(); i++) {
 						JButton b = (JButton) debates.get(i).getComponent(3);
 						b.setText("");
@@ -403,20 +406,20 @@ public class Gui extends JFrame {
 						JButton b3 = (JButton) debates.get(i + (2*dpt)).getComponent(3);
 						for(int j = 0; j < 3; j++) {
 							if(j == 0) {
-								b1.setText(b1.getText() + dp.getCalculatedJudges(1)[i][j].getName());
-								b2.setText(b2.getText() + dp.getCalculatedJudges(2)[i][j].getName());
-								b3.setText(b3.getText() + dp.getCalculatedJudges(3)[i][j].getName());
+								b1.setText(b1.getText() + cjudges1[i][j].getName());
+								b2.setText(b2.getText() + cjudges2[i][j].getName());
+								b3.setText(b3.getText() + cjudges3[i][j].getName());
 							}
 							else {
-								b1.setText(b1.getText() + ", " + dp.getCalculatedJudges(1)[i][j].getName());
-								b2.setText(b2.getText() + ", " + dp.getCalculatedJudges(2)[i][j].getName());
-								b3.setText(b3.getText() + ", " + dp.getCalculatedJudges(3)[i][j].getName());
+								b1.setText(b1.getText() + ", " + cjudges1[i][j].getName());
+								b2.setText(b2.getText() + ", " + cjudges2[i][j].getName());
+								b3.setText(b3.getText() + ", " + cjudges3[i][j].getName());
 							}
 						}
 					}
-					System.out.println("zz1" + hasDuplicate(dp.getCalculatedJudges(1)));
-					System.out.println("zz2" + hasDuplicate(dp.getCalculatedJudges(2)));
-					System.out.println("zz3" + hasDuplicate(dp.getCalculatedJudges(3)));
+					System.out.println("zz1 has duplicate " + hasDuplicate(dp.getCalculatedJudges(1)));
+					System.out.println("zz2 has duplicate " + hasDuplicate(dp.getCalculatedJudges(2)));
+					System.out.println("zz3 has duplicate " + hasDuplicate(dp.getCalculatedJudges(3)));
 				}
 			}
 		});
@@ -948,16 +951,27 @@ public class Gui extends JFrame {
 		dp.setGui(this);
 	}
 	
-	public boolean hasDuplicate(Judge[][] items) {
+	public boolean hasDuplicate(Judge[] items) {
 		  Set<Judge> appeared = new HashSet<>();
-		  for(int i = 0; i < items.length; i++) {
-			  for (Judge item : items[i]) {
-			    if (!appeared.add(item)) {
-			      return true;
-			    }
-			  }
+		  for (Judge item : items) {
+		    if (!appeared.add(item)) {
+		      return true;
+		    }
 		  }
-		  return false;
+	  return false;
+	}
+	
+	public Judge[][] reshape(Judge[] array, int rows, int columns) {
+		Judge[][] rs = new Judge[rows][columns];
+		if(array.length != rows*columns) { //passt nicht
+			return null;
 		}
+		for(int i = 0; i < columns; i++) {
+			for(int j = 0; j < rows; j++) {
+				rs[j][i] = array[j + (i*rows)];
+			}
+		}
+		return rs;
+	}
 }
 //NEIN NEIN NEIN NEIN NEIN
