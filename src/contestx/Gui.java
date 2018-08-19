@@ -393,9 +393,9 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(dp.judgesZuordnen2()) {
 					int dpt = (dp.getJuniorDebates().size()/3) + (dp.getSeniorDebates().size()/3);
-					Judge[][] cjudges1 = reshape(dp.getCalculatedJudges(1), 4, 3);
-					Judge[][] cjudges2 = reshape(dp.getCalculatedJudges(2), 4, 3);
-					Judge[][] cjudges3 = reshape(dp.getCalculatedJudges(3), 4, 3);
+					Judge[][] cjudges1 = dp.getCalculatedJudges(1);
+					Judge[][] cjudges2 = dp.getCalculatedJudges(2);
+					Judge[][] cjudges3 = dp.getCalculatedJudges(3);
 					for(int i = 0; i < debates.size(); i++) {
 						JButton b = (JButton) debates.get(i).getComponent(3);
 						b.setText("");
@@ -951,27 +951,17 @@ public class Gui extends JFrame {
 		dp.setGui(this);
 	}
 	
-	public boolean hasDuplicate(Judge[] items) {
+	public boolean hasDuplicate(Judge[][] items) {
 		  Set<Judge> appeared = new HashSet<>();
-		  for (Judge item : items) {
-		    if (!appeared.add(item)) {
-		      return true;
-		    }
+		  for(int i = 0; i < items.length; i++) {
+			  for (Judge item : items[i]) {
+			    if (!appeared.add(item)) {
+			      return true;
+			    }
+			  }
 		  }
 	  return false;
 	}
 	
-	public Judge[][] reshape(Judge[] array, int rows, int columns) {
-		Judge[][] rs = new Judge[rows][columns];
-		if(array.length != rows*columns) { //passt nicht
-			return null;
-		}
-		for(int i = 0; i < columns; i++) {
-			for(int j = 0; j < rows; j++) {
-				rs[j][i] = array[j + (i*rows)];
-			}
-		}
-		return rs;
-	}
 }
 //NEIN NEIN NEIN NEIN NEIN

@@ -271,6 +271,22 @@ public class Debatingplan implements Serializable{
 	}
 	
 	public boolean judgesZuordnen2() {
+		debatesAll.clear();
+		for(int i = 0; i < 3; i++) {
+			for (int j = 0; j < dPTjunior; j++) {
+				debatesAll.add(debatesJ.get((i*dPTjunior) + j));
+			}
+			for (int j = 0; j < dPTsenior; j++) {
+				debatesAll.add(debatesS.get((i*dPTsenior) + j));
+			}
+		}
+		//Judges in den Debates zurücksetzen
+		for(int i = 0; i < debatesAll.size(); i++) {
+			debatesAll.get(i).removeAllJudges();
+		}
+		
+		
+		
 		dPTjunior = debatesJ.size()/3;
 		dPTsenior = debatesS.size()/3;
 		
@@ -383,26 +399,16 @@ public class Debatingplan implements Serializable{
 		}
 		erfahren.clear();
 		kannAktuell.clear();
-		/*else {
-			for(int i = 0; i < unbenutzt.size(); i++) {
-				kannAktuell1.add(unbenutzt.get(i));
-			}
-			unbenutzt.clear();
-			if(!zuordnen2(3, kannAktuell1, 0, 1)) {
-				JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-				return false;
-			}
-			else {
-				for(int i = 0; i < unbenutzt.size(); i++) {
-					kannAktuell2.add(unbenutzt.get(i));
-				}
-				if(!zuordnen2(3, kannAktuell2, 0, 2)) {
-					JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-					return false;
-				}
+		
+		//Judges in die Debates eintragen
+		
+		for(int i = 0; i < dPTjunior + dPTsenior; i++) {
+			for(int j = 0; j < 3; j++) {
+				debatesAll.get(i).addJudge(getCalculatedJudges(1)[i][j]);
+				debatesAll.get(i + dPTjunior + dPTsenior).addJudge(getCalculatedJudges(2)[i][j]);
+				debatesAll.get(i + 2*(dPTjunior + dPTsenior)).addJudge(getCalculatedJudges(3)[i][j]);
 			}
 		}
-		unbenutzt.clear();*/
 		return true;
 	}
 	
@@ -1309,19 +1315,32 @@ public class Debatingplan implements Serializable{
 		return rs;
 	}
 	
-	public Judge[] getCalculatedJudges(int zeitzone) {
+	public Judge[][] getCalculatedJudges(int zeitzone) {
 		switch(zeitzone) {
 			case 1: {
-				return judgesz1;
+				return reshape(judgesz1, dPTjunior + dPTsenior, 3);
 			}
 			case 2: {
-				return judgesz2;
+				return reshape(judgesz2, dPTjunior + dPTsenior, 3);
 			}
 			case 3: {
-				return judgesz3;
+				return reshape(judgesz3, dPTjunior + dPTsenior, 3);
 			}
 			default: return null;
 		}
+	}
+	
+	public Judge[][] reshape(Judge[] array, int rows, int columns) {
+		Judge[][] rs = new Judge[rows][columns];
+		if(array.length != rows*columns) { //passt nicht
+			return null;
+		}
+		for(int i = 0; i < columns; i++) {
+			for(int j = 0; j < rows; j++) {
+				rs[j][i] = array[j + (i*rows)];
+			}
+		}
+		return rs;
 	}
 }
 
