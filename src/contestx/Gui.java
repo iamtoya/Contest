@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -364,7 +366,7 @@ public class Gui extends JFrame {
 					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
 					
-					ArrayList<Debate> debatesJ = berechne(true);
+					ArrayList<Debate> debatesJ = berechne(true); //für Junior-Teams berechnen
 					int dPTjunior = debatesJ.size()/3;
 					createRelativeSubpanels(dPTjunior, debatesJ);
 					dPTjunior = 0;
@@ -389,7 +391,33 @@ public class Gui extends JFrame {
 		JButton btnNewButton = new JButton("Calculate judges");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dp.judgesZuordnen();
+				if(dp.judgesZuordnen2()) {
+					int dpt = (dp.getJuniorDebates().size()/3) + (dp.getSeniorDebates().size()/3);
+					for(int i = 0; i < debates.size(); i++) {
+						JButton b = (JButton) debates.get(i).getComponent(3);
+						b.setText("");
+					}
+					for(int i = 0; i < dpt; i++) {
+						JButton b1 = (JButton) debates.get(i).getComponent(3);
+						JButton b2 = (JButton) debates.get(i + dpt).getComponent(3);
+						JButton b3 = (JButton) debates.get(i + (2*dpt)).getComponent(3);
+						for(int j = 0; j < 3; j++) {
+							if(j == 0) {
+								b1.setText(b1.getText() + dp.getCalculatedJudges(1)[i][j].getName());
+								b2.setText(b2.getText() + dp.getCalculatedJudges(2)[i][j].getName());
+								b3.setText(b3.getText() + dp.getCalculatedJudges(3)[i][j].getName());
+							}
+							else {
+								b1.setText(b1.getText() + ", " + dp.getCalculatedJudges(1)[i][j].getName());
+								b2.setText(b2.getText() + ", " + dp.getCalculatedJudges(2)[i][j].getName());
+								b3.setText(b3.getText() + ", " + dp.getCalculatedJudges(3)[i][j].getName());
+							}
+						}
+					}
+					System.out.println("zz1" + hasDuplicate(dp.getCalculatedJudges(1)));
+					System.out.println("zz2" + hasDuplicate(dp.getCalculatedJudges(2)));
+					System.out.println("zz3" + hasDuplicate(dp.getCalculatedJudges(3)));
+				}
 			}
 		});
 		btnNewButton.setBounds(895, 45, 147, 54);
@@ -919,5 +947,17 @@ public class Gui extends JFrame {
 	public void setDPGui() {
 		dp.setGui(this);
 	}
+	
+	public boolean hasDuplicate(Judge[][] items) {
+		  Set<Judge> appeared = new HashSet<>();
+		  for(int i = 0; i < items.length; i++) {
+			  for (Judge item : items[i]) {
+			    if (!appeared.add(item)) {
+			      return true;
+			    }
+			  }
+		  }
+		  return false;
+		}
 }
 //NEIN NEIN NEIN NEIN NEIN
