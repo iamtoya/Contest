@@ -265,7 +265,7 @@ public class Debatingplan implements Serializable{
 	}
 	
 	private boolean zuordnen(int zeitzone, ArrayList<Judge> kannAktuell, int index, boolean erfahren) { //index steht für das index-te Debate der Zz.
-		boolean letzterDurchlauf = false;
+		boolean letzterDurchlauf = false; //beschreibt, ob sich diese Ausführung im 2. Durchlauf der unerfahrenen Judges befindet (im letzten Durchlauf)
 		ArrayList<Judge> bereitsVersucht = new ArrayList<Judge>();
 		if(erfahren) {
 			if(!(index < dPTjunior + dPTsenior)) { //wenn Limit überschritten, erster Erfolg
@@ -316,7 +316,7 @@ public class Debatingplan implements Serializable{
 		erfahrenerJudge = new Judge();
 		int i = 0;
 		while(i < kannAktuell.size() && (kannAktuell.get(i).getSchule().getName().equals(x1) 
-				|| kannAktuell.get(i).getSchule().getName().equals(y1))) { //i erhöhen bis möglicher Judge gefunden
+				|| kannAktuell.get(i).getSchule().getName().equals(y1))) { //i erhöhen bis möglicher Judge gefunden, der nicht zu Schule Pro und Schule Con gehört
 			i++;
 		}
 		if(!(i == kannAktuell.size())) { //wenn möglicher Judge gefunden
@@ -335,7 +335,9 @@ public class Debatingplan implements Serializable{
 					d.removeJudge(1);
 				}
 			}
-			if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
+			if(judge_button.getText() != "") {
+				judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
+			}
 			else judge_button.setText(erfahrenerJudge.getName());
 			d.addJudge(erfahrenerJudge);
 			

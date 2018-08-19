@@ -106,7 +106,7 @@ public class Gui extends JFrame {
 	
 	//Attribute für showEnterPointsDialog (für den ActionListener)
 	private Team selectedTeam;
-	private final JButton btnLoadPlan = new JButton("Load plan");
+	
 	private final JButton btnFirstPlace = new JButton("first place");
 	private final JButton btnSecondPlace = new JButton("second place");
 	private final JButton btnNewButton_2 = new JButton("third place");
@@ -417,28 +417,34 @@ public class Gui extends JFrame {
 		});
 		btnSavePlan.setBounds(1202, 15, 130, 39);
 		contentPane.add(btnSavePlan);
+		
+		JButton btnLoadPlan = new JButton("Load plan");
 		btnLoadPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SWTdialog s = new SWTdialog(SWT.OPEN);
 				String path = s.open();
 				
 				if(path != null) {
-					//Panels zurücksetzen
-					panel.removeAll();
-					panel_1.removeAll();
-					panel_2.removeAll();
-					panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
-					panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-					debates.clear();
-					
 					dp = (Debatingplan) readFromFile(path);
-					setDPGui(); //im gespeicherten dp ist ebenfalls ein GUI referenziert, doch es ist nicht dieses hier
-					ArrayList<Debate> debatesJ = dp.getJuniorDebates();
-					int dPTjunior = debatesJ.size()/3;
-					createRelativeSubpanels(dPTjunior, debatesJ);
-					dPTjunior = 0;
+					if(dp != null) {
+						//Panels zurücksetzen
+						panel.removeAll();
+						panel_1.removeAll();
+						panel_2.removeAll();
+						panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
+						panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+						debates.clear();
+						
+						setDPGui(); //im gespeicherten dp ist ebenfalls ein GUI referenziert, doch es ist nicht dieses hier
+						verwaltung.setDP(dp); //für Verwaltung gilt ähnliches mit dem Debatingplan
+						
+						ArrayList<Debate> debatesJ = dp.getJuniorDebates();
+						int dPTjunior = debatesJ.size()/3;
+						createRelativeSubpanels(dPTjunior, debatesJ);
+						dPTjunior = 0;
+					}
 				}
 			}
 		});
@@ -686,42 +692,39 @@ public class Gui extends JFrame {
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			combo.addItem(dp.getSchulen().get(i).getName());
 		}
-		combo.addItem("keine Schule");
-		Object[] options = {"Select judge's school:", combo, "Enter judge's name:", chckbx};
+		Object[] options = {"Select judge's school:", combo, chckbx, "Enter judge's name:"};
 		String s = (String)JOptionPane.showInputDialog(subFrame, options);
 		boolean judgeAlreadyExisting = false;
-		for(int i = 0; i < dp.getJudges().size(); i++) {
+		for(int i = 0; i < dp.getJudges().size(); i++) { //prüft ob Judge(-name) schon existiert
 			if(dp.getJudgeAt(i).getName().equals(s)) judgeAlreadyExisting = true;
 		}
 		
 		int index = combo.getSelectedIndex();
-		if(s != null && !s.contains(",") && !judgeAlreadyExisting) {
-			if(s.length() > 0) {
-				if(chckbx[0].isSelected()) {
-					if(index+1 != combo.getItemCount()) dp.addJudge(new Judge(s, dp.getSchulen().get(index), true));
-					else { //wenn "keine Schule" ausgewählt
-						dp.addJudge(new Judge(s, true)); //Dummy-Schule noch hinzuzufügen
+		if(s!= null) { //wenn nicht auf CLOSE geklickt wurde
+			if(!s.contains(",") && !judgeAlreadyExisting) {
+				if(s.length() > 0) {
+					if(chckbx[0].isSelected()) {
+						dp.addJudge(new Judge(s, dp.getSchulen().get(index), true)); //erfahrener Judge wird hinzugefügt
 					}
-				}
-				else {
-					if(index+1 != combo.getItemCount()) dp.addJudge(new Judge(s, dp.getSchulen().get(index), false));
 					else {
-						dp.addJudge(new Judge(s, false)); //Dummy-Schule noch hinzuzufügen
+						dp.addJudge(new Judge(s, dp.getSchulen().get(index), false)); //unerfahrener Judge wird hinzugefügt
+					}			
+				}
+				try{ 
+					if(s.length() == 0) { //try-catch, da code Exception erzeugt, die aber nicht weiter relevant ist
+						JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
 					}
-				}			
-			}
-			try{ 
-				if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
-					JOptionPane.showMessageDialog(subFrame, "No judge name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
+				}
+				catch(NullPointerException e) {
+					
 				}
 			}
-			catch(NullPointerException e) {
-				
+			else if(judgeAlreadyExisting) {
+				JOptionPane.showMessageDialog(subFrame, "Judge already exists.", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
-		}
-		else {
-			if(!judgeAlreadyExisting) JOptionPane.showMessageDialog(subFrame, "Judge names can't contain a comma or be empty.", "Error Message", JOptionPane.ERROR_MESSAGE);
-			else JOptionPane.showMessageDialog(subFrame, "Judge already exists.", "Error Message", JOptionPane.ERROR_MESSAGE);
+			else if(s.contains(",")) {
+				JOptionPane.showMessageDialog(subFrame, "Judge names can't contain a comma", "Error Message", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 	
@@ -898,17 +901,20 @@ public class Gui extends JFrame {
 						ObjectInputStream ois = new ObjectInputStream(fis);
 						result = ois.readObject();
 						ois.close();
+						return result;
 		}
 		catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			return null;
 		}
 		catch (FileNotFoundException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(subFrame, "File not found.", "Error Message", JOptionPane.ERROR_MESSAGE);
+			return null;
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			return null;
 		}
-		return result;
 	}
 	public void setDPGui() {
 		dp.setGui(this);

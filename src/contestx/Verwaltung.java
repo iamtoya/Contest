@@ -434,4 +434,8 @@ public class Verwaltung extends JFrame {
 			}
 		}
 	}
+	
+	public void setDP(Debatingplan d) {
+		this.dp = d;
+	}
 }
