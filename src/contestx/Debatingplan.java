@@ -117,6 +117,17 @@ public class Debatingplan implements Serializable{
 		
 	}
 	
+	public void _speakerDummys()
+	{
+		for(int i=0;i<schulen.size();i++)
+		{
+			for(int j=0;j<schulen.get(i).getJuniorTeam().getAllSpeaker().size();j++)
+			{
+				speaker.add(schulen.get(i).getJuniorTeam().getAllSpeaker().get(j));
+			}
+		}
+	}
+	
 	public ArrayList<Debate> berechne(boolean junior) {
 		reset(); //Komponenten erneuern/zurücksetzen
 		String[][] usedComps;
@@ -745,7 +756,7 @@ public class Debatingplan implements Serializable{
 		usedCompsSenior = new String[dPTsenior*3][2];
 	}
 	
-	private void bestSpeaker()
+	public void bestSpeaker()
 	{
 		sortSpeaker();
 		int i=0;
@@ -1228,6 +1239,21 @@ public class Debatingplan implements Serializable{
 			
 		}
 		if(speakerSortiert.get(0).getName().equals("")) speakerSortiert.remove(0);
+	}
+	
+	public ArrayList<Speaker> getErsterSpeaker()
+	{
+		return ersterS;
+	}
+	
+	public ArrayList<Speaker> getZweiterSpeaker()
+	{
+		return zweiterS;
+	}
+	
+	public ArrayList<Speaker> getDritterSpeaker()
+	{
+		return dritterS;
 	}
 	
 	public ArrayList<Schule> getSchulen() {

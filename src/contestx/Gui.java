@@ -159,13 +159,14 @@ public class Gui extends JFrame {
 
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			//dp.getJuniorTeams().add(new Team(dp.getSchulen().get(i), true));
-			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(0,new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam()));
-			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(1,new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam()));
-			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(2,new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam()));
+			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(0,new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam(),3));
+			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(1,new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam(),4));
+			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(2,new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam(),2));
 			//dp.getSeniorTeams().add(new Team(dp.getSchulen().get(i), false));
 		}
 		//schulen problem gelöst
 		dp.getSchulen().get(2).getJuniorTeam().setSpeakerAt(3,new Speaker("Hans", dp.getSchulen().get(2).getJuniorTeam()));
+		dp._speakerDummys();
 		
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -483,9 +484,8 @@ public class Gui extends JFrame {
 		
 		contentPane.add(btnLoadPlan);
 		
-		JButton btnNewButton_1 = new JButton("Find best speakers");
-		btnNewButton_1.setBounds(286, 609, 123, 39);
-		contentPane.add(btnNewButton_1);
+
+		
 		btnFirstPlace.setBounds(419, 582, 110, 23);
 		
 		contentPane.add(btnFirstPlace);
@@ -508,7 +508,22 @@ public class Gui extends JFrame {
 		
 		contentPane.add(button_3);
 		
-		
+		JButton btnNewButton_1 = new JButton("Find best speakers");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try
+				{
+					dp.bestSpeaker();
+					btnFirstPlace.setText(dp.getErsterSpeaker().get(0).getName());
+				}
+				catch(IndexOutOfBoundsException ind)
+				{
+					JOptionPane.showMessageDialog(null, "Please add Speakers to all teams", "Speakers not found", JOptionPane.ERROR_MESSAGE);;
+				}
+			}
+		});
+		btnNewButton_1.setBounds(286, 609, 123, 39);
+		contentPane.add(btnNewButton_1);
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..

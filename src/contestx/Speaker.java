@@ -30,6 +30,16 @@ public class Speaker implements Serializable {
 		}
 	}
 	
+	public Speaker(String name, Team team, int punkt) {
+		hoechstPunkte = punkt;
+		this.name=name;
+		this.team=team;
+		punkte = new ArrayList<Integer>();
+		for(int i = 0; i < 6; i++) { //verhindert durch setPunkteIn() ausgelöste IndexOutOfBoundsException
+			punkte.add(0);
+		}
+	}
+	
 	public Speaker(String name) {
 		this.name = name;
 		hoechstPunkte = 0;
@@ -41,7 +51,7 @@ public class Speaker implements Serializable {
 	}
 	public void hoechstPunkteErmitteln()
 	{
-		for(int i=0; i<5; i++)
+		for(int i=0; i<=5; i++)
 		{
 			if(getPunkteIn(i)>hoechstPunkte)
 			{
