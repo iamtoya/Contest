@@ -13,4 +13,4 @@ Datum		Name			Was?
 9.6.18		Leo				setPoints Methode erweitert und beendet
 11.6.18 	Jonas 			fixed setPoints-Methode (NullPointerException)
 2.7.		Jonas			Bild des Planes kann nun erzeugt werden
-01.01.19  Jonas Debates werden jetzt für Junior- und Senior-Teams angezeigt
+01.01.19		Jonas			Debates werden jetzt für Junior- und Senior-Teams angezeigt
