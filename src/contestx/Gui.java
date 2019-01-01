@@ -367,10 +367,28 @@ public class Gui extends JFrame {
 					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
 					
-					ArrayList<Debate> debatesJ = berechne(true); //für Junior-Teams berechnen
-					int dPTjunior = debatesJ.size()/3;
-					createRelativeSubpanels(dPTjunior, debatesJ);
-					dPTjunior = 0;
+					ArrayList<Debate> debatesJ = berechne(true, false); //für Junior-Teams berechnen
+					ArrayList<Debate> debatesS = berechne(false, true); //für Senior-Teams berechnen
+					int dPTjunior = debatesJ.size() / 3;
+					int dPTsenior = debatesS.size() / 3;
+					ArrayList<Debate> debatesJS = new ArrayList<Debate>();
+					boolean senior = true;
+					for(int i = 0; i < 3; i++) {
+						senior = !senior;
+						if(!senior) {
+							for(int j = 0; j < dPTjunior; j++) {
+								debatesJS.add(debatesJ.get((i * dPTjunior) + j));
+							}
+							i--;
+						}
+						else {
+							for(int j = 0; j < dPTsenior; j++) {
+								debatesJS.add(debatesS.get((i * dPTsenior) + j));
+							}
+						}
+					}
+					int dPT = debatesJS.size() / 3;
+					createRelativeSubpanels(dPT, debatesJS);
 				}
 			}
 		});
@@ -577,11 +595,12 @@ public class Gui extends JFrame {
 			width = dp.getRecommendedPanelWidth(btnTimezone.getFontMetrics(f));
 		}
 		System.out.println(width);
+		//Länge der Panels, in denen die Debates angezeigt werden sollen, wird festgelegt
 		panel.setBounds(panel.getX(), panel.getY(), debatesPerTime*width, 110);
 		panel_1.setBounds(panel_1.getX(), panel_1.getY(), debatesPerTime*width, 110);
 		panel_2.setBounds(panel_2.getX(), panel_2.getY(), debatesPerTime*width, 110);
 		cutPanels(debatesPerTime); //Panels werden in Subpanels zerschnitten
-		for(int i = 0; i < debatesPerTime*3; i++) {
+		for(int i = 0; i < debatesPerTime*3; i++) { //die einzelnen Subpanels werden >debates< hinzugefügt (inklusive Layout/Beschriftung)
 			debates.add(new JPanel());
 			debates.get(i).setBorder(new LineBorder(new Color(0, 0, 0))); //Grenzen werden gezeichnet
 			BorderLayout layout = new BorderLayout(1, 1);
@@ -602,15 +621,14 @@ public class Gui extends JFrame {
 					}
 				}
 			});
-			//String schoolname = breakStringIfTooLong(array.get(i).getTeamPro().getSchule().getName());
-			//System.out.println(schoolname);
+			
 			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
 			while(dp.getPanelWidth(array.get(i).getTeamPro().getSchule().getName(), westB.getFontMetrics(individualF)) == -1) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
-				westB.setFont(individualF);
+			westB.setFont(individualF);
 			debates.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(width/2, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
 			//TeamPro-button clicked
@@ -649,7 +667,7 @@ public class Gui extends JFrame {
 			eastB.setFont(individualF);
 			debates.get(i).add(eastB, BorderLayout.EAST);
 			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(width/2, 150)); 
-			//TeamPro-button clicked
+			//TeamCon-button clicked
 			eastB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int j = 0;
@@ -683,7 +701,25 @@ public class Gui extends JFrame {
 			}
 			JButton southB = new JButton(text);
 	        debates.get(i).add(southB, BorderLayout.SOUTH);
-	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, 22)); 
+	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, 22));
+	        
+	        //Subpanels werden entsprechend Junior/Senior eingefärbt
+	        if(array.get(i).getTeamPro().getIsJunior()) { //falls es sich um ein Junior-Debate handelt
+	        	northB.setBackground(new Color(153, 214, 255)); //Raum-Hintergrund blau gesetzt
+	        	northB.setContentAreaFilled(false);
+	        	northB.setOpaque(true);
+	        	southB.setBackground(new Color(153, 214, 255)); //Judges-Hintergrund blau gesetzt
+	        	southB.setContentAreaFilled(false);
+	        	southB.setOpaque(true);
+	        }
+	        else { //es handelt sich um ein Senior-Debate
+	        	northB.setBackground(new Color(255, 153, 153)); //Raum-Hintergrund blau gesetzt
+	        	northB.setContentAreaFilled(false);
+	        	northB.setOpaque(true);
+	        	southB.setBackground(new Color(255, 153, 153)); //Judges-Hintergrund blau gesetzt
+	        	southB.setContentAreaFilled(false);
+	        	southB.setOpaque(true);
+	        }
 		}
 		for(int i = 0; i < debatesPerTime; i++) { //die in debates gespeicherten, oben modifizierten Panels werden den drei großen Panels hinzugefügt
 			panel.add(debates.get(i));
@@ -905,18 +941,20 @@ public class Gui extends JFrame {
 		return dp.getSeniorTeams();
 	}
 	
-	public ArrayList<Debate> berechne(boolean junior) {
+	public ArrayList<Debate> berechne(boolean junior, boolean avoid_reset) {
 		//Panels zurücksetzen(mehrfaches drücken)
-		panel.removeAll();
-		panel_1.removeAll();
-		panel_2.removeAll();
-		panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
-		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-		debates.clear();
+		if(!avoid_reset) {
+			panel.removeAll();
+			panel_1.removeAll();
+			panel_2.removeAll();
+			panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
+			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+			debates.clear();
+		}
 		//berechnen lassen
-		ArrayList<Debate> array = dp.berechne(junior);
+		ArrayList<Debate> array = dp.berechne(junior, avoid_reset);
 		return array;
 	}
 	

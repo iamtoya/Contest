@@ -128,8 +128,8 @@ public class Debatingplan implements Serializable{
 		}
 	}
 	
-	public ArrayList<Debate> berechne(boolean junior) {
-		reset(); //Komponenten erneuern/zurücksetzen
+	public ArrayList<Debate> berechne(boolean junior, boolean avoid_reset) {
+		if(!avoid_reset) reset(); //Komponenten erneuern/zurücksetzen
 		String[][] usedComps;
 		int dPT;
 		ArrayList<String> teamNames;
@@ -143,14 +143,15 @@ public class Debatingplan implements Serializable{
 			dPT = dPTsenior;
 			teamNames = teamSeniorNames;
 		}
-		while(!teamOnEachSide(usedComps, teamNames)) {
+		while(!teamOnEachSide(usedComps, teamNames)) { //jedes Team muss mindestens einmal Pro und Con sein, damit es nicht in 2 Zeitzonen aussetzen muss
 			for(int i = 1; i <= dPT; i++) { //Timezone 1
+				//Teams, die gegeneinander spielen sollen werden in usedComps gespeichert
 				usedComps[i-1][0] = teamNames.get((2*i)-2); //"[i-1]", da i in for-schleife um 1 größer; "(2*i)-1" = Index der zugewiesenen Schule, immer: s1+s2;s3+s4...
 				usedComps[i-1][1] = teamNames.get(2*i-1);
 				
 			}
 			boolean run = true;
-			while(run) { //Timezone 2
+			while(run) { //Timezone 2: es wird zusätzlich überprüft, dass kein Team zweimal gegen dasselbe spielt
 				Collections.shuffle(teamNames);
 				for(int i = 1; i <= dPT; i++) {
 					usedComps[dPT+i-1][0] = teamNames.get((2*i)-2); //"[i-1]", da for-schleife einsbasiert
@@ -173,6 +174,7 @@ public class Debatingplan implements Serializable{
 				}
 			}
 		}
+		//an diesem Punkt ist usedComps korrekt gefüllt
 		for(int i = 0; i < usedComps.length; i++) {
 			System.out.println(usedComps[i][0]);
 			System.out.println(usedComps[i][1] + "\n");
@@ -180,8 +182,12 @@ public class Debatingplan implements Serializable{
 		
 		System.out.println(teamOnEachSide(usedComps, teamNames));
 		for(int i = 0; i < dPT*3; i++) {
-			if(junior) debatesJ.add(new Debate(replaceStringJunior(usedComps[i][0]), replaceStringJunior(usedComps[i][1]))); //Debates werden aufgrund der Teamnamen gebildet
-			else debatesS.add(new Debate(replaceStringJunior(usedComps[i][0]), replaceStringJunior(usedComps[i][1]))); //Debates werden aufgrund der Teamnamen gebildet
+			if(junior) {
+				debatesJ.add(new Debate(replaceStringJunior(usedComps[i][0]), replaceStringJunior(usedComps[i][1]))); //Debates werden auf Basis der Teamnamen gebildet
+			}
+			else {
+				debatesS.add(new Debate(replaceStringSenior(usedComps[i][0]), replaceStringSenior(usedComps[i][1]))); //Debates werden auf Basis der Teamnamen gebildet
+			}
 		}
 		if(junior) return debatesJ;
 		else return debatesS;
@@ -692,7 +698,7 @@ public class Debatingplan implements Serializable{
 		}
 		return false;
 	}
-	public boolean teamOnEachSide(String[][] usedComps, ArrayList<String> teamNames) {
+	public boolean teamOnEachSide(String[][] usedComps, ArrayList<String> teamNames) { //prüft, ob alle teilnehmenden Teams mindestens einmal Pro und mindestens einmal Con sind
 		Set<String> teamsPro = new HashSet<String>();
 		Set<String> teamsCon = new HashSet<String>();
 		for(int i = 0; i < usedComps.length; i++) {
@@ -730,7 +736,7 @@ public class Debatingplan implements Serializable{
 		teams_senior.clear();
 		teamJuniorNames.clear();
 		teamSeniorNames.clear();
-		//erneuern der vom GUI abgerufenen Daten
+		//Erneuern der vom GUI abgerufenen Daten
 		for(int i = 0; i < schulen.size(); i++) {
 			if(schulen.get(i).getHasJuniorTeam()) {
 				teams_junior.add(schulen.get(i).getJuniorTeam());
@@ -751,7 +757,6 @@ public class Debatingplan implements Serializable{
 		}
 		Collections.shuffle(teamSeniorNames); //Reihenfolge randomisieren
 		dPTsenior = (int) teamSeniorNames.size()/2;
-		dPTsenior = 0; //erstmal, noch zu ändern!
 		usedCompsJunior = new String[dPTjunior*3][2];
 		usedCompsSenior = new String[dPTsenior*3][2];
 	}
