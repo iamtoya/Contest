@@ -26,7 +26,7 @@ public class Debatingplan implements Serializable{
 	private Zeitzone zeitzone3;
 	private ArrayList<Judge> judges;
 	private ArrayList<Schule> schulen;
-	private ArrayList<Speaker> speaker;
+	private ArrayList<Speaker> speaker; //Zugriff durch sortSpeaker()
 	private ArrayList<Speaker> speakerSortiert; //nach Punkten
 	private ArrayList<Speaker> ersterS;
 	private ArrayList<Speaker> zweiterS;
@@ -42,10 +42,10 @@ public class Debatingplan implements Serializable{
 	private ArrayList<String> motions;	  
 	//  obiges nach Modellierung
 	private Gui gui;
-	private ArrayList<Team> teams_junior;
+	private ArrayList<Team> teams_junior; //Zugriff durch sortTeams()
 	private ArrayList<String> teamJuniorNames;
 	private int dPTjunior;
-	private ArrayList<Team> teams_senior;
+	private ArrayList<Team> teams_senior; //Zugriff durch sortTeams()
 	private ArrayList<String> teamSeniorNames;
 	private int dPTsenior;
 	private String[][] usedCompsJunior; //hier werden die verwendeten Kompositionen gespeichert

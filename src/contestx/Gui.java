@@ -55,6 +55,7 @@ import javax.swing.SwingConstants;
 /**
  * Still existing errors:
  * TODO: Motion-Buttons korrekt layouten
+ * TODO: in showEnterPointsDialog muss auf Funktionalität von der Siegerberechnung zugegriffen werden (um siegendes Team festzustellen)
  * Panels und Berechnen nur für Junior-Teams
  * judgeZuordnen: erfahrene Zuordnung und restl. Zuordnung kommunizieren nicht!
  * Daten Speichern und Laden (außer das Bild des Plans) 
@@ -112,8 +113,6 @@ public class Gui extends JFrame {
 	private final JLabel label_10 = new JLabel("bis:");
 	
 	private int standard_width;
-	//Attribute für showEnterPointsDialog (für den ActionListener)
-	private Team selectedTeam;
 	
 	private final JButton btnFirstPlace = new JButton("first place");
 	private final JButton btnSecondPlace = new JButton("second place");
@@ -165,13 +164,13 @@ public class Gui extends JFrame {
 
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			//dp.getJuniorTeams().add(new Team(dp.getSchulen().get(i), true));
-			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(0,new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam(),3));
-			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(1,new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam(),4));
-			dp.getSchulen().get(i).getJuniorTeam().setSpeakerAt(2,new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam(),2));
+			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam(),3));
+			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam(),4));
+			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam(),2));
 			//dp.getSeniorTeams().add(new Team(dp.getSchulen().get(i), false));
 		}
 		//schulen problem gelöst
-		dp.getSchulen().get(2).getJuniorTeam().setSpeakerAt(3,new Speaker("Hans", dp.getSchulen().get(2).getJuniorTeam()));
+		dp.getSchulen().get(2).getJuniorTeam().addSpeaker(new Speaker("Hans", dp.getSchulen().get(2).getJuniorTeam()));
 		dp._speakerDummys();
 		
 //		debates.add(new JPanel());
@@ -697,16 +696,16 @@ public class Gui extends JFrame {
 						j++;
 					}
 					try {
-						if(debatesPerTime > j) showEnterPointsDialog(array.get(j).getTeamPro(), 
+						if(debatesPerTime > j) showEnterPointsDialog(array.get(j), true, westB,
 								new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
 										 	 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
 					
 						else if(j >= debatesPerTime) {
-							if(j >= debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamPro(), 
+							if(j >= debatesPerTime*2) showEnterPointsDialog(array.get(j), true, westB,
 									new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
 											 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 3)); //Zeitzone 3
 						
-							else showEnterPointsDialog(array.get(j).getTeamPro(), 
+							else showEnterPointsDialog(array.get(j), true, westB,
 									new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
 											 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 2)); //Zeitzone 2
 						}
@@ -733,16 +732,16 @@ public class Gui extends JFrame {
 						j++;
 					}
 					try {
-						if(debatesPerTime > j) showEnterPointsDialog(array.get(j).getTeamCon(), 
+						if(debatesPerTime > j) showEnterPointsDialog(array.get(j), false, eastB,
 								new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
 										 	 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
 					
 						else if(j >= debatesPerTime) {
-							if(j >= debatesPerTime*2) showEnterPointsDialog(array.get(j).getTeamCon(), 
+							if(j >= debatesPerTime*2) showEnterPointsDialog(array.get(j), false, eastB,
 									new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
 											 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 3)); //Zeitzone 3
 						
-							else showEnterPointsDialog(array.get(j).getTeamCon(), 
+							else showEnterPointsDialog(array.get(j), false, eastB,
 									new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
 											 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 2)); //Zeitzone 2
 						}
@@ -771,10 +770,10 @@ public class Gui extends JFrame {
 	        	southB.setOpaque(true);
 	        }
 	        else { //es handelt sich um ein Senior-Debate
-	        	northB.setBackground(new Color(255, 153, 153)); //Raum-Hintergrund blau gesetzt
+	        	northB.setBackground(new Color(255, 153, 153)); //Raum-Hintergrund rot gesetzt
 	        	northB.setContentAreaFilled(false);
 	        	northB.setOpaque(true);
-	        	southB.setBackground(new Color(255, 153, 153)); //Judges-Hintergrund blau gesetzt
+	        	southB.setBackground(new Color(255, 153, 153)); //Judges-Hintergrund rot gesetzt
 	        	southB.setContentAreaFilled(false);
 	        	southB.setOpaque(true);
 	        }
@@ -895,8 +894,15 @@ public class Gui extends JFrame {
 	}
 	
 	//Methode zur Eingabe der Punkte
-	public void showEnterPointsDialog(Team selectedTeam, Zeitzone zeitzone) {
+	public void showEnterPointsDialog(Debate debate, boolean pro, JButton button, Zeitzone zeitzone) {
+		Team selectedTeam;
+		if(pro) selectedTeam = debate.getTeamPro();
+		else selectedTeam = debate.getTeamCon();
 		Speaker[] speakers = new Speaker[selectedTeam.getAllSpeaker().size()];
+		if(selectedTeam.getAllSpeaker().size() < 3) { //es wurden noch keine Speaker hinzugefügt
+			JOptionPane.showMessageDialog(subFrame, "Please make sure you have added enough speakers to this team.", "Error Message", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		String[] speaker_names = new String[speakers.length];
 		//speakers und speaker_names haben dieselbe Ordnung und bezeichnen dieselben Speaker
 		for(int i = 0; i < speakers.length; i++) { //Speaker-Array wird gefüllt
@@ -905,7 +911,13 @@ public class Gui extends JFrame {
 		}
 		JComboBox[] speaker = {new JComboBox(speaker_names), new JComboBox(speaker_names), new JComboBox(speaker_names), new JComboBox(speaker_names)}; //JLists are to enter the Speaker
 		
-		JTextField[] points = {new JTextField(), new JTextField(), new JTextField(), new JTextField()}; //JTextFields are to enter the points
+		JTextField[] points = {new JTextField(""), new JTextField(""), new JTextField(""), new JTextField("")}; //JTextFields are to enter the points
+		String strange_default_text = points[0].getText();
+		//>speaker< richtig setzen
+		Speaker[] selectedSpeaker = selectedTeam.getSpeakersAtTime(zeitzone.getNumber() - 1);
+		for(int i = 0; i < speaker.length; i++) {
+			if(!(selectedSpeaker[i] == null)) speaker[i].setSelectedItem(selectedSpeaker[i].getName());
+		}
 		
 		JButton[] okCancel = {new JButton("Okay"), new JButton("Cancel")};
 		okCancel[0].setBackground(Color.GREEN);
@@ -925,37 +937,81 @@ public class Gui extends JFrame {
 		//Okay-Button
 		okCancel[0].addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
+				boolean speakerFilledCorrectly = true;
 				boolean everythingCorrect = true;
 				try {
 					for(int i = 0; i < 4; i++) {
+						//Speaker-Reihe
 						takenSpeakers[i] = new Speaker("", selectedTeam); //takenSpeaker wird resettet, damit bei mehrfachen Eingabeversuchen kein Fehler entsteht
-						givenPoints[i] = Integer.parseInt(points[i].getText());
-						for(int j = 0; j <= i; j++) { //verhindert doppeltes Eintragen von Speakern
+						for(int j = 0; j <= i; j++) { //verhindert doppeltes Eintragen von Speakern durch Vergleich voriger Speaker mit dem jetzigen
 							if(takenSpeakers[j].equals(speakers[speaker[i].getSelectedIndex()]) && i != 3) { //wenn Speaker bereits eingetragen
+								speakerFilledCorrectly = false;
 								everythingCorrect = false;
 							}
 						}
 						takenSpeakers[i] = speakers[speaker[i].getSelectedIndex()];
 						if(takenSpeakers[i].getName() == "") { //wenn kein existenter Speaker ausgewählt wurde
+							speakerFilledCorrectly = false;
 							everythingCorrect = false;
 						}
 					}
-					if(everythingCorrect) subFrame.dispose(); //resettet subFrame und schließt ihn
+					//Punkte eintragen getrennt, da NumberFormatException zum Abbruch zwingen kann
+					for(int i = 0; i < 4; i++) {
+						//Punkte-Reihe
+						givenPoints[i] = Integer.parseInt(points[i].getText());
+					}
+					if(speakerFilledCorrectly) {
+						subFrame.dispose(); //resettet subFrame und schließt ihn
+					}
 					else {
-						JOptionPane.showMessageDialog(subFrame, "You must select 3 different existing Team-Members", "Error Message", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(subFrame, "You must select at least 3 different existing Team-Members", "Error Message", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				catch(NumberFormatException ex) {
 					everythingCorrect = false;
-					JOptionPane.showMessageDialog(subFrame, "Not every field was filled correctly.\nNotice: You can't use decimal numbers.", "Error Message", JOptionPane.ERROR_MESSAGE);
 				}
+				subFrame.dispose();
 				if(everythingCorrect) {
-																				// TRUE UND TRUE ALS TESTWERTE EINGETRAGEN!!!!!!!
-						selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone,true, true); //Punkte in den Teams eintragen 
+					boolean win = false;
+					int punkte_gegner = 0;
+					int punkte_eigen = 0;
+					if(pro) punkte_gegner = debate.getTeamCon().getPunkteAt(zeitzone.getNumber() - 1);
+					else punkte_gegner = debate.getTeamPro().getPunkteAt(zeitzone.getNumber() - 1);
+					for(int i = 0; i < givenPoints.length; i++) {
+						punkte_eigen += givenPoints[i];
+					}
+					if(!(punkte_gegner == 0) && !(punkte_gegner > punkte_eigen)) { //Gegner-Punkte noch bereits eingetragen oder weniger als eigene
+						win = true;
+					}
+					selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone, pro, win); //Punkte in den Teams eintragen
 					for(int i = 0; i < selectedTeam.getAllSpeaker().size(); i++) { //KonsolenAusgabe
 						for(int j = 0; j < 6; j++) {
 							System.out.println(selectedTeam.getAllSpeaker().get(i).getName() + " " + selectedTeam.getAllSpeaker().get(i).getPunkteIn(j));
 						}
+					}
+					//Button-Farbe ändern
+					button.setBackground(new Color(153, 255, 161)); //grün: alles fertig
+					button.setContentAreaFilled(false);
+					button.setOpaque(true);
+				}
+				else {
+					boolean run = true;
+					int index = 0;
+					while(run && index < 4) {
+						if(points[index].getText().length() != 0) { //wenn versucht wurde, Punkte einzutragen
+							run = false;
+							JOptionPane.showMessageDialog(subFrame, "Not every field was filled correctly.\nNotice: You can't use decimal numbers.", "Error Message", JOptionPane.ERROR_MESSAGE);
+						}
+						index++;
+					}
+					if(run) { //es wurde nicht versucht, Punkte einzutragen
+						//gewählte Speaker eintragen
+						selectedTeam.setSpeakersAtTime(zeitzone.getNumber() - 1, takenSpeakers);
+						//Button-Farbe ändern
+						if(debate.getTeamPro().getIsJunior()) button.setBackground(new Color(153, 214, 255)); // rot/blau: noch Punkte einzutragen
+						else button.setBackground(new Color(255, 153, 153));
+						button.setContentAreaFilled(false);
+						button.setOpaque(true);
 					}
 				}
 			}
@@ -976,6 +1032,8 @@ public class Gui extends JFrame {
 		subFrameCP.add(subPanel2);
 		subPanel2.setLayout(new GridLayout(6, 0, 0, 20)); //6 Zeilen rechts
 		
+		subPanel1.add(new JLabel("Speakers for this Debate"));
+		subPanel2.add(new JLabel("Gained Points"));
 		for(int i = 0; i < speaker.length; i++) { //fügt JComboBoxes und JTextFields den Panels hinzu
 			subPanel1.add(speaker[i]);
 			subPanel2.add(points[i]);
