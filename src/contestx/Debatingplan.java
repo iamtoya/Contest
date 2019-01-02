@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1342,20 +1343,38 @@ public class Debatingplan implements Serializable{
 	
 	//Methode um die Höhe der Panels abhängig von dem benötigten Platz für Schulnamen zu bestimmen
 	public int getRecommendedPanelWidth(FontMetrics fm) {
-		return getPanelWidth(getLongestSchoolName(), fm);
+		return getPanelWidth(getLongestSchoolName(fm), fm);
 	}
-	private String getLongestSchoolName() {
+	private String getLongestSchoolName(FontMetrics fm) {
 		String rs = "";
 		String loc = "";
 		for(int i = 0; i < schulen.size(); i++) {
 			loc = schulen.get(i).getName();
-			Pattern pattern = Pattern.compile("\\s");
-			Matcher matcher = pattern.matcher(loc);
-			if(matcher.find() && !loc.equals("Keine Schule")) {
-				String[] s = loc.split("\\s");
-				for(int j = 0; j < s.length; j++) {
-					if(rs.length() < s[j].length()) {
-						rs = s[j];
+			Pattern pattern1 = Pattern.compile("\\s"); // "\\s" is the whitespace-regex
+			Pattern pattern2 = Pattern.compile("-");
+			Matcher matcher1 = pattern1.matcher(loc);
+			Matcher matcher2 = pattern2.matcher(loc);
+			if(!loc.equals("Keine Schule")) {
+				List<String> s = new ArrayList<String>();
+				if(matcher1.find()) {
+					s = Arrays.asList(loc.split("\\s"));
+					if(matcher2.find()) {
+						s = getAllSplits("-", s);
+					}
+				}
+				else if(matcher2.find()) {
+					s = Arrays.asList(loc.split("-"));
+					if(matcher1.find()) {
+						s = getAllSplits("\\s", s);
+					}
+				}
+				else {
+					s.add(loc);
+				}
+				
+				for(int j = 0; j < s.size(); j++) {
+					if(fm.stringWidth(rs) < fm.stringWidth(s.get(j))) {
+						rs = s.get(j);
 					}
 				}
 			}
@@ -1367,22 +1386,41 @@ public class Debatingplan implements Serializable{
 	}
 	public int getPanelWidth(String s, FontMetrics fm) {
 		int rs = 0;
-		Pattern pattern = Pattern.compile("\\s");
-		Matcher matcher = pattern.matcher(s);
-		if(matcher.find()) {
-			String[] strings = s.split("\\s");
-			for(int i = 0; i < strings.length; i++) {
-				if(rs < fm.stringWidth(strings[i])*2 + 50) {
-					rs = fm.stringWidth(strings[i])*2 + 50;
-				}
+		Pattern pattern1 = Pattern.compile("\\s");
+		Matcher matcher1 = pattern1.matcher(s);
+		Pattern pattern2 = Pattern.compile("-");
+		Matcher matcher2 = pattern2.matcher(s);
+		List<String> strings = new ArrayList<String>();
+		if(matcher1.find()) {
+			strings = Arrays.asList(s.split("\\s"));
+			if(matcher2.find()) {
+				strings = getAllSplits("-", strings);
 			}
 		}
-		else rs = fm.stringWidth(s)*2 + 50;
+		else if(matcher2.find()) {
+			strings = Arrays.asList(s.split("-"));
+			if(matcher1.find()) strings = getAllSplits("\\s", strings);
+		}
+		else strings.add(s);
+		for(int i = 0; i < strings.size(); i++) {
+			if(rs < fm.stringWidth(strings.get(i))*2 + 50) {
+				rs = fm.stringWidth(strings.get(i))*2 + 50;
+			}
+		}
 		if(rs < 150) rs = 150; //Mindestgröße
 		if(rs > 250) { //Maximalgröße
-			rs = -1;
+			//rs = -1; //Error-Code
+			rs = 250;
 		}
 		return rs;
+	}
+	
+	public List<String> getAllSplits(String regex, List<String> s) {
+		List<String> temp = new ArrayList<String>();
+		for(int j = 0; j < s.size(); j++) {
+			temp.addAll(Arrays.asList(s.get(j).split(regex)));
+		}
+		return temp;
 	}
 	
 	public Judge[][] getCalculatedJudges(int zeitzone) {

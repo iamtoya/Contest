@@ -54,7 +54,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 /**
  * Still existing errors:
- * TODO: judgesZuordnen funktioniert noch nicht richtig: es gibt doppelte Judges pro Zeitzone
+ * TODO: Motion-Buttons korrekt layouten
  * Panels und Berechnen nur für Junior-Teams
  * judgeZuordnen: erfahrene Zuordnung und restl. Zuordnung kommunizieren nicht!
  * Daten Speichern und Laden (außer das Bild des Plans) 
@@ -111,6 +111,7 @@ public class Gui extends JFrame {
 	private final JLabel label_9 = new JLabel("von:");
 	private final JLabel label_10 = new JLabel("bis:");
 	
+	private int standard_width;
 	//Attribute für showEnterPointsDialog (für den ActionListener)
 	private Team selectedTeam;
 	
@@ -187,10 +188,12 @@ public class Gui extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1389, 1060);
+		standard_width = this.getWidth();
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		contentPane.setBackground(new Color(255, 255, 255));
 		btnTimezone.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String s = (String)JOptionPane.showInputDialog("Enter a new motion");
@@ -252,108 +255,126 @@ public class Gui extends JFrame {
 		//Implementierung der 3 Panels ohne Border
 		panel_2.setBorder(null);
 		panel_2.setBounds(194, 645, 734, 100);
+		panel_2.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_2);
 		
 		
 		panel_1.setBorder(null);
 		panel_1.setBounds(194, 392, 734, 100);
+		panel_1.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_1);
 		
 		
 		panel.setBorder(null);
 		panel.setBounds(194, 139, 734, 100);
+		panel.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel);
 		
+		panel_3.setBorder(null);
+		panel_3.setBounds(194, 255, 734, 100);
+		panel_3.setBackground(new Color(255, 255, 255));
+		contentPane.add(panel_3);
+		
+		panel_4.setBorder(null);
+		panel_4.setBounds(194, 508, 734, 100);
+		panel_4.setBackground(new Color(255, 255, 255));
+		contentPane.add(panel_4);
+		
+		panel_5.setBorder(null);
+		panel_5.setBounds(194, 761, 734, 100);
+		panel_5.setBackground(new Color(255, 255, 255));
+		contentPane.add(panel_5);
+		
 		txtVon = new JTextField();
-		txtVon.setBounds(67, 241, 36, 20);
+		txtVon.setBounds(88, 254, 36, 20);
 		contentPane.add(txtVon);
 		txtVon.setColumns(10);
 		
 		JLabel lblVon = new JLabel("von:");
-		lblVon.setBounds(31, 241, 46, 14);
+		lblVon.setBounds(52, 254, 46, 14);
 		contentPane.add(lblVon);
 		
 		JLabel lblBis = new JLabel("bis:");
-		lblBis.setBounds(35, 269, 46, 14);
+		lblBis.setBounds(56, 282, 46, 14);
 		contentPane.add(lblBis);
 		
 		textField = new JTextField();
 		textField.setColumns(10);
-		textField.setBounds(67, 269, 36, 20);
+		textField.setBounds(88, 282, 36, 20);
 		contentPane.add(textField);
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
-		textField_2.setBounds(114, 269, 36, 20);
+		textField_2.setBounds(135, 282, 36, 20);
 		contentPane.add(textField_2);
 		
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
-		textField_3.setBounds(114, 241, 36, 20);
+		textField_3.setBounds(135, 254, 36, 20);
 		contentPane.add(textField_3);
-		label.setBounds(123, 244, -13, 14);
+		label.setBounds(144, 257, -13, 14);
 		
 		contentPane.add(label);
-		label_1.setBounds(107, 244, 46, 14);
+		label_1.setBounds(128, 257, 46, 14);
 		
 		contentPane.add(label_1);
-		label_2.setBounds(107, 272, 46, 14);
+		label_2.setBounds(128, 285, 46, 14);
 		
 		contentPane.add(label_2);
 		textField_4.setColumns(10);
-		textField_4.setBounds(114, 522, 36, 20);
+		textField_4.setBounds(140, 536, 36, 20);
 		
 		contentPane.add(textField_4);
-		label_3.setBounds(107, 525, 46, 14);
+		label_3.setBounds(133, 539, 46, 14);
 		
 		contentPane.add(label_3);
 		textField_5.setColumns(10);
-		textField_5.setBounds(67, 522, 36, 20);
+		textField_5.setBounds(93, 536, 36, 20);
 		
 		contentPane.add(textField_5);
 		textField_6.setColumns(10);
-		textField_6.setBounds(67, 494, 36, 20);
+		textField_6.setBounds(93, 508, 36, 20);
 		
 		contentPane.add(textField_6);
 		textField_7.setColumns(10);
-		textField_7.setBounds(114, 494, 36, 20);
+		textField_7.setBounds(140, 508, 36, 20);
 		
 		contentPane.add(textField_7);
-		label_4.setBounds(107, 497, 46, 14);
+		label_4.setBounds(133, 511, 46, 14);
 		
 		contentPane.add(label_4);
-		label_5.setBounds(31, 494, 46, 14);
+		label_5.setBounds(57, 508, 46, 14);
 		
 		contentPane.add(label_5);
-		label_6.setBounds(35, 522, 46, 14);
+		label_6.setBounds(61, 536, 46, 14);
 		
 		contentPane.add(label_6);
 		textField_8.setColumns(10);
-		textField_8.setBounds(114, 775, 36, 20);
+		textField_8.setBounds(140, 789, 36, 20);
 		
 		contentPane.add(textField_8);
-		label_7.setBounds(107, 778, 46, 14);
+		label_7.setBounds(133, 792, 46, 14);
 		
 		contentPane.add(label_7);
 		textField_9.setColumns(10);
-		textField_9.setBounds(67, 775, 36, 20);
+		textField_9.setBounds(93, 789, 36, 20);
 		
 		contentPane.add(textField_9);
 		textField_10.setColumns(10);
-		textField_10.setBounds(67, 747, 36, 20);
+		textField_10.setBounds(93, 761, 36, 20);
 		
 		contentPane.add(textField_10);
 		textField_11.setColumns(10);
-		textField_11.setBounds(114, 747, 36, 20);
+		textField_11.setBounds(140, 761, 36, 20);
 		
 		contentPane.add(textField_11);
-		label_8.setBounds(107, 750, 46, 14);
+		label_8.setBounds(133, 764, 46, 14);
 		
 		contentPane.add(label_8);
-		label_9.setBounds(31, 747, 46, 14);
+		label_9.setBounds(57, 761, 46, 14);
 		
 		contentPane.add(label_9);
-		label_10.setBounds(35, 775, 46, 14);
+		label_10.setBounds(61, 789, 46, 14);
 		
 		contentPane.add(label_10);
 		
@@ -386,12 +407,10 @@ public class Gui extends JFrame {
 					panels[1] = panel_1;
 					panels[2] = panel_2;
 					createRelativeSubpanels(dPTjunior, debatesJ, panels);
-					JPanel[] panels2 = new JPanel[3];
-					panels2[0] = panel_3;
-					panels2[1] = panel_4;
-					panels2[2] = panel_5;
-					System.out.println("Component-Count before call: " + panel.getComponentCount());
-					createRelativeSubpanels(dPTsenior, debatesS, panels2);
+					panels[0] = panel_3;
+					panels[1] = panel_4;
+					panels[2] = panel_5;
+					createRelativeSubpanels(dPTsenior, debatesS, panels);
 					
 					//Für ein gemeinsames Panel:
 					/*ArrayList<Debate> debatesJS = new ArrayList<Debate>();
@@ -505,19 +524,35 @@ public class Gui extends JFrame {
 						panel.removeAll();
 						panel_1.removeAll();
 						panel_2.removeAll();
+						panel_3.removeAll();
+						panel_4.removeAll();
+						panel_5.removeAll();
 						panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
 						panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 						panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 						panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
 						debates.clear();
 						
 						setDPGui(); //im gespeicherten dp ist ebenfalls ein GUI referenziert, doch es ist nicht dieses hier
 						verwaltung.setDP(dp); //für Verwaltung gilt ähnliches mit dem Debatingplan
 						
 						ArrayList<Debate> debatesJ = dp.getJuniorDebates();
-						int dPTjunior = debatesJ.size()/3;
-						//createRelativeSubpanels(dPTjunior, debatesJ);
-						dPTjunior = 0;
+						ArrayList<Debate> debatesS = dp.getSeniorDebates();
+						int dPTjunior = debatesJ.size() / 3;
+						int dPTsenior = debatesS.size() / 3;
+						//Für separate Panel:
+						JPanel[] panels = new JPanel[3];
+						panels[0] = panel;
+						panels[1] = panel_1;
+						panels[2] = panel_2;
+						createRelativeSubpanels(dPTjunior, debatesJ, panels);
+						panels[0] = panel_3;
+						panels[1] = panel_4;
+						panels[2] = panel_5;
+						createRelativeSubpanels(dPTsenior, debatesS, panels);
 					}
 				}
 			}
@@ -567,28 +602,13 @@ public class Gui extends JFrame {
 		btnNewButton_1.setBounds(284, 939, 123, 39);
 		contentPane.add(btnNewButton_1);
 		
-		panel_3.setBorder(null);
-		panel_3.setBounds(194, 255, 734, 100);
-		contentPane.add(panel_3);
-		
-		panel_4.setBorder(null);
-		panel_4.setBounds(194, 508, 734, 100);
-		contentPane.add(panel_4);
-		
-		panel_5.setBorder(null);
-		panel_5.setBounds(194, 761, 734, 100);
-		contentPane.add(panel_5);
-		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
 	
 	public void imagescreen(File f) {
 		//Versuch des Speicherns des Frames als Bild
-		int h1 = textField_9.getHeight() + (textField_9.getY()-panel.getY()) + 10;
-		int h2 = panel_2.getHeight() + (panel_2.getY()-panel.getY()) + 10;
-		int h;
-		if(h1 > h2) h = h1;
-		else h = h2;
+		//int h1 = textField_9.getHeight() + (textField_9.getY()-panel.getY()) + 10;
+		int h = panel_5.getHeight() + (panel_5.getY()-panel.getY()) + 10;
 		
 		Rectangle r = new Rectangle(btnTimezone.getX()-5, panel.getY()-5, panel.getWidth() + (panel.getX()-btnTimezone.getX()) + 10, h);
 		BufferedImage bi = ScreenImage.createImage(contentPane, r);
@@ -625,12 +645,12 @@ public class Gui extends JFrame {
 		//Länge der 3 großen Panels wird entsprechen der Zahl der Debates
 		//und der empfohlenen Panel-Breite entsprechend des längsten Namens angepasst
 		Font f = new Font("Tahoma", Font.PLAIN, 16);
-		FontMetrics m = btnTimezone.getFontMetrics(f);
+		FontMetrics m = btnTimezone.getFontMetrics(f); //nur zufällig btnTimezone gewählt, hätte auch jeder andere Component mit Font-Metrics sein können
 		int width = dp.getRecommendedPanelWidth(m);
-		while(width == -1) { //Error Code: String zu lang
+		/*while(width == -1) { //Error Code: String zu lang
 			f = new Font("Tahoma", Font.PLAIN, f.getSize()-1);
 			width = dp.getRecommendedPanelWidth(btnTimezone.getFontMetrics(f));
-		}
+		}*/
 		System.out.println(width);
 		//Länge der Panels, in denen die Debates angezeigt werden sollen, wird festgelegt
 		for(int i = 0; i < panels.length; i++) {
@@ -660,10 +680,10 @@ public class Gui extends JFrame {
 				}
 			});
 			
-			JButton westB = new JButton("<html><b>Pro</b><br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
+			JButton westB = new JButton("<html><b>Pro</b><br/>" + array.get(i).getTeamPro().getSchule().getName().replaceAll("-", "- ") + "</html>"); //aus "array" wird der Name des Pro-Teams ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
-			while(dp.getPanelWidth(array.get(i).getTeamPro().getSchule().getName(), westB.getFontMetrics(individualF)) == -1) {
+			while(dp.getPanelWidth(array.get(i).getTeamPro().getSchule().getName(), westB.getFontMetrics(individualF)) == 250) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
 			westB.setFont(individualF);
@@ -696,10 +716,10 @@ public class Gui extends JFrame {
 					}
 				}
 			});
-			JButton eastB = new JButton("<html><b>Con</b><br/>" + array.get(i).getTeamCon().getSchule().getName() + "</html>");
+			JButton eastB = new JButton("<html><b>Con</b><br/>" + array.get(i).getTeamCon().getSchule().getName().replaceAll("-", "- ") + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			individualF = new Font("Tahoma", Font.PLAIN, 16);
-			while(dp.getPanelWidth(array.get(i).getTeamCon().getSchule().getName(), westB.getFontMetrics(individualF)) == -1) {
+			while(dp.getPanelWidth(array.get(i).getTeamCon().getSchule().getName(), westB.getFontMetrics(individualF)) == 250) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
 			eastB.setFont(individualF);
@@ -758,13 +778,22 @@ public class Gui extends JFrame {
 	        	southB.setContentAreaFilled(false);
 	        	southB.setOpaque(true);
 	        }
+	        //Team-Hintergründe werden gelb: es wurde noch keine korrekte Speaker-Zuordnung vorgenommen
+	        westB.setBackground(new Color(255, 243, 153));
+	        westB.setContentAreaFilled(false);
+	        westB.setOpaque(true);
+	        eastB.setBackground(new Color(255, 243, 153));
+	        eastB.setContentAreaFilled(false);
+	        eastB.setOpaque(true);
 		}
-		System.out.println("Component-Count after: " + panel.getComponentCount());
 		for(int i = 0; i < debatesPerTime; i++) { //die in debates gespeicherten, oben modifizierten Panels werden den drei großen Panels hinzugefügt
 			for(int j = 0; j < panels.length; j++) {
 				panels[j].add(panel_list.get(i + (j * debatesPerTime)));
 			}
 		}
+		int new_width = panel.getWidth() + panel.getX() + 40;
+		if(new_width < standard_width) new_width = standard_width;
+		this.setBounds(this.getX(), this.getY(), new_width, this.getHeight()); //update the width relative to the length of the panels
 	}
 	
 	public void showEnterSchoolDialog() {
@@ -941,11 +970,11 @@ public class Gui extends JFrame {
 		
 		JPanel subPanel1 = new JPanel();
 		subFrameCP.add(subPanel1);
-		subPanel1.setLayout(new GridLayout(5, 0, 0, 20)); //5 Zeilen
+		subPanel1.setLayout(new GridLayout(6, 0, 0, 20)); //6 Zeilen links
 		
 		JPanel subPanel2 = new JPanel();
 		subFrameCP.add(subPanel2);
-		subPanel2.setLayout(new GridLayout(5, 0, 0, 20)); //5 Zeilen
+		subPanel2.setLayout(new GridLayout(6, 0, 0, 20)); //6 Zeilen rechts
 		
 		for(int i = 0; i < speaker.length; i++) { //fügt JComboBoxes und JTextFields den Panels hinzu
 			subPanel1.add(speaker[i]);

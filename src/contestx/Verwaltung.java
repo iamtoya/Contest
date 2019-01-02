@@ -16,6 +16,12 @@ import javax.swing.JRadioButton;
 import java.awt.Component;
 import java.awt.Font;
 
+/**
+ * TODO: die aktualisierenMit()-Methode muss auch für Löschen funktionieren (siehe Task an Methodenkopf)
+ * @author Andi, Games
+ *
+ */
+
 public class Verwaltung extends JFrame {
 	//Klassenattribute, auf die in Methoden zugegriffen wird
 	private static final int SCHULEN = 0;
