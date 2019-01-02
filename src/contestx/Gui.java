@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
 
 import org.eclipse.swt.SWT;
 
@@ -11,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
@@ -18,6 +20,7 @@ import java.awt.Rectangle;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -193,28 +196,56 @@ public class Gui extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		contentPane.setBackground(new Color(255, 255, 255));
-		btnTimezone.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				String s = (String)JOptionPane.showInputDialog("Enter a new motion");
-				btnTimezone.setText(s);
-			}
-		});
+		
 		
 		//Timezone 1-Button impl.
 		btnTimezone.setEnabled(true);
-		btnTimezone.setBounds(42, 186, 137, 52);
+		btnTimezone.setBounds(42, 139, 137, 99);
+		btnTimezone.setBackground(new Color(255, 255, 255));
+		btnTimezone.setContentAreaFilled(false);
+		btnTimezone.setOpaque(true);
+		btnTimezone.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		btnTimezone.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(btnTimezone);
+		btnTimezone.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String s = (String)JOptionPane.showInputDialog("Enter a new motion");
+				if(!(s == null)) if(!(s.length() == 0)) btnTimezone.setText("<html><center>" + s + "</center></html>");
+			}
+		});
 		
 		
 		//Timezone 2-Button impl.
 		btnTimezone_1.setEnabled(true);
-		btnTimezone_1.setBounds(42, 440, 137, 52);
+		btnTimezone_1.setBounds(42, 392, 137, 100);
+		btnTimezone_1.setBackground(new Color(255, 255, 255));
+		btnTimezone_1.setContentAreaFilled(false);
+		btnTimezone_1.setOpaque(true);
+		btnTimezone_1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		btnTimezone_1.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(btnTimezone_1);
+		btnTimezone_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String s = (String)JOptionPane.showInputDialog("Enter a new motion");
+				if(!(s == null)) if(!(s.length() == 0)) btnTimezone_1.setText("<html><center>" + s + "</center></html>");
+			}
+		});
 		
 		//Timezone 3-Button impl.
 		btnTimezone_2.setEnabled(true);
-		btnTimezone_2.setBounds(42, 693, 137, 52);
+		btnTimezone_2.setBounds(42, 645, 137, 100);
+		btnTimezone_2.setBackground(new Color(255, 255, 255));
+		btnTimezone_2.setContentAreaFilled(false);
+		btnTimezone_2.setOpaque(true);
+		btnTimezone_2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		btnTimezone_2.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(btnTimezone_2);
+		btnTimezone_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String s = (String)JOptionPane.showInputDialog("Enter a new motion");
+				if(!(s == null)) if(!(s.length() == 0)) btnTimezone_2.setText("<html><center>" + s + "</center></html>");
+			}
+		});
 		
 		
 		//Add-SchoolButton
@@ -793,6 +824,10 @@ public class Gui extends JFrame {
 		int new_width = panel.getWidth() + panel.getX() + 40;
 		if(new_width < standard_width) new_width = standard_width;
 		this.setBounds(this.getX(), this.getY(), new_width, this.getHeight()); //update the width relative to the length of the panels
+		//remove painted border of long panels
+		for(int i = 0; i < panels.length; i++) {
+			panels[i].setBorder(null);
+		}
 	}
 	
 	public void showEnterSchoolDialog() {
