@@ -683,7 +683,8 @@ public class Debatingplan implements Serializable{
 			if(judges.get(i).getKannZuZeit(zeitzone) && //is available at this timezone
 					judges.get(i).getSchule().getName() != schule1 && //is not from Pro's school
 					judges.get(i).getSchule().getName() != schule2 && //is not from Con's school
-					!Arrays.asList(calculated_judges).contains(judges.get(i)) //has not been already selected
+					!Arrays.asList(calculated_judges).contains(judges.get(i)) && //has not been already selected
+					!(index < (dPTjunior + dPTsenior) && !judges.get(i).getErfahren()) //there is at least 1 experienced judge
 					)
 			{
 				available.add(judges.get(i));
