@@ -10,20 +10,27 @@ import org.eclipse.swt.SWT;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.ListCellRenderer;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,6 +48,8 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.border.LineBorder;
@@ -54,15 +63,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 /**
  * Still existing errors:
- * TODO: Motion-Buttons korrekt layouten
- * TODO: in showEnterPointsDialog muss auf Funktionalität von der Siegerberechnung zugegriffen werden (um siegendes Team festzustellen)
  * Panels und Berechnen nur für Junior-Teams
  * judgeZuordnen: erfahrene Zuordnung und restl. Zuordnung kommunizieren nicht!
  * Daten Speichern und Laden (außer das Bild des Plans) 
- * @author Games
+ * @author Games, Andi, Jupp
  *
  */
 
@@ -124,6 +132,8 @@ public class Gui extends JFrame {
 	private final JButton button_1 = new JButton("first place");
 	private final JButton button_2 = new JButton("second place");
 	private final JButton button_3 = new JButton("third place");
+	private DefaultListModel listModel = new DefaultListModel();
+	private final JList list = new JList(listModel);
 
 	/**
 	 * Launch the application.
@@ -131,9 +141,9 @@ public class Gui extends JFrame {
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} 
+		catch(Exception e) {
+			e.printStackTrace();
 		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -200,7 +210,7 @@ public class Gui extends JFrame {
 		
 		//Timezone 1-Button impl.
 		btnTimezone.setEnabled(true);
-		btnTimezone.setBounds(42, 139, 137, 99);
+		btnTimezone.setBounds(446, 139, 137, 99);
 		btnTimezone.setBackground(new Color(255, 255, 255));
 		btnTimezone.setContentAreaFilled(false);
 		btnTimezone.setOpaque(true);
@@ -217,7 +227,7 @@ public class Gui extends JFrame {
 		
 		//Timezone 2-Button impl.
 		btnTimezone_1.setEnabled(true);
-		btnTimezone_1.setBounds(42, 392, 137, 100);
+		btnTimezone_1.setBounds(446, 392, 137, 100);
 		btnTimezone_1.setBackground(new Color(255, 255, 255));
 		btnTimezone_1.setContentAreaFilled(false);
 		btnTimezone_1.setOpaque(true);
@@ -233,7 +243,7 @@ public class Gui extends JFrame {
 		
 		//Timezone 3-Button impl.
 		btnTimezone_2.setEnabled(true);
-		btnTimezone_2.setBounds(42, 645, 137, 100);
+		btnTimezone_2.setBounds(446, 645, 137, 100);
 		btnTimezone_2.setBackground(new Color(255, 255, 255));
 		btnTimezone_2.setContentAreaFilled(false);
 		btnTimezone_2.setOpaque(true);
@@ -284,127 +294,127 @@ public class Gui extends JFrame {
 		
 		//Implementierung der 3 Panels ohne Border
 		panel_2.setBorder(null);
-		panel_2.setBounds(194, 645, 734, 100);
+		panel_2.setBounds(598, 645, 734, 100);
 		panel_2.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_2);
 		
 		
 		panel_1.setBorder(null);
-		panel_1.setBounds(194, 392, 734, 100);
+		panel_1.setBounds(598, 392, 734, 100);
 		panel_1.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_1);
 		
 		
 		panel.setBorder(null);
-		panel.setBounds(194, 139, 734, 100);
+		panel.setBounds(598, 139, 734, 100);
 		panel.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel);
 		
 		panel_3.setBorder(null);
-		panel_3.setBounds(194, 255, 734, 100);
+		panel_3.setBounds(598, 255, 734, 100);
 		panel_3.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_3);
 		
 		panel_4.setBorder(null);
-		panel_4.setBounds(194, 508, 734, 100);
+		panel_4.setBounds(598, 508, 734, 100);
 		panel_4.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_4);
 		
 		panel_5.setBorder(null);
-		panel_5.setBounds(194, 761, 734, 100);
+		panel_5.setBounds(598, 761, 734, 100);
 		panel_5.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_5);
 		
 		txtVon = new JTextField();
-		txtVon.setBounds(88, 254, 36, 20);
+		txtVon.setBounds(492, 254, 36, 20);
 		contentPane.add(txtVon);
 		txtVon.setColumns(10);
 		
 		JLabel lblVon = new JLabel("von:");
-		lblVon.setBounds(52, 254, 46, 14);
+		lblVon.setBounds(456, 254, 46, 14);
 		contentPane.add(lblVon);
 		
 		JLabel lblBis = new JLabel("bis:");
-		lblBis.setBounds(56, 282, 46, 14);
+		lblBis.setBounds(460, 282, 46, 14);
 		contentPane.add(lblBis);
 		
 		textField = new JTextField();
 		textField.setColumns(10);
-		textField.setBounds(88, 282, 36, 20);
+		textField.setBounds(492, 282, 36, 20);
 		contentPane.add(textField);
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
-		textField_2.setBounds(135, 282, 36, 20);
+		textField_2.setBounds(539, 282, 36, 20);
 		contentPane.add(textField_2);
 		
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
-		textField_3.setBounds(135, 254, 36, 20);
+		textField_3.setBounds(539, 254, 36, 20);
 		contentPane.add(textField_3);
-		label.setBounds(144, 257, -13, 14);
+		label.setBounds(548, 257, -13, 14);
 		
 		contentPane.add(label);
-		label_1.setBounds(128, 257, 46, 14);
+		label_1.setBounds(532, 257, 46, 14);
 		
 		contentPane.add(label_1);
-		label_2.setBounds(128, 285, 46, 14);
+		label_2.setBounds(532, 285, 46, 14);
 		
 		contentPane.add(label_2);
 		textField_4.setColumns(10);
-		textField_4.setBounds(140, 536, 36, 20);
+		textField_4.setBounds(544, 536, 36, 20);
 		
 		contentPane.add(textField_4);
-		label_3.setBounds(133, 539, 46, 14);
+		label_3.setBounds(537, 539, 46, 14);
 		
 		contentPane.add(label_3);
 		textField_5.setColumns(10);
-		textField_5.setBounds(93, 536, 36, 20);
+		textField_5.setBounds(497, 536, 36, 20);
 		
 		contentPane.add(textField_5);
 		textField_6.setColumns(10);
-		textField_6.setBounds(93, 508, 36, 20);
+		textField_6.setBounds(497, 508, 36, 20);
 		
 		contentPane.add(textField_6);
 		textField_7.setColumns(10);
-		textField_7.setBounds(140, 508, 36, 20);
+		textField_7.setBounds(544, 508, 36, 20);
 		
 		contentPane.add(textField_7);
-		label_4.setBounds(133, 511, 46, 14);
+		label_4.setBounds(537, 511, 46, 14);
 		
 		contentPane.add(label_4);
-		label_5.setBounds(57, 508, 46, 14);
+		label_5.setBounds(461, 508, 46, 14);
 		
 		contentPane.add(label_5);
-		label_6.setBounds(61, 536, 46, 14);
+		label_6.setBounds(465, 536, 46, 14);
 		
 		contentPane.add(label_6);
 		textField_8.setColumns(10);
-		textField_8.setBounds(140, 789, 36, 20);
+		textField_8.setBounds(544, 789, 36, 20);
 		
 		contentPane.add(textField_8);
-		label_7.setBounds(133, 792, 46, 14);
+		label_7.setBounds(537, 792, 46, 14);
 		
 		contentPane.add(label_7);
 		textField_9.setColumns(10);
-		textField_9.setBounds(93, 789, 36, 20);
+		textField_9.setBounds(497, 789, 36, 20);
 		
 		contentPane.add(textField_9);
 		textField_10.setColumns(10);
-		textField_10.setBounds(93, 761, 36, 20);
+		textField_10.setBounds(497, 761, 36, 20);
 		
 		contentPane.add(textField_10);
 		textField_11.setColumns(10);
-		textField_11.setBounds(140, 761, 36, 20);
+		textField_11.setBounds(544, 761, 36, 20);
 		
 		contentPane.add(textField_11);
-		label_8.setBounds(133, 764, 46, 14);
+		label_8.setBounds(537, 764, 46, 14);
 		
 		contentPane.add(label_8);
-		label_9.setBounds(57, 761, 46, 14);
+		label_9.setBounds(461, 761, 46, 14);
 		
 		contentPane.add(label_9);
-		label_10.setBounds(61, 789, 46, 14);
+		label_10.setBounds(465, 789, 46, 14);
 		
 		contentPane.add(label_10);
 		
@@ -593,25 +603,25 @@ public class Gui extends JFrame {
 		
 
 		
-		btnFirstPlace.setBounds(417, 912, 110, 23);
+		btnFirstPlace.setBounds(821, 912, 110, 23);
 		
 		contentPane.add(btnFirstPlace);
-		btnSecondPlace.setBounds(417, 939, 110, 23);
+		btnSecondPlace.setBounds(821, 939, 110, 23);
 		
 		contentPane.add(btnSecondPlace);
-		btnNewButton_2.setBounds(417, 965, 110, 23);
+		btnNewButton_2.setBounds(821, 965, 110, 23);
 		
 		contentPane.add(btnNewButton_2);
-		btnFindBestTeams.setBounds(555, 939, 123, 39);
+		btnFindBestTeams.setBounds(959, 939, 123, 39);
 		
 		contentPane.add(btnFindBestTeams);
-		button_1.setBounds(688, 912, 110, 23);
+		button_1.setBounds(1092, 912, 110, 23);
 		
 		contentPane.add(button_1);
-		button_2.setBounds(688, 939, 110, 23);
+		button_2.setBounds(1092, 939, 110, 23);
 		
 		contentPane.add(button_2);
-		button_3.setBounds(688, 965, 110, 23);
+		button_3.setBounds(1092, 965, 110, 23);
 		
 		contentPane.add(button_3);
 		
@@ -629,8 +639,35 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-		btnNewButton_1.setBounds(284, 939, 123, 39);
+		btnNewButton_1.setBounds(688, 939, 123, 39);
 		contentPane.add(btnNewButton_1);
+		
+		//listScroller.setPreferredSize(new Dimension(250, 80));
+		//listScroller.setViewportView(list);
+		
+		list.setBounds(38, 139, 375, 721);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setLayoutOrientation(JList.VERTICAL);
+		list.setFixedCellHeight(50);
+		list.setVisibleRowCount(6);
+		list.setBackground(Color.lightGray);
+		list.setCellRenderer(new Renderer());
+		SchoolMenu schoolmenu = new SchoolMenu();
+		
+		MouseListener mouseListener = new MouseListener() {
+			public void mouseClicked(MouseEvent e) { 
+				if(e.getButton() == MouseEvent.BUTTON3) { //right click
+					list.setSelectedIndex(list.locationToIndex(e.getPoint()));
+					schoolmenu.show(list, e.getX(), e.getY());
+				}
+			}
+			public void mouseEntered(MouseEvent e) { }
+			public void mousePressed(MouseEvent e) { }
+			public void mouseReleased(MouseEvent e) { }
+			public void mouseExited(MouseEvent e) { }
+		};
+		list.addMouseListener(mouseListener);
+		contentPane.add(list);
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
@@ -839,17 +876,25 @@ public class Gui extends JFrame {
 		
 		if(s != null && s.length() > 0) { //der Fall, dass keine Schule eingegeben wurde wird hier abgefangen
 			if(chckbxs[0].isSelected() && chckbxs[1].isSelected()) { //unterschieden wird in der Anzahl der gewählten Checkboxes
-				dp.getSchulen().add(new Schule(s, true, true));
-				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), true)); //die team-listen werden erweitert
-				dp.getSeniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), false));
+				Schule schule = new Schule(s, true, true);
+				dp.getSchulen().add(schule);
+				Team teamjunior = new Team(schule, true);
+				Team teamsenior = new Team(schule, false);
+				dp.getJuniorTeams().add(teamjunior); //die team-listen werden erweitert
+				dp.getSeniorTeams().add(teamsenior);
+				listModel.addElement(schule.getName());
 			}
 			else if (chckbxs[0].isSelected()) {
-				dp.getSchulen().add(new Schule(s, true, false));
-				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), true));
+				Schule schule = new Schule(s, true, false);
+				dp.getSchulen().add(schule);
+				dp.getJuniorTeams().add(new Team(schule, true));
+				listModel.addElement(schule.getName());
 			}
 			else if (chckbxs[1].isSelected()) {
-				dp.getSchulen().add(new Schule(s, false, true));
-				dp.getJuniorTeams().add(new Team(dp.getSchulen().get(dp.getSchulen().size()-1), false));
+				Schule schule = new Schule(s, false, true);
+				dp.getSchulen().add(schule);
+				dp.getJuniorTeams().add(new Team(schule, false));
+				listModel.addElement(schule.getName());
 			}
 			else {
 			//keine Checkbox wurde ausgewählt -> kein Team dieser Schule nimmt teil -> die Schule nimmt nicht teil
@@ -858,7 +903,7 @@ public class Gui extends JFrame {
 		}
 		try{
 			if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
-				JOptionPane.showMessageDialog(subFrame, "Enter a school name", "Error Message", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(subFrame, "Please enter a school name", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		catch(NullPointerException e) {
@@ -1195,6 +1240,63 @@ public class Gui extends JFrame {
 			  }
 		  }
 	  return false;
+	}
+	
+	
+	public class Renderer extends JButton implements ListCellRenderer {
+		public Renderer() {
+			setOpaque(true);
+			setHorizontalAlignment(CENTER);
+			setVerticalAlignment(CENTER);
+			setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		}
+
+		@Override
+		public java.awt.Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+			String name = (String) value;
+			setText(name);
+			setBackground(new Color(255, 243, 153));
+			setContentAreaFilled(false);
+			setOpaque(true);
+			return this;
+		}
+	}
+	
+	public class SchoolMenu extends JPopupMenu {
+		JMenuItem[] items;
+		public SchoolMenu() {
+			items = new JMenuItem[3];
+			for(int i = 0; i < items.length; i++) {
+				items[i] = new JMenuItem();
+			}
+			items[0].setText("Edit");
+			items[0].addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Schule schule = (Schule) listModel.get(list.getSelectedIndex());
+					System.out.println(schule.getName());
+					//TODO: functionality needs to be added
+				}
+			});
+			items[1].setText("Edit Speakers");
+			items[1].addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//TODO: functionality needs to be added
+				}
+			});
+			items[2].setText("Delete");
+			items[2].addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//TODO: functionality needs to be added
+				}
+			});
+			for(int i = 0; i < items.length; i++) {
+				add(items[i]);
+			}
+		}
+	}
+	
+	public class JudgeMenu extends JPopupMenu {
+		
 	}
 }
 //NEIN NEIN NEIN NEIN NEIN
