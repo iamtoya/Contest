@@ -62,6 +62,10 @@ public class Judge implements Serializable {
 		return kannZuZeit.get(2);
 	}
 	
+	public Boolean getKannZuZeit(int zeitzone) {
+		return kannZuZeit.get(zeitzone - 1);
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.awt.event.ActionEvent;
@@ -53,6 +54,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 /**
  * Still existing errors:
+ * TODO: judgesZuordnen funktioniert noch nicht richtig: es gibt doppelte Judges pro Zeitzone
  * Panels und Berechnen nur für Junior-Teams
  * judgeZuordnen: erfahrene Zuordnung und restl. Zuordnung kommunizieren nicht!
  * Daten Speichern und Laden (außer das Bild des Plans) 
@@ -68,7 +70,7 @@ public class Gui extends JFrame {
 	//private ArrayList<Team> dp.getSeniorTeams();
 	//private ArrayList<Judge> judges;
 	//private ArrayList<Speaker> speaker;
-	private ArrayList<JPanel> debates; //die Debates werden hier vereinfacht als Panels betrachtet; Liste aller im Plan vorkommenden Debates als Panels
+	private ArrayList<JPanel> debates; //die Debates werden hier vereinfacht als Panels betrachtet; Liste aller im Plan vorkommenden Debates als Panels: JUNIOR VOR SENIOR!!
 	private JPanel contentPane;
 	private Debatingplan dp;
 	private Verwaltung verwaltung;
@@ -388,6 +390,7 @@ public class Gui extends JFrame {
 					panels2[0] = panel_3;
 					panels2[1] = panel_4;
 					panels2[2] = panel_5;
+					System.out.println("Component-Count before call: " + panel.getComponentCount());
 					createRelativeSubpanels(dPTsenior, debatesS, panels2);
 					
 					//Für ein gemeinsames Panel:
@@ -435,6 +438,7 @@ public class Gui extends JFrame {
 					Judge[][] cjudges1 = dp.getCalculatedJudges(1);
 					Judge[][] cjudges2 = dp.getCalculatedJudges(2);
 					Judge[][] cjudges3 = dp.getCalculatedJudges(3);
+					debates = getDebates(); //debates aktualisieren
 					for(int i = 0; i < debates.size(); i++) {
 						JButton b = (JButton) debates.get(i).getComponent(3);
 						b.setText("");
@@ -456,9 +460,9 @@ public class Gui extends JFrame {
 							}
 						}
 					}
-					System.out.println("zz1 has duplicate " + hasDuplicate(dp.getCalculatedJudges(1)));
-					System.out.println("zz2 has duplicate " + hasDuplicate(dp.getCalculatedJudges(2)));
-					System.out.println("zz3 has duplicate " + hasDuplicate(dp.getCalculatedJudges(3)));
+					System.out.println("zz1 has duplicate " + hasDuplicate(dp.getCalculatedJudges(1))); //should be false
+					System.out.println("zz2 has duplicate " + hasDuplicate(dp.getCalculatedJudges(2))); //should be false
+					System.out.println("zz3 has duplicate " + hasDuplicate(dp.getCalculatedJudges(3))); //should be false
 				}
 			}
 		});
@@ -617,6 +621,7 @@ public class Gui extends JFrame {
 	}
 	
 	public void createRelativeSubpanels(int debatesPerTime, ArrayList<Debate> array, JPanel[] panels) {
+		System.out.println("Component-Count before: " + panel.getComponentCount());
 		//Länge der 3 großen Panels wird entsprechen der Zahl der Debates
 		//und der empfohlenen Panel-Breite entsprechend des längsten Namens angepasst
 		Font f = new Font("Tahoma", Font.PLAIN, 16);
@@ -632,13 +637,14 @@ public class Gui extends JFrame {
 			panels[i].setBounds(panels[i].getX(), panels[i].getY(), debatesPerTime*width, 110);
 		}
 		cutPanels(debatesPerTime, panels); //Panels werden in Subpanels zerschnitten
+		ArrayList<JPanel> panel_list = new ArrayList<JPanel>();
 		for(int i = 0; i < debatesPerTime*3; i++) { //die einzelnen Subpanels werden >debates< hinzugefügt (inklusive Layout/Beschriftung)
-			debates.add(new JPanel());
-			debates.get(i).setBorder(new LineBorder(new Color(0, 0, 0))); //Grenzen werden gezeichnet
+			panel_list.add(new JPanel());
+			panel_list.get(i).setBorder(new LineBorder(new Color(0, 0, 0))); //Grenzen werden gezeichnet
 			BorderLayout layout = new BorderLayout(1, 1);
-			debates.get(i).setLayout(layout); //BorderLayout wird festgelegt
+			panel_list.get(i).setLayout(layout); //BorderLayout wird festgelegt
 			JButton northB = new JButton("Room Nr. " + array.get(i).getRaum());
-			debates.get(i).add(northB, BorderLayout.NORTH);
+			panel_list.get(i).add(northB, BorderLayout.NORTH);
 			layout.getLayoutComponent(BorderLayout.NORTH).setPreferredSize(new Dimension(width, 22)); 
 			northB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -654,20 +660,20 @@ public class Gui extends JFrame {
 				}
 			});
 			
-			JButton westB = new JButton("<html>Pro<br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
+			JButton westB = new JButton("<html><b>Pro</b><br/>" + array.get(i).getTeamPro().getSchule().getName() + "</html>"); //aus "array" wird der Name des Pro-Teams an i-ter Stelle ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
 			while(dp.getPanelWidth(array.get(i).getTeamPro().getSchule().getName(), westB.getFontMetrics(individualF)) == -1) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
 			westB.setFont(individualF);
-			debates.get(i).add(westB, BorderLayout.WEST);
+			panel_list.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(width/2, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
 			//TeamPro-button clicked
 			westB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int j = 0;
-					while(!debates.get(j).getComponent(1).equals(westB)) { //findet den index des entsprechenden array-eintrags zum button 
+					while(!panel_list.get(j).getComponent(1).equals(westB)) { //findet den index des entsprechenden array-eintrags zum button 
 						j++;
 					}
 					try {
@@ -690,20 +696,20 @@ public class Gui extends JFrame {
 					}
 				}
 			});
-			JButton eastB = new JButton("<html>Con<br/>" + array.get(i).getTeamCon().getSchule().getName() + "</html>");
+			JButton eastB = new JButton("<html><b>Con</b><br/>" + array.get(i).getTeamCon().getSchule().getName() + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			individualF = new Font("Tahoma", Font.PLAIN, 16);
 			while(dp.getPanelWidth(array.get(i).getTeamCon().getSchule().getName(), westB.getFontMetrics(individualF)) == -1) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
 			eastB.setFont(individualF);
-			debates.get(i).add(eastB, BorderLayout.EAST);
+			panel_list.get(i).add(eastB, BorderLayout.EAST);
 			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(width/2, 150)); 
 			//TeamCon-button clicked
 			eastB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int j = 0;
-					while(!debates.get(j).getComponent(2).equals(eastB)) { //findet den index des entsprechenden array-eintrags zum button 
+					while(!panel_list.get(j).getComponent(2).equals(eastB)) { //findet den index des entsprechenden array-eintrags zum button 
 						j++;
 					}
 					try {
@@ -732,7 +738,7 @@ public class Gui extends JFrame {
 				else text = array.get(i).getJudge(j).getName();
 			}
 			JButton southB = new JButton(text);
-	        debates.get(i).add(southB, BorderLayout.SOUTH);
+			panel_list.get(i).add(southB, BorderLayout.SOUTH);
 	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, 22));
 	        
 	        //Subpanels werden entsprechend Junior/Senior eingefärbt
@@ -753,9 +759,10 @@ public class Gui extends JFrame {
 	        	southB.setOpaque(true);
 	        }
 		}
+		System.out.println("Component-Count after: " + panel.getComponentCount());
 		for(int i = 0; i < debatesPerTime; i++) { //die in debates gespeicherten, oben modifizierten Panels werden den drei großen Panels hinzugefügt
 			for(int j = 0; j < panels.length; j++) {
-				panels[j].add(debates.get(i + (j * debatesPerTime)));
+				panels[j].add(panel_list.get(i + (j * debatesPerTime)));
 			}
 		}
 	}
@@ -979,10 +986,21 @@ public class Gui extends JFrame {
 			panel.removeAll();
 			panel_1.removeAll();
 			panel_2.removeAll();
+			panel_3.removeAll();
+			panel_4.removeAll();
+			panel_5.removeAll();
 			panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
+			panel_1.setBorder(null);
+			panel_2.setBorder(null);
+			panel_3.setBorder(null);
+			panel_4.setBorder(null);
+			panel_5.setBorder(null);
 			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 			panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 			panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
 			debates.clear();
 		}
 		//berechnen lassen
@@ -995,6 +1013,15 @@ public class Gui extends JFrame {
 	}
 	
 	public ArrayList<JPanel> getDebates() {
+		//update the debates-list
+		debates.clear();
+		//this is java:
+		debates.addAll(new ArrayList<JPanel>(Arrays.asList(Arrays.asList(panel.getComponents()).toArray(new JPanel[panel.getComponents().length]))));
+		debates.addAll(new ArrayList<JPanel>(Arrays.asList(Arrays.asList(panel_3.getComponents()).toArray(new JPanel[panel_3.getComponents().length]))));
+		debates.addAll(new ArrayList<JPanel>(Arrays.asList(Arrays.asList(panel_1.getComponents()).toArray(new JPanel[panel_1.getComponents().length]))));
+		debates.addAll(new ArrayList<JPanel>(Arrays.asList(Arrays.asList(panel_4.getComponents()).toArray(new JPanel[panel_4.getComponents().length]))));
+		debates.addAll(new ArrayList<JPanel>(Arrays.asList(Arrays.asList(panel_2.getComponents()).toArray(new JPanel[panel_2.getComponents().length]))));
+		debates.addAll(new ArrayList<JPanel>(Arrays.asList(Arrays.asList(panel_5.getComponents()).toArray(new JPanel[panel_5.getComponents().length]))));
 		return debates;
 	}
 	public void writeToFile(Object obj, String filepath) {

@@ -94,7 +94,7 @@ public class Debatingplan implements Serializable{
 		schulen.add(new Schule(true));
 		
 		//Dummy-Judges
-		judges.add(new Judge("1", schulen.get(1), true));
+		/*judges.add(new Judge("1", schulen.get(1), true));
 		judges.add(new Judge("2", schulen.get(1), true));
 		judges.add(new Judge("3", schulen.get(1), false));
 		judges.add(new Judge("4", schulen.get(1), false));
@@ -112,7 +112,10 @@ public class Debatingplan implements Serializable{
 		judges.add(new Judge("16", schulen.get(0), false));
 		judges.add(new Judge("17", schulen.get(0), false));
 		judges.add(new Judge("18", schulen.get(0), false));
-		judges.add(new Judge("19", schulen.get(0), false));
+		judges.add(new Judge("19", schulen.get(0), false));*/
+		for(int i = 0; i < 24; i++) {
+			judges.add(new Judge("" + i, schulen.get(i % schulen.size()), (i % 2 == 0)));
+		}
 
 		
 	}
@@ -289,7 +292,7 @@ public class Debatingplan implements Serializable{
 	
 	public boolean judgesZuordnen2() {
 		debatesAll.clear();
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < 3; i++) { //3 Zeitzonen werden durchlaufen
 			for (int j = 0; j < dPTjunior; j++) {
 				debatesAll.add(debatesJ.get((i*dPTjunior) + j));
 			}
@@ -328,7 +331,8 @@ public class Debatingplan implements Serializable{
 			}
 		}
 		
-		if(!zuordnen2(1, 0, 0, true)) {
+		//if(!zuordnen2(1, 0, 0, true)) {
+		if(!zuordnen3(0, 1)) {
 			JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -369,7 +373,8 @@ public class Debatingplan implements Serializable{
 			}
 		}
 
-		if(!zuordnen2(2, 0, 0, true)) {
+		//if(!zuordnen2(2, 0, 0, true)) {
+		if(!zuordnen3(0, 2)) {
 			JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -410,7 +415,8 @@ public class Debatingplan implements Serializable{
 			}
 		}
 		
-		if(!zuordnen2(3, 0, 0, true)) {
+		//if(!zuordnen2(3, 0, 0, true)) {
+		if(!zuordnen3(0, 3)) {
 			JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -561,7 +567,7 @@ public class Debatingplan implements Serializable{
 			return true;
 		}
 		
-		ArrayList<Judge> verfuegbar;
+		ArrayList<Judge> verfuegbar; //Liste der tatsächlich für dieses Debate verfügbaren Judges
 		if(index >= dPTjunior + dPTsenior) {
 			erfahren = false;
 			for(int i = 0; i < this.erfahren.size(); i++) {
@@ -658,6 +664,39 @@ public class Debatingplan implements Serializable{
 		else {
 			return false;
 		}
+	}
+	
+	public boolean zuordnen3(int index, int zeitzone) { 
+		Judge[] calculated_judges; //zu füllende Liste wird abhängig von der Zeitzone ausgewählt
+		if(zeitzone == 1) calculated_judges = judgesz1;
+		else if(zeitzone == 2) calculated_judges = judgesz2;
+		else calculated_judges = judgesz3;
+		
+		if(!Arrays.asList(calculated_judges).contains(null) && !gui.hasDuplicate(this.getCalculatedJudges(zeitzone))) return true; //Abbruchbedingung
+		
+		ArrayList<Judge> available = new ArrayList<Judge>(); //beinhaltet alle für dieses Debate verfügbaren Judges
+		//Schulen werden aus Debate mittels >index< ausgelesen (notwendig als Bedingung für >available<)
+		String schule1 = debatesAll.get((zeitzone - 1) * (dPTjunior + dPTsenior) + index % (dPTjunior + dPTsenior)).getTeamPro().getSchule().getName();
+		String schule2 = debatesAll.get((zeitzone - 1) * (dPTjunior + dPTsenior) + index % (dPTjunior + dPTsenior)).getTeamCon().getSchule().getName();
+		for(int i = 0; i < judges.size(); i++) { //>available< wird gefüllt...
+			if(judges.get(i).getKannZuZeit(zeitzone) && //is available at this timezone
+					judges.get(i).getSchule().getName() != schule1 && //is not from Pro's school
+					judges.get(i).getSchule().getName() != schule2 && //is not from Con's school
+					!Arrays.asList(calculated_judges).contains(judges.get(i)) //has not been already selected
+					)
+			{
+				available.add(judges.get(i));
+			}
+		}
+		if(available.isEmpty()) return false; //kein Judge verfügbar -> korrekte Zuordnung an diesem Punkt nicht möglich
+		int judge_to_test_index = 0; //iteriert über >available<
+		while(judge_to_test_index < available.size()) {
+			calculated_judges[index] = available.get(judge_to_test_index);
+			if(zuordnen3(index + 1, zeitzone)) return true;
+			else judge_to_test_index++; 
+			System.out.println("" + judge_to_test_index);
+		}
+		return false;
 	}
 	public boolean containsDoubleComma(String t) {
 		if(t.contains(",")) {
