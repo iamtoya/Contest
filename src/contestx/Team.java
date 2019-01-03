@@ -186,8 +186,7 @@ public class Team implements Serializable {
 	//	  }
 	//	
 	//}
-	
-	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone, boolean pro, boolean win) { //Zeitzonen: 1; 2; 3;
+	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone) {
 		int teampunkteGesamt = 0;					// Variable die Punkte eines Teamsspeichert
 		//Teambewertung tb = new Teambewertung();		// neues Teambewertungsobjekt
 		setSpeakersAtTime(zeitzone.getNumber() - 1, speakers);
@@ -203,8 +202,12 @@ public class Team implements Serializable {
 		for(int k = 0; k < punkte.length; k++) {				// geht Punktearray durch
 			teampunkteGesamt = punkte[k] + teampunkteGesamt;	// addiert die Punkte der Spieler um Teampunktzahl zu erhalten
 		}
-		setWin(zeitzone.getNumber() - 1, win);
 		this.punkte.set(zeitzone.getNumber() - 1, teampunkteGesamt);
+	}
+	
+	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone, boolean win) { //Zeitzonen: 1; 2; 3;
+		setPoints(speakers, punkte, zeitzone);
+		setWin(zeitzone.getNumber() - 1, win);
 		/*
 		tb.setGesamtpunkte(teampunkteGesamt);					// Punkte werden gespeichert in Teambewertung
 		tb.setIsPro(pro);										// das Team ist pro
@@ -233,6 +236,20 @@ public class Team implements Serializable {
 	
 	public void setIsJunior(Boolean isJunior) {
 		this.isJunior = isJunior;
+	}
+	
+	public int[] getSpeakerPunkteAt(int zeitzone) {
+		int index = zeitzone - 1;
+		int[] punkte = new int[4];
+		Speaker[] speakers = getSpeakersAtTime(index);
+		for(int i = 0; i < 4; i++) {
+			if(i == 3) { //reply speaker has another index
+				index += 3;
+			}
+			if(speakers[i] != null) punkte[i] = speakers[i].getPunkteIn(index);
+			else punkte[i] = 0;
+		}
+		return punkte;
 	}
 /*	
 	public void setTeambewertungAt(int index, Teambewertung teambewertung) {

@@ -33,7 +33,7 @@ public class Schule implements Serializable {
 	
 	public Schule(boolean keineSchule) {
 		if(keineSchule) {
-			name="Keine Schule";
+			name="other";
 			hasJuniorTeam=false;
 			hasSeniorTeam=false;
 			juniorTeam = new Team(this, true);

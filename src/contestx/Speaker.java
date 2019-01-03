@@ -87,6 +87,7 @@ public class Speaker implements Serializable {
 		
 	public int getHoechstePunkte()
 	{
+		hoechstPunkteErmitteln();
 		return hoechstPunkte;
 	}
 }

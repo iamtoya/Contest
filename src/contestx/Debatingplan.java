@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,6 +83,11 @@ public class Debatingplan implements Serializable{
 		
 		teamsSSortiert = new ArrayList<Team>();
 		teamsJSortiert = new ArrayList<Team>();
+		
+		motions = new ArrayList<String>();
+		for(int i = 0; i < 3; i++) { //fill with 3 entries (for the 3 motions)
+			motions.add("Motion " + (i + 1));
+		}
 		
 		//Dummy-Schulen
 		schulen.add(new Schule("1", true, true));
@@ -834,6 +840,34 @@ public class Debatingplan implements Serializable{
 		}
 	}
 	
+	public void bestSpeaker2() {
+		ersterS.clear();
+		zweiterS.clear();
+		dritterS.clear();
+		sortSpeaker2();
+		int i = 0;
+		System.out.println("Erste:");
+		while(i < speaker.size() && speaker.get(0).getHoechstePunkte() == speaker.get(i).getHoechstePunkte()) {
+			ersterS.add(speaker.get(i));
+			System.out.println(speaker.get(i).getName());
+			i++;
+		}
+		int j = i;
+		System.out.println("Zweite:");
+		while(j < speaker.size() && speaker.get(i).getHoechstePunkte() == speaker.get(j).getHoechstePunkte()) {
+			zweiterS.add(speaker.get(j));
+			System.out.println(speaker.get(j).getName());
+			j++;
+		}
+		int k = j;
+		System.out.println("Dritte:");
+		while(k < speaker.size() && speaker.get(j).getHoechstePunkte() == speaker.get(k).getHoechstePunkte()) {
+			dritterS.add(speaker.get(k));
+			System.out.println(speaker.get(k).getName());
+			k++;
+		}
+	}
+	
 	private void sortTeams(boolean junior)
 	{
 		ArrayList<Team> teams1 = new ArrayList<Team>();
@@ -1260,6 +1294,7 @@ public class Debatingplan implements Serializable{
 		{
 			speaker1.get(i).hoechstPunkteErmitteln();
 		}
+		
 		while(speakerSortiert.size()<speaker.size()+1)
 		{
 			temp.add(new Speaker());
@@ -1285,6 +1320,18 @@ public class Debatingplan implements Serializable{
 			
 		}
 		if(speakerSortiert.get(0).getName().equals("")) speakerSortiert.remove(0);
+	}
+	
+	private void sortSpeaker2() {
+		System.out.println("Speakers:");
+		for(int i = 0; i < speaker.size(); i++) { //works fine
+			System.out.println(speaker.get(i).getHoechstePunkte() + ": " + speaker.get(i).getName());
+		}
+		Collections.sort(speaker, new PunkteComparator());
+		System.out.println("Speakers highscores:");
+		for(int i = 0; i < speaker.size(); i++) { //doesnt work
+			System.out.println(speaker.get(i).getHoechstePunkte() + ": " + speaker.get(i).getName());
+		}
 	}
 	
 	public ArrayList<Speaker> getErsterSpeaker()
@@ -1450,6 +1497,27 @@ public class Debatingplan implements Serializable{
 			}
 		}
 		return rs;
+	}
+	
+	public void setMotion(String motion, int index) {
+		motions.set(index, motion);
+	}
+	
+	public String getMotion(int index) {
+		return motions.get(index);
+	}
+	
+	public class PunkteComparator implements Comparator<Speaker> {
+		@Override
+		public int compare(Speaker speaker1, Speaker speaker2) {
+			if(speaker1.getHoechstePunkte() > speaker2.getHoechstePunkte()) {
+				return -1;
+			}
+			else if(speaker1.getHoechstePunkte() == speaker2.getHoechstePunkte()) {
+				return 0;
+			}
+			else return 1;
+		}
 	}
 }
 

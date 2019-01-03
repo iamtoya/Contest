@@ -49,6 +49,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -65,6 +66,7 @@ import java.awt.Dimension;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.ScrollPaneConstants;
 /**
  * Still existing errors:
@@ -179,13 +181,13 @@ public class Gui extends JFrame {
 
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			//dp.getJuniorTeams().add(new Team(dp.getSchulen().get(i), true));
-			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam(),3));
-			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam(),4));
-			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam(),2));
+			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam(), 1));
+			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam(), 1));
+			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam(), 1));
 			//dp.getSeniorTeams().add(new Team(dp.getSchulen().get(i), false));
 		}
 		//schulen problem gelöst
-		dp.getSchulen().get(2).getJuniorTeam().addSpeaker(new Speaker("Hans", dp.getSchulen().get(2).getJuniorTeam()));
+		dp.getSchulen().get(2).getJuniorTeam().addSpeaker(new Speaker("Hans", dp.getSchulen().get(2).getJuniorTeam(), 1));
 		dp._speakerDummys();
 		
 //		debates.add(new JPanel());
@@ -222,7 +224,12 @@ public class Gui extends JFrame {
 		btnTimezone.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String s = (String)JOptionPane.showInputDialog("Enter a new motion");
-				if(!(s == null)) if(!(s.length() == 0)) btnTimezone.setText("<html><center>" + s + "</center></html>");
+				if(!(s == null)) {
+					if(!(s.length() == 0)) {
+						dp.setMotion(s, 0);
+						btnTimezone.setText("<html><center>" + s + "</center></html>");
+					}
+				}
 			}
 		});
 		
@@ -239,7 +246,12 @@ public class Gui extends JFrame {
 		btnTimezone_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String s = (String)JOptionPane.showInputDialog("Enter a new motion");
-				if(!(s == null)) if(!(s.length() == 0)) btnTimezone_1.setText("<html><center>" + s + "</center></html>");
+				if(!(s == null)) {
+					if(!(s.length() == 0)) {
+						dp.setMotion(s, 1);
+						btnTimezone_1.setText("<html><center>" + s + "</center></html>");
+					}
+				}
 			}
 		});
 		
@@ -255,7 +267,12 @@ public class Gui extends JFrame {
 		btnTimezone_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String s = (String)JOptionPane.showInputDialog("Enter a new motion");
-				if(!(s == null)) if(!(s.length() == 0)) btnTimezone_2.setText("<html><center>" + s + "</center></html>");
+				if(!(s == null)) {
+					if(!(s.length() == 0)) {
+						dp.setMotion(s, 2);
+						btnTimezone_2.setText("<html><center>" + s + "</center></html>");
+					}
+				}
 			}
 		});
 		
@@ -547,7 +564,10 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				SWTdialog d = new SWTdialog(SWT.SAVE);
 				String path = d.open();
-				if(path != null) writeToFile(dp, path);
+				if(path != null) {
+					writeToFile(dp, path);
+					refresh();
+				}
 			}
 		});
 		btnSavePlan.setBounds(1202, 15, 130, 39);
@@ -580,6 +600,15 @@ public class Gui extends JFrame {
 						
 						setDPGui(); //im gespeicherten dp ist ebenfalls ein GUI referenziert, doch es ist nicht dieses hier
 						verwaltung.setDP(dp); //für Verwaltung gilt ähnliches mit dem Debatingplan
+						
+						listModel.clear();
+						for(int i = 0; i < dp.getSchulen().size(); i++) { //Schulen-Liste neu berechnen
+							if(!(dp.getSchulen().get(i).getName().equals("other"))) listModel.addElement(dp.getSchulen().get(i));
+						}
+						
+						btnTimezone.setText("<html><center>" + dp.getMotion(0) + "</center></html>");
+						btnTimezone_1.setText("<html><center>" + dp.getMotion(1) + "</center></html>");
+						btnTimezone_2.setText("<html><center>" + dp.getMotion(2) + "</center></html>");
 						
 						ArrayList<Debate> debatesJ = dp.getJuniorDebates();
 						ArrayList<Debate> debatesS = dp.getSeniorDebates();
@@ -632,12 +661,30 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try
 				{
-					dp.bestSpeaker();
+					dp.bestSpeaker2();
 					btnFirstPlace.setText(dp.getErsterSpeaker().get(0).getName());
+					//oder:
+					JTextArea textField = new JTextArea();
+					textField.append("Speaker with highest score (" + dp.getErsterSpeaker().get(0).getHoechstePunkte() + "):\n");
+					for(int i = 0; i < dp.getErsterSpeaker().size(); i++) {
+						textField.append("\t" + dp.getErsterSpeaker().get(i).getName() + "\n");
+					}
+					textField.append("Speaker with second highest score (" + dp.getZweiterSpeaker().get(0).getHoechstePunkte() + "):\n");
+					for(int i = 0; i < dp.getZweiterSpeaker().size(); i++) {
+						textField.append("\t" + dp.getZweiterSpeaker().get(i).getName() + "\n");
+					}
+					textField.append("Speaker with third highest score (" + dp.getDritterSpeaker().get(0).getHoechstePunkte() + "):\n");
+					for(int i = 0; i < dp.getDritterSpeaker().size(); i++) {
+						textField.append("\t" + dp.getDritterSpeaker().get(i).getName() + "\n");
+					}
+					
+					JScrollPane sp = new JScrollPane(textField);
+					JOptionPane.showMessageDialog(subFrame, sp, "Best Speaker", JOptionPane.INFORMATION_MESSAGE);
 				}
 				catch(IndexOutOfBoundsException ind)
 				{
-					JOptionPane.showMessageDialog(null, "Please add Speakers to all teams", "Speakers not found", JOptionPane.ERROR_MESSAGE);;
+					throw ind;
+					//JOptionPane.showMessageDialog(null, "Please add Speakers to all teams", "Speakers not found", JOptionPane.ERROR_MESSAGE);;
 				}
 			}
 		});
@@ -674,16 +721,23 @@ public class Gui extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(list);
 		scrollPane.setBounds(38, 139, 375, 722);
 		contentPane.add(scrollPane);
+		for(int i = 0; i < dp.getSchulen().size(); i++) {
+			if(!(dp.getSchulen().get(i).getName() == "other")) listModel.addElement(dp.getSchulen().get(i));
+		}
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
 	
 	public void imagescreen(File f) {
 		//Versuch des Speicherns des Frames als Bild
-		//int h1 = textField_9.getHeight() + (textField_9.getY()-panel.getY()) + 10;
 		int h = panel_5.getHeight() + (panel_5.getY()-panel.getY()) + 10;
+		int width = 0;
+		//je nachdem ob es mehr junior- oder senior-debates gibt
+		if(panel.getWidth() >= panel_5.getWidth()) width = panel.getWidth() + (panel.getX()-btnTimezone.getX()) + 10;
+		else width = panel_5.getWidth() + (panel_5.getX()-btnTimezone.getX()) + 10;
 		
-		Rectangle r = new Rectangle(btnTimezone.getX()-5, panel.getY()-5, panel.getWidth() + (panel.getX()-btnTimezone.getX()) + 10, h);
+		
+		Rectangle r = new Rectangle(btnTimezone.getX()-5, panel.getY()-5, width, h);
 		BufferedImage bi = ScreenImage.createImage(contentPane, r);
 		try {
 			ScreenImage.writeImage(bi, f, false);
@@ -1035,11 +1089,15 @@ public class Gui extends JFrame {
 		JComboBox[] speaker = {new JComboBox(speaker_names), new JComboBox(speaker_names), new JComboBox(speaker_names), new JComboBox(speaker_names)}; //JLists are to enter the Speaker
 		
 		JTextField[] points = {new JTextField(""), new JTextField(""), new JTextField(""), new JTextField("")}; //JTextFields are to enter the points
-		String strange_default_text = points[0].getText();
+		
 		//>speaker< richtig setzen
 		Speaker[] selectedSpeaker = selectedTeam.getSpeakersAtTime(zeitzone.getNumber() - 1);
 		for(int i = 0; i < speaker.length; i++) {
 			if(!(selectedSpeaker[i] == null)) speaker[i].setSelectedItem(selectedSpeaker[i].getName());
+		}
+		int[] selectedPoints = selectedTeam.getSpeakerPunkteAt(zeitzone.getNumber());
+		for(int i = 0; i < points.length; i++) {
+			if(selectedPoints[i] != 0) points[i].setText("" + selectedPoints[i]);
 		}
 		
 		JButton[] okCancel = {new JButton("Okay"), new JButton("Cancel")};
@@ -1062,39 +1120,58 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				boolean speakerFilledCorrectly = true;
 				boolean everythingCorrect = true;
-				try {
-					for(int i = 0; i < 4; i++) {
-						//Speaker-Reihe
-						takenSpeakers[i] = new Speaker("", selectedTeam); //takenSpeaker wird resettet, damit bei mehrfachen Eingabeversuchen kein Fehler entsteht
-						for(int j = 0; j <= i; j++) { //verhindert doppeltes Eintragen von Speakern durch Vergleich voriger Speaker mit dem jetzigen
-							if(takenSpeakers[j].equals(speakers[speaker[i].getSelectedIndex()]) && i != 3) { //wenn Speaker bereits eingetragen
-								speakerFilledCorrectly = false;
-								everythingCorrect = false;
-							}
-						}
-						takenSpeakers[i] = speakers[speaker[i].getSelectedIndex()];
-						if(takenSpeakers[i].getName() == "") { //wenn kein existenter Speaker ausgewählt wurde
+				for(int i = 0; i < 4; i++) {
+					//Speaker-Reihe
+					takenSpeakers[i] = new Speaker("", selectedTeam); //takenSpeaker wird resettet, damit bei mehrfachen Eingabeversuchen kein Fehler entsteht
+					for(int j = 0; j <= i; j++) { //verhindert doppeltes Eintragen von Speakern durch Vergleich voriger Speaker mit dem jetzigen
+						if(takenSpeakers[j].equals(speakers[speaker[i].getSelectedIndex()]) && i != 3) { //wenn Speaker bereits eingetragen
 							speakerFilledCorrectly = false;
 							everythingCorrect = false;
 						}
 					}
-					//Punkte eintragen getrennt, da NumberFormatException zum Abbruch zwingen kann
-					for(int i = 0; i < 4; i++) {
-						//Punkte-Reihe
+					takenSpeakers[i] = speakers[speaker[i].getSelectedIndex()];
+					if(takenSpeakers[i].getName() == "") { //wenn kein existenter Speaker ausgewählt wurde
+						speakerFilledCorrectly = false;
+						everythingCorrect = false;
+					}
+				}
+				//Punkte eintragen getrennt, da NumberFormatException zum Abbruch zwingen kann
+				for(int i = 0; i < 4; i++) {
+					//Punkte-Reihe
+					if(points[i].getText().length() != 0) {
 						givenPoints[i] = Integer.parseInt(points[i].getText());
 					}
-					if(speakerFilledCorrectly) {
-						subFrame.dispose(); //resettet subFrame und schließt ihn
-					}
 					else {
-						JOptionPane.showMessageDialog(subFrame, "You must select at least 3 different existing Team-Members", "Error Message", JOptionPane.ERROR_MESSAGE);
+						try {
+							givenPoints[i] = Integer.parseInt(points[i].getText());
+						}
+						catch(NumberFormatException ex) {
+							givenPoints[i] = 0;
+						}
+						everythingCorrect = false;
 					}
 				}
-				catch(NumberFormatException ex) {
-					everythingCorrect = false;
+				subFrame.dispose(); //resettet subFrame und schließt ihn
+				if(speakerFilledCorrectly) {
+					selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone);
+					//Button-Farbe ändern
+					if(debate.getTeamPro().getIsJunior()) button.setBackground(new Color(153, 214, 255)); // rot/blau: noch Punkte einzutragen
+					else button.setBackground(new Color(255, 153, 153));
+					button.setContentAreaFilled(false);
+					button.setOpaque(true);
+					
+					for(int i = 0; i < selectedTeam.getAllSpeaker().size(); i++) { //KonsolenAusgabe
+						for(int j = 0; j < 6; j++) {
+							System.out.println(selectedTeam.getAllSpeaker().get(i).getName() + " " + selectedTeam.getAllSpeaker().get(i).getPunkteIn(j));
+						}
+					}
 				}
-				subFrame.dispose();
+				else {
+					JOptionPane.showMessageDialog(subFrame, "You must select at least 3 different existing Team-Members", "Error Message", JOptionPane.ERROR_MESSAGE);
+				}
+				
 				if(everythingCorrect) {
+					//ermittelt, ob gewonnen
 					boolean win = false;
 					int punkte_gegner = 0;
 					int punkte_eigen = 0;
@@ -1103,15 +1180,12 @@ public class Gui extends JFrame {
 					for(int i = 0; i < givenPoints.length; i++) {
 						punkte_eigen += givenPoints[i];
 					}
-					if(!(punkte_gegner == 0) && !(punkte_gegner > punkte_eigen)) { //Gegner-Punkte noch bereits eingetragen oder weniger als eigene
+					if(!(punkte_gegner == 0) && !(punkte_gegner > punkte_eigen)) { //Gegner-Punkte bereits eingetragen oder weniger als eigene
 						win = true;
 					}
-					selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone, pro, win); //Punkte in den Teams eintragen
-					for(int i = 0; i < selectedTeam.getAllSpeaker().size(); i++) { //KonsolenAusgabe
-						for(int j = 0; j < 6; j++) {
-							System.out.println(selectedTeam.getAllSpeaker().get(i).getName() + " " + selectedTeam.getAllSpeaker().get(i).getPunkteIn(j));
-						}
-					}
+					selectedTeam.setWin(zeitzone.getNumber() - 1, win);
+					//selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone, win); //Punkte in den Teams eintragen
+					
 					//Button-Farbe ändern
 					button.setBackground(new Color(153, 255, 161)); //grün: alles fertig
 					button.setContentAreaFilled(false);
@@ -1127,7 +1201,7 @@ public class Gui extends JFrame {
 						}
 						index++;
 					}
-					if(run) { //es wurde nicht versucht, Punkte einzutragen
+					/*if(run) { //es wurde nicht versucht, Punkte einzutragen
 						//gewählte Speaker eintragen
 						selectedTeam.setSpeakersAtTime(zeitzone.getNumber() - 1, takenSpeakers);
 						//Button-Farbe ändern
@@ -1135,7 +1209,7 @@ public class Gui extends JFrame {
 						else button.setBackground(new Color(255, 153, 153));
 						button.setContentAreaFilled(false);
 						button.setOpaque(true);
-					}
+					}*/
 				}
 			}
 		});
@@ -1379,6 +1453,13 @@ public class Gui extends JFrame {
 	  return false;
 	}
 	
+	public void refresh() {
+		//Motion-Button's border neu berechnen
+		btnTimezone.setBorder(new LineBorder(Color.BLACK));
+		btnTimezone_1.setBorder(new LineBorder(Color.BLACK));
+		btnTimezone_2.setBorder(new LineBorder(Color.BLACK));
+	}
+	
 	
 	public class Renderer extends JButton implements ListCellRenderer {
 		public Renderer() {
@@ -1390,6 +1471,7 @@ public class Gui extends JFrame {
 
 		@Override
 		public java.awt.Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+			setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			Color color = new Color(244, 244, 244);
 			Color selected_color = new Color(220, 220, 220);
 			try{
