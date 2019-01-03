@@ -951,6 +951,15 @@ public class Debatingplan implements Serializable{
 		}
 	}
 	
+	public void sortTeams2(boolean junior) {
+		if(junior) {
+			Collections.sort(teams_junior, new TeamComparator());
+		}
+		else {
+			Collections.sort(teams_senior, new TeamComparator());
+		}
+	}
+	
 	public void bestTeams(boolean junior)
 	{
 		sortTeams(junior);
@@ -1283,6 +1292,32 @@ public class Debatingplan implements Serializable{
 		}
 		}
 	}
+	
+	public void bestTeams2(boolean junior) {
+		ArrayList<Team> t;
+		if(junior) t = teams_junior;
+		else t = teams_senior;
+		System.out.println("Vorher");
+		for(int i = 0; i < t.size(); i++) {
+			System.out.println(t.get(i).getSchule().getName() + " mit Wins: " + t.get(i).getWinAmount() + " und Punkten: " + t.get(i).getHoechstPunkte());
+		}
+		sortTeams2(junior);
+		System.out.println("Nachher");
+		for(int i = 0; i < t.size(); i++) {
+			System.out.println(t.get(i).getSchule().getName() + " mit Wins: " + t.get(i).getWinAmount() + " und Punkten: " + t.get(i).getHoechstPunkte());
+		}
+		if(junior) {
+			teamJ1 = teams_junior.get(0);
+			teamJ2 = teams_junior.get(1);
+			teamJ3 = teams_junior.get(2);
+		}
+		else {
+			teamS1 = teams_senior.get(0);
+			teamS2 = teams_senior.get(1);
+			teamS3 = teams_senior.get(2);
+		}
+	}
+	
 	private void sortSpeaker()
 	{
 		speakerSortiert.clear();
@@ -1510,6 +1545,21 @@ public class Debatingplan implements Serializable{
 		return motions.get(index);
 	}
 	
+	public Team[] getBestTeams(boolean junior) {
+		Team[] teams = new Team[3];
+		if(junior) {
+			teams[0] = teamJ1;
+			teams[1] = teamJ2;
+			teams[2] = teamJ3;
+		}
+		else {
+			teams[0] = teamS1;
+			teams[1] = teamS2;
+			teams[2] = teamS3; 
+		}
+		return teams;
+	}
+	
 	public class PunkteComparator implements Comparator<Speaker> {
 		@Override
 		public int compare(Speaker speaker1, Speaker speaker2) {
@@ -1520,6 +1570,27 @@ public class Debatingplan implements Serializable{
 				return 0;
 			}
 			else return 1;
+		}
+	}
+	
+	public class TeamComparator implements Comparator<Team> {
+		@Override
+		public int compare(Team team1, Team team2) {
+			if(team1.getWinAmount() > team2.getWinAmount()) {
+				return -1;
+			}
+			else if(team1.getWinAmount() < team2.getWinAmount()) {
+				return 1;
+			}
+			else {
+				if(team1.getHoechstPunkte() > team2.getHoechstPunkte()) {
+					return -1;
+				}
+				else if(team1.getHoechstPunkte() < team2.getHoechstPunkte()) {
+					return 1;
+				}
+				else return 0;
+			}
 		}
 	}
 }

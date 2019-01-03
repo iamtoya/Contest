@@ -660,6 +660,24 @@ public class Gui extends JFrame {
 		
 		contentPane.add(btnNewButton_2);
 		btnFindBestTeams.setBounds(959, 939, 123, 39);
+		btnFindBestTeams.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dp.bestTeams2(true);
+				Team[] winnerTeams = dp.getBestTeams(true);
+				button_1.setText(winnerTeams[0].getSchule().getName());
+				//oder:
+				JTextArea textField = new JTextArea();
+				textField.append("First junior-team with " + winnerTeams[0].getWinAmount() + " wins and " + winnerTeams[0].getHoechstPunkte() + " maximum points:\n");
+				textField.append("\t" + winnerTeams[0].getSchule().getName() + "\n");
+				textField.append("Second junior-team with " + winnerTeams[1].getWinAmount() + " wins and " + winnerTeams[1].getHoechstPunkte() + " maximum points:\n");
+				textField.append("\t" + winnerTeams[1].getSchule().getName() + "\n");
+				textField.append("Third junior-team with " + winnerTeams[2].getWinAmount() + " wins and " + winnerTeams[2].getHoechstPunkte() + " maximum points:\n");
+				textField.append("\t" + winnerTeams[2].getSchule().getName() + "\n");
+				
+				JScrollPane sp = new JScrollPane(textField);
+				JOptionPane.showMessageDialog(subFrame, sp, "Best Speaker", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		
 		contentPane.add(btnFindBestTeams);
 		button_1.setBounds(1092, 912, 110, 23);
