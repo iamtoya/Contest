@@ -1306,15 +1306,20 @@ public class Debatingplan implements Serializable{
 		for(int i = 0; i < t.size(); i++) {
 			System.out.println(t.get(i).getSchule().getName() + " mit Wins: " + t.get(i).getWinAmount() + " und Punkten: " + t.get(i).getHoechstPunkte());
 		}
-		if(junior) {
-			teamJ1 = teams_junior.get(0);
-			teamJ2 = teams_junior.get(1);
-			teamJ3 = teams_junior.get(2);
+		try{
+			if(junior) {
+				teamJ1 = teams_junior.get(0);
+				teamJ2 = teams_junior.get(1);
+				teamJ3 = teams_junior.get(2);
+			}
+			else {
+				teamS1 = teams_senior.get(0);
+				teamS2 = teams_senior.get(1);
+				teamS3 = teams_senior.get(2);
+			}
 		}
-		else {
-			teamS1 = teams_senior.get(0);
-			teamS2 = teams_senior.get(1);
-			teamS3 = teams_senior.get(2);
+		catch(IndexOutOfBoundsException e) {
+			
 		}
 	}
 	
