@@ -65,8 +65,10 @@ import java.awt.Dimension;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.ScrollPaneConstants;
 /**
  * Still existing errors:
+ * TODO: "Keine Schule" vielleicht umbenennen in "andere" ?
  * Panels und Berechnen nur für Junior-Teams
  * judgeZuordnen: erfahrene Zuordnung und restl. Zuordnung kommunizieren nicht!
  * Daten Speichern und Laden (außer das Bild des Plans) 
@@ -262,7 +264,7 @@ public class Gui extends JFrame {
 		JButton btnAddSchool = new JButton("AddSchool");
 		btnAddSchool.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				showEnterSchoolDialog();
+				showEnterSchoolDialog(null);
 			}
 		});
 		
@@ -650,7 +652,7 @@ public class Gui extends JFrame {
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.setFixedCellHeight(50);
 		list.setVisibleRowCount(6);
-		list.setBackground(Color.lightGray);
+		list.setBackground(new Color(248, 248, 248));
 		list.setCellRenderer(new Renderer());
 		SchoolMenu schoolmenu = new SchoolMenu();
 		
@@ -668,6 +670,10 @@ public class Gui extends JFrame {
 		};
 		list.addMouseListener(mouseListener);
 		contentPane.add(list);
+		
+		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setBounds(38, 139, 375, 722);
+		contentPane.add(scrollPane);
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
@@ -867,14 +873,22 @@ public class Gui extends JFrame {
 		}
 	}
 	
-	public void showEnterSchoolDialog() {
+	public void showEnterSchoolDialog(Schule school_param) {
 		JCheckBox[] chckbxs = {new JCheckBox("has junior team"), new JCheckBox("has senior team")}; //2 CheckBoxen fragen ab, welche Teams die eingetragene Schule bereitstellt
-		chckbxs[0].setSelected(true); //CheckBoxen werden zu Beginn auf true gesetzt (erleichtert schnelle Eingabe)
-		chckbxs[1].setSelected(true);
+		if(school_param == null) {
+			chckbxs[0].setSelected(true); //CheckBoxen werden zu Beginn auf true gesetzt (erleichtert schnelle Eingabe)
+			chckbxs[1].setSelected(true);
+		}
+		else {
+			chckbxs[0].setSelected(school_param.getHasJuniorTeam());
+			chckbxs[1].setSelected(school_param.getHasSeniorTeam());
+		}
 		Object[] options = {"Enter school name:", chckbxs};
-		String s = (String)JOptionPane.showInputDialog(subFrame, options); //Schulname wird in "s" gespeichert
+		String s = "";
+		if(school_param == null) s = (String)JOptionPane.showInputDialog(subFrame, options); //Schulname wird in "s" gespeichert
+		else s = (String)JOptionPane.showInputDialog(subFrame, options, school_param.getName());
 		
-		if(s != null && s.length() > 0) { //der Fall, dass keine Schule eingegeben wurde wird hier abgefangen
+		if(school_param == null && s != null && s.length() > 0) { //der Fall, dass keine Schule eingegeben wurde wird hier abgefangen
 			if(chckbxs[0].isSelected() && chckbxs[1].isSelected()) { //unterschieden wird in der Anzahl der gewählten Checkboxes
 				Schule schule = new Schule(s, true, true);
 				dp.getSchulen().add(schule);
@@ -882,23 +896,52 @@ public class Gui extends JFrame {
 				Team teamsenior = new Team(schule, false);
 				dp.getJuniorTeams().add(teamjunior); //die team-listen werden erweitert
 				dp.getSeniorTeams().add(teamsenior);
-				listModel.addElement(schule.getName());
+				listModel.addElement(schule);
 			}
 			else if (chckbxs[0].isSelected()) {
 				Schule schule = new Schule(s, true, false);
 				dp.getSchulen().add(schule);
 				dp.getJuniorTeams().add(new Team(schule, true));
-				listModel.addElement(schule.getName());
+				listModel.addElement(schule);
 			}
 			else if (chckbxs[1].isSelected()) {
 				Schule schule = new Schule(s, false, true);
 				dp.getSchulen().add(schule);
 				dp.getJuniorTeams().add(new Team(schule, false));
-				listModel.addElement(schule.getName());
+				listModel.addElement(schule);
 			}
 			else {
-			//keine Checkbox wurde ausgewählt -> kein Team dieser Schule nimmt teil -> die Schule nimmt nicht teil
+				//keine Checkbox wurde ausgewählt -> kein Team dieser Schule nimmt teil -> die Schule nimmt nicht teil
 				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		else if(s != null && s.length() > 0) { //alte Schule
+			if(!chckbxs[0].isSelected() && !chckbxs[1].isSelected()) {
+				//keine Checkbox wurde ausgewählt -> kein Team dieser Schule nimmt teil -> die Schule nimmt nicht teil
+				JOptionPane.showMessageDialog(subFrame, "Your school has neither a senior nor a junior team", "Error Message", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			if(chckbxs[0].isSelected() && !school_param.getHasJuniorTeam()) { //wenn es vorher KEIN juniorteam gab
+				Team teamjunior = new Team(school_param, true);
+				dp.getJuniorTeams().add(teamjunior);
+			}
+			if(chckbxs[1].isSelected() && !school_param.getHasSeniorTeam()) { //wenn es vorher KEIN seniorteam gab
+				Team teamsenior = new Team(school_param, false);
+				dp.getSeniorTeams().add(teamsenior);
+			}
+			if(s != school_param.getName()) { //wenn der Schulname geändert wurde
+				school_param.setName(s);
+				
+			}
+			if(!chckbxs[0].isSelected() && school_param.getHasJuniorTeam()) { //wenn es vorher ein juniorteam gab
+				dp.getJuniorTeams().remove(school_param.getJuniorTeam());
+				school_param.setJuniorTeam(null); //delete reference
+				school_param.setHasJuniorTeam(false);
+			}
+			if(!chckbxs[1].isSelected() && school_param.getHasSeniorTeam()) { //wenn es vorher ein seniorteam gab
+				dp.getSeniorTeams().remove(school_param.getSeniorTeam());
+				school_param.setHasSeniorTeam(false);
+				school_param.setSeniorTeam(null); //delete reference
 			}
 		}
 		try{
@@ -1123,6 +1166,100 @@ public class Gui extends JFrame {
 	 	
 	}
 	
+	public void showEditSpeakerDialog(Team team) {
+		ArrayList<Speaker> speaker_to_copy = team.getAllSpeaker();
+		ArrayList<Speaker> speaker = new ArrayList<Speaker>(speaker_to_copy);
+		//create Components
+		DefaultListModel model = new DefaultListModel();
+		JList speaker_list = new JList(model);
+		speaker_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		speaker_list.setLayoutOrientation(JList.VERTICAL);
+		speaker_list.setFixedCellHeight(50);
+		speaker_list.setCellRenderer(new Renderer());
+		JScrollPane sp = new JScrollPane(speaker_list);
+		//fill list
+		for(int i = 0; i < speaker.size(); i++) {
+			model.addElement(speaker.get(i));
+		}
+		//create buttons + actionListeners
+		JButton add_speaker = new JButton("Add Speaker");
+		add_speaker.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String s = (String)JOptionPane.showInputDialog("Enter speaker's name:");
+				if(!(s == null) && !(s.length() == 0)) {
+					Speaker new_speaker = new Speaker(s, team);
+					speaker.add(new_speaker);
+					model.addElement(new_speaker);
+				}
+			}
+		});
+		JButton delete_speaker = new JButton("Delete Speaker");
+		delete_speaker.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedIndex = speaker_list.getSelectedIndex();
+				if(!(selectedIndex == -1)) {
+					Speaker toRemove = (Speaker) model.get(selectedIndex);
+					speaker.remove(toRemove);
+					model.remove(selectedIndex);
+				}
+			}
+		});
+		JButton okay = new JButton("Okay");
+		okay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dp.getSpeaker().removeAll(team.getAllSpeaker());
+				team.setAllSpeaker(speaker);
+				dp.getSpeaker().addAll(speaker);
+				for(int i = 0; i < dp.getSpeaker().size(); i++) {
+					System.out.println(dp.getSpeaker().get(i).getTeam().getSchule().getName() + ": " + dp.getSpeaker().get(i).getName());
+				}
+				subFrame.dispose();
+			}
+		});
+		JButton cancel = new JButton("Cancel");
+		cancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				subFrame.dispose();
+			}
+		});
+		
+		//create Content-Pane
+		subFrame.setVisible(true);
+		subFrame.setBounds(500, 150, 500, 500);
+		JPanel cpane = new JPanel();
+		subFrame.setContentPane(cpane);
+		cpane.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		//add components to content pane
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.weighty = 0;
+		c.ipady = 40;
+		c.gridx = 0;
+		c.gridy = 0;
+		cpane.add(add_speaker, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		cpane.add(delete_speaker, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.ipady = 300;
+		c.weighty = 1;
+		c.gridwidth = 2;
+		c.gridx = 0;
+		c.gridy = 1;
+		cpane.add(sp, c);
+		//cpane.add(speaker_list, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0;
+		c.ipady = 50;
+		c.gridwidth = 1;
+		c.gridy = 2;
+		cpane.add(okay, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		cpane.add(cancel, c);
+	}
+	
 	public String breakStringIfTooLong(String s, double length) { //funktioniert noch nicht!
 		int pieces = (int) Math.ceil(s.length()/length);
 		int l = (int) length;
@@ -1253,9 +1390,60 @@ public class Gui extends JFrame {
 
 		@Override
 		public java.awt.Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-			String name = (String) value;
-			setText(name);
-			setBackground(new Color(255, 243, 153));
+			Color color = new Color(244, 244, 244);
+			Color selected_color = new Color(220, 220, 220);
+			try{
+				Schule schule = (Schule) value;
+				setText(schule.getName());
+				color = new Color(255, 243, 153);
+				selected_color = new Color(237, 226, 142);
+				
+				if(schule.getHasJuniorTeam()) {
+					if(schule.getJuniorTeam().getAllSpeaker().size() >= 3) {
+						if(schule.getHasSeniorTeam()) {
+							if(schule.getSeniorTeam().getAllSpeaker().size() >= 3) {
+								color = new Color(153, 255, 161); //grün
+								selected_color = new Color(136, 226, 143);
+							}
+						}
+						else {
+							color = new Color(153, 255, 161); //grün
+							selected_color = new Color(136, 226, 143);
+						}
+					}
+				}
+				else {
+					if(schule.getHasSeniorTeam()) {
+						if(schule.getSeniorTeam().getAllSpeaker().size() >= 3) {
+							color = new Color(153, 255, 161); //grün
+							selected_color = new Color(136, 226, 143);
+						}
+					}
+				}
+				if(isSelected) {
+					setBackground(selected_color);
+					setForeground(list.getSelectionForeground());
+				}
+				else {
+					setBackground(color);
+					setForeground(list.getForeground());
+				}
+			}
+			catch(Exception e) {
+				if(e.getMessage().contains("Speaker")) {
+					color = new Color(244, 244, 244);
+					Speaker speaker = (Speaker) value;
+					setText(speaker.getName());
+					if(isSelected) {
+						setBackground(new Color(140, 184, 255));
+						setForeground(list.getSelectionForeground());
+					}
+					else {
+						setBackground(color);
+						setForeground(list.getForeground());
+					}
+				}
+			}
 			setContentAreaFilled(false);
 			setOpaque(true);
 			return this;
@@ -1265,7 +1453,7 @@ public class Gui extends JFrame {
 	public class SchoolMenu extends JPopupMenu {
 		JMenuItem[] items;
 		public SchoolMenu() {
-			items = new JMenuItem[3];
+			items = new JMenuItem[4];
 			for(int i = 0; i < items.length; i++) {
 				items[i] = new JMenuItem();
 			}
@@ -1273,20 +1461,53 @@ public class Gui extends JFrame {
 			items[0].addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Schule schule = (Schule) listModel.get(list.getSelectedIndex());
-					System.out.println(schule.getName());
-					//TODO: functionality needs to be added
+					showEnterSchoolDialog(schule);
 				}
 			});
-			items[1].setText("Edit Speakers");
+			items[1].setText("Edit Junior-Team Speakers");
 			items[1].addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//TODO: functionality needs to be added
+					Schule schule = (Schule) listModel.get(list.getSelectedIndex());
+					if(schule.getHasJuniorTeam()) {
+						showEditSpeakerDialog(schule.getJuniorTeam());
+					}
+					else JOptionPane.showMessageDialog(subFrame, "This school has no junior team.", "Error Message", JOptionPane.ERROR_MESSAGE);
 				}
 			});
-			items[2].setText("Delete");
+			items[2].setText("Edit Senior-Team Speakers");
 			items[2].addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//TODO: functionality needs to be added
+					Schule schule = (Schule) listModel.get(list.getSelectedIndex());
+					if(schule.getHasSeniorTeam()) {
+						showEditSpeakerDialog(schule.getSeniorTeam());
+					}
+					else JOptionPane.showMessageDialog(subFrame, "This school has no senior team.", "Error Message", JOptionPane.ERROR_MESSAGE);
+				}
+			});
+			items[3].setText("Delete");
+			items[3].addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//TODO: functionality (deleting) needs to be extended to lists of speakers + teams
+					int selectedIndex = list.getSelectedIndex();
+					Schule schule = (Schule) listModel.getElementAt(selectedIndex);
+					if(schule.getHasJuniorTeam()) {
+						//remove speakers
+						for(int i = 0; i < schule.getJuniorTeam().getAllSpeaker().size(); i++) {
+							dp.getSpeaker().remove(schule.getJuniorTeam().getAllSpeaker().get(i));
+						}
+						//remove team
+						dp.getJuniorTeams().remove(schule.getJuniorTeam());
+					}
+					if(schule.getHasSeniorTeam()) {
+						//remove speakers
+						for(int i = 0; i < schule.getSeniorTeam().getAllSpeaker().size(); i++) {
+							dp.getSpeaker().remove(schule.getSeniorTeam().getAllSpeaker().get(i));
+						}
+						//remove team
+						dp.getSeniorTeams().remove(schule.getSeniorTeam());
+					}
+					dp.getSchulen().remove(schule);
+					listModel.remove(selectedIndex);
 				}
 			});
 			for(int i = 0; i < items.length; i++) {
@@ -1295,8 +1516,5 @@ public class Gui extends JFrame {
 		}
 	}
 	
-	public class JudgeMenu extends JPopupMenu {
-		
-	}
 }
 //NEIN NEIN NEIN NEIN NEIN

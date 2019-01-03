@@ -152,6 +152,10 @@ public class Team implements Serializable {
 		return speaker;
 	}
 	
+	public void setAllSpeaker(ArrayList<Speaker> speaker_list) {
+		speaker = speaker_list;
+	}
+	
 	public Speaker getSpeaker(int index) {
 		return speaker.get(index);
 	}
