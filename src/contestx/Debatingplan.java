@@ -1360,7 +1360,7 @@ public class Debatingplan implements Serializable{
 		if(speakerSortiert.get(0).getName().equals("")) speakerSortiert.remove(0);
 	}
 	
-	private void sortSpeaker2() {
+	public void sortSpeaker2() {
 		System.out.println("Speakers:");
 		for(int i = 0; i < speaker.size(); i++) { //works fine
 			System.out.println(speaker.get(i).getHoechstePunkte() + ": " + speaker.get(i).getName());

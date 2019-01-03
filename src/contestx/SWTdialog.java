@@ -24,7 +24,7 @@ public class SWTdialog {
 	}
 	
 	public String open() {
-		String[] stringarray = {"*.ser"};
+		String[] stringarray = {"*.ser", "*.csv"};
 		f.setFilterExtensions(stringarray);
 		String s = f.open();
 		return s;

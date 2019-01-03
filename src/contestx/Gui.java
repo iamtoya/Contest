@@ -36,9 +36,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -767,7 +769,13 @@ public class Gui extends JFrame {
 		JButton btnExportScores = new JButton("<html><center>Export Scores</center></html>");
 		btnExportScores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				SWTdialog s = new SWTdialog(SWT.OPEN);
+				String path = s.open();
+				try {
+					exportScores(path);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnExportScores.setBounds(1217, 912, 115, 76);
@@ -1547,6 +1555,70 @@ public class Gui extends JFrame {
 		btnTimezone.setBorder(new LineBorder(Color.BLACK));
 		btnTimezone_1.setBorder(new LineBorder(Color.BLACK));
 		btnTimezone_2.setBorder(new LineBorder(Color.BLACK));
+	}
+	
+	public void exportScores(String path) throws IOException {
+		FileWriter fw = null;
+		PrintWriter out = null;
+		try {
+			fw = new FileWriter(path);
+			out = new PrintWriter(fw);
+		}
+		catch(NullPointerException e) {
+			return;
+		}
+		//Export speakers
+		dp.sortSpeaker2();
+		ArrayList<Speaker> speaker = dp.getSpeaker();
+		int rows = speaker.size();
+		int columns = 8; //Name, Schulname (junior), ZZ1, ZZ1 Reply, ZZ2, ZZ2 Reply, ZZ3, ZZ3 Reply
+		out.println("Speaker:");
+		out.println("Name, Schoolname (junior/senior), Speech (" + dp.zeitzone1.print() + "), Reply-Speech (" + dp.zeitzone1.print() + "), "
+				+ "Speech (" + dp.zeitzone2.print() + "), Reply-Speech (" + dp.zeitzone2.print() + "), Speech (" + dp.zeitzone3.print() + "), Reply-Speech (" + dp.zeitzone3.print() + ")");
+		for(int i = 0; i < rows; i++) {
+			if(!(speaker.get(i).getTeam().getSchule().getName().equals("other"))) {
+				out.print(speaker.get(i).getName() + ",");
+				String junior = "";
+				if(speaker.get(i).getTeam().getIsJunior()) junior = "junior";
+				else junior = "senior";
+				out.print(speaker.get(i).getTeam().getSchule().getName() + " (" + junior + "),");
+				out.print(speaker.get(i).getPunkteIn(0) + ",");
+				out.print(speaker.get(i).getPunkteIn(3) + ",");
+				out.print(speaker.get(i).getPunkteIn(1) + ",");
+				out.print(speaker.get(i).getPunkteIn(4) + ",");
+				out.print(speaker.get(i).getPunkteIn(2) + ",");
+				out.println(speaker.get(i).getPunkteIn(5));
+			}
+		}
+		out.println();
+		out.println("Junior-Teams:");
+		//Export Junior-Teams
+		exportTeams(true, out);
+		out.println("Senior-Teams:");
+		exportTeams(false, out);
+		out.flush();
+		out.close();
+		fw.close();
+	}
+	
+	public void exportTeams(boolean junior, PrintWriter out) {
+		dp.sortTeams2(junior);
+		ArrayList<Team> teams;
+		if(junior) {
+			teams = dp.getJuniorTeams();
+		}
+		else {
+			teams = dp.getSeniorTeams();
+		}
+		out.println("Name, Wins, Points at (" + dp.zeitzone1.print() + "), Points at (" + dp.zeitzone2.print() + "), Points at (" + dp.zeitzone3.print() + ")");
+		for(int i = 0; i < teams.size(); i++) {
+			out.print(teams.get(i).getSchule().getName() + ",");
+			out.print(teams.get(i).getWinAmount() + ",");
+			out.print(teams.get(i).getPunkteAt(0) + ",");
+			out.print(teams.get(i).getPunkteAt(1) + ",");
+			out.println(teams.get(i).getPunkteAt(2));
+		}
+		out.println();
 	}
 	
 	

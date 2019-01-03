@@ -71,4 +71,8 @@ public class Zeitzone implements Serializable{
 	public int getNumber() {
 		return timezoneNumber;
 	}
+	
+	public String print() {
+		return startHours + ":" + startMins + "-" + endHours + ":" + endMins;
+	}
 }
