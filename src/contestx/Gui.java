@@ -663,15 +663,23 @@ public class Gui extends JFrame {
 		btnFindBestTeams.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dp.bestTeams2(true);
+				dp.bestTeams2(false);
+				
 				Team[] winnerTeams = dp.getBestTeams(true);
-				button_1.setText(winnerTeams[0].getSchule().getName());
-				//oder:
 				JTextArea textField = new JTextArea();
 				textField.append("First junior-team with " + winnerTeams[0].getWinAmount() + " wins and " + winnerTeams[0].getHoechstPunkte() + " maximum points:\n");
 				textField.append("\t" + winnerTeams[0].getSchule().getName() + "\n");
 				textField.append("Second junior-team with " + winnerTeams[1].getWinAmount() + " wins and " + winnerTeams[1].getHoechstPunkte() + " maximum points:\n");
 				textField.append("\t" + winnerTeams[1].getSchule().getName() + "\n");
 				textField.append("Third junior-team with " + winnerTeams[2].getWinAmount() + " wins and " + winnerTeams[2].getHoechstPunkte() + " maximum points:\n");
+				textField.append("\t" + winnerTeams[2].getSchule().getName() + "\n");
+				
+				winnerTeams = dp.getBestTeams(false);
+				textField.append("First senior-team with " + winnerTeams[0].getWinAmount() + " wins and " + winnerTeams[0].getHoechstPunkte() + " maximum points:\n");
+				textField.append("\t" + winnerTeams[0].getSchule().getName() + "\n");
+				textField.append("Second senior-team with " + winnerTeams[1].getWinAmount() + " wins and " + winnerTeams[1].getHoechstPunkte() + " maximum points:\n");
+				textField.append("\t" + winnerTeams[1].getSchule().getName() + "\n");
+				textField.append("Third senior-team with " + winnerTeams[2].getWinAmount() + " wins and " + winnerTeams[2].getHoechstPunkte() + " maximum points:\n");
 				textField.append("\t" + winnerTeams[2].getSchule().getName() + "\n");
 				
 				JScrollPane sp = new JScrollPane(textField);
@@ -755,6 +763,15 @@ public class Gui extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(list);
 		scrollPane.setBounds(38, 139, 375, 722);
 		contentPane.add(scrollPane);
+		
+		JButton btnExportScores = new JButton("<html><center>Export Scores</center></html>");
+		btnExportScores.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnExportScores.setBounds(1217, 912, 115, 76);
+		contentPane.add(btnExportScores);
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			if(!(dp.getSchulen().get(i).getName() == "other")) listModel.addElement(dp.getSchulen().get(i));
 		}
@@ -1668,6 +1685,5 @@ public class Gui extends JFrame {
 			}
 		}
 	}
-	
 }
 //NEIN NEIN NEIN NEIN NEIN
