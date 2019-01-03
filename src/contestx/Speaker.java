@@ -51,6 +51,7 @@ public class Speaker implements Serializable {
 	}
 	public void hoechstPunkteErmitteln()
 	{
+		hoechstPunkte = 0;
 		for(int i=0; i<=5; i++)
 		{
 			if(getPunkteIn(i)>hoechstPunkte)

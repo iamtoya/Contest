@@ -188,7 +188,7 @@ public class Gui extends JFrame {
 		}
 		//schulen problem gelöst
 		dp.getSchulen().get(2).getJuniorTeam().addSpeaker(new Speaker("Hans", dp.getSchulen().get(2).getJuniorTeam(), 1));
-		dp._speakerDummys();
+		dp._speakerDummys(); //fügt Speaker aus Schulen zur >dp.speaker<-Liste hinzu
 		
 //		debates.add(new JPanel());
 	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -610,6 +610,22 @@ public class Gui extends JFrame {
 						btnTimezone_1.setText("<html><center>" + dp.getMotion(1) + "</center></html>");
 						btnTimezone_2.setText("<html><center>" + dp.getMotion(2) + "</center></html>");
 						
+						if(!(dp.zeitzone1.getStartHours() == 0)) txtVon.setText("" + dp.zeitzone1.getStartHours());
+						if(!(dp.zeitzone1.getStartMins() == 0)) textField_3.setText("" + dp.zeitzone1.getStartMins());
+						if(!(dp.zeitzone1.getEndHours() == 0)) textField.setText("" + dp.zeitzone1.getEndHours());
+						if(!(dp.zeitzone1.getEndMins() == 0)) textField_2.setText("" + dp.zeitzone1.getEndMins());
+						
+						if(!(dp.zeitzone3.getStartHours() == 0)) textField_10.setText("" + dp.zeitzone3.getStartHours());
+						if(!(dp.zeitzone3.getStartMins() == 0)) textField_11.setText("" + dp.zeitzone3.getStartMins());
+						if(!(dp.zeitzone3.getEndHours() == 0)) textField_9.setText("" + dp.zeitzone3.getEndHours());
+						if(!(dp.zeitzone3.getEndMins() == 0)) textField_8.setText("" + dp.zeitzone3.getEndMins());
+						
+						if(!(dp.zeitzone2.getStartHours() == 0)) textField_6.setText("" + dp.zeitzone2.getStartHours());
+						if(!(dp.zeitzone2.getStartMins() == 0)) textField_7.setText("" + dp.zeitzone2.getStartMins());
+						if(!(dp.zeitzone2.getEndHours() == 0)) textField_5.setText("" + dp.zeitzone2.getEndHours());
+						if(!(dp.zeitzone2.getEndMins() == 0)) textField_4.setText("" + dp.zeitzone2.getEndMins());
+						
+						
 						ArrayList<Debate> debatesJ = dp.getJuniorDebates();
 						ArrayList<Debate> debatesS = dp.getSeniorDebates();
 						int dPTjunior = debatesJ.size() / 3;
@@ -824,18 +840,29 @@ public class Gui extends JFrame {
 						j++;
 					}
 					try {
-						if(debatesPerTime > j) showEnterPointsDialog(array.get(j), true, westB,
-								new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
-										 	 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
+						if(debatesPerTime > j) {
+							dp.zeitzone1.setStartHours(Integer.parseInt(txtVon.getText()));
+							dp.zeitzone1.setStartMins(Integer.parseInt(textField_3.getText()));
+							dp.zeitzone1.setEndHours(Integer.parseInt(textField.getText()));
+							dp.zeitzone1.setEndMins(Integer.parseInt(textField_2.getText()));
+							showEnterPointsDialog(array.get(j), true, westB, dp.zeitzone1); //Zeitzone 1
+						}
 					
 						else if(j >= debatesPerTime) {
-							if(j >= debatesPerTime*2) showEnterPointsDialog(array.get(j), true, westB,
-									new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
-											 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 3)); //Zeitzone 3
-						
-							else showEnterPointsDialog(array.get(j), true, westB,
-									new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
-											 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 2)); //Zeitzone 2
+							if(j >= debatesPerTime*2) {
+								dp.zeitzone3.setStartHours(Integer.parseInt(textField_10.getText()));
+								dp.zeitzone3.setStartMins(Integer.parseInt(textField_11.getText()));
+								dp.zeitzone3.setEndHours(Integer.parseInt(textField_9.getText()));
+								dp.zeitzone3.setEndMins(Integer.parseInt(textField_8.getText()));
+								showEnterPointsDialog(array.get(j), true, westB, dp.zeitzone3); //Zeitzone 3
+							}
+							else {
+								dp.zeitzone2.setStartHours(Integer.parseInt(textField_6.getText()));
+								dp.zeitzone2.setStartMins(Integer.parseInt(textField_7.getText()));
+								dp.zeitzone2.setEndHours(Integer.parseInt(textField_5.getText()));
+								dp.zeitzone2.setEndMins(Integer.parseInt(textField_4.getText()));
+								showEnterPointsDialog(array.get(j), true, westB, dp.zeitzone2); //Zeitzone 2
+							}
 						}
 					}
 					catch(NumberFormatException ex) {
@@ -1569,7 +1596,6 @@ public class Gui extends JFrame {
 			items[3].setText("Delete");
 			items[3].addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//TODO: functionality (deleting) needs to be extended to lists of speakers + teams
 					int selectedIndex = list.getSelectedIndex();
 					Schule schule = (Schule) listModel.getElementAt(selectedIndex);
 					if(schule.getHasJuniorTeam()) {

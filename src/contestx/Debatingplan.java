@@ -22,9 +22,6 @@ public class Debatingplan implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Debate> debatesJ;
 	private ArrayList<Debate> debatesS;
-	private Zeitzone zeitzone1;
-	private Zeitzone zeitzone2;
-	private Zeitzone zeitzone3;
 	private ArrayList<Judge> judges;
 	private ArrayList<Schule> schulen;
 	private ArrayList<Speaker> speaker; //Zugriff durch sortSpeaker()
@@ -41,6 +38,9 @@ public class Debatingplan implements Serializable{
 	private Team teamJ2;
 	private Team teamJ3;
 	private ArrayList<String> motions;	  
+	public Zeitzone zeitzone1;
+	public Zeitzone zeitzone2;
+	public Zeitzone zeitzone3;
 	//  obiges nach Modellierung
 	private Gui gui;
 	private ArrayList<Team> teams_junior; //Zugriff durch sortTeams()
@@ -88,6 +88,9 @@ public class Debatingplan implements Serializable{
 		for(int i = 0; i < 3; i++) { //fill with 3 entries (for the 3 motions)
 			motions.add("Motion " + (i + 1));
 		}
+		zeitzone1 = new Zeitzone(1);
+		zeitzone2 = new Zeitzone(2);
+		zeitzone3 = new Zeitzone(3);
 		
 		//Dummy-Schulen
 		schulen.add(new Schule("1", true, true));
