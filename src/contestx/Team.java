@@ -1,4 +1,5 @@
 package contestx;
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -250,6 +251,21 @@ public class Team implements Serializable {
 			else punkte[i] = 0;
 		}
 		return punkte;
+	}
+	
+	public Color getColor(int zeitzone) {
+		Speaker[] s = getSpeakersAtTime(zeitzone - 1);
+		int[] p = getSpeakerPunkteAt(zeitzone);
+		for(int i = 0; i < s.length; i++) {
+			if(s[i] == null) { //speaker noch nicht korrekt gesetzt
+				return new Color(255, 243, 153); //gelb
+			}
+			if(p[i] == 0) { //WARNUNG: VERGEBENE PUNKTE DÜRFEN NICHT 0 SEIN!!
+				if(getIsJunior()) return new Color(153, 214, 255); //blau
+				else return new Color(255, 153, 153); //rot
+			}
+		}
+		return new Color(153, 255, 161); //grün
 	}
 /*	
 	public void setTeambewertungAt(int index, Teambewertung teambewertung) {

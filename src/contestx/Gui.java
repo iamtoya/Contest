@@ -836,11 +836,17 @@ public class Gui extends JFrame {
 			westB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int j = 0;
+					int zeitzone = 0;
 					while(!panel_list.get(j).getComponent(1).equals(westB)) { //findet den index des entsprechenden array-eintrags zum button 
 						j++;
 					}
+					if(debatesPerTime > j) zeitzone = 1;
+					else if(j >= debatesPerTime) {
+						if(j >= debatesPerTime*2) zeitzone = 3;
+						else zeitzone = 2;
+					}
 					try {
-						if(debatesPerTime > j) {
+						if(zeitzone == 1) {
 							dp.zeitzone1.setStartHours(Integer.parseInt(txtVon.getText()));
 							dp.zeitzone1.setStartMins(Integer.parseInt(textField_3.getText()));
 							dp.zeitzone1.setEndHours(Integer.parseInt(textField.getText()));
@@ -848,21 +854,19 @@ public class Gui extends JFrame {
 							showEnterPointsDialog(array.get(j), true, westB, dp.zeitzone1); //Zeitzone 1
 						}
 					
-						else if(j >= debatesPerTime) {
-							if(j >= debatesPerTime*2) {
-								dp.zeitzone3.setStartHours(Integer.parseInt(textField_10.getText()));
-								dp.zeitzone3.setStartMins(Integer.parseInt(textField_11.getText()));
-								dp.zeitzone3.setEndHours(Integer.parseInt(textField_9.getText()));
-								dp.zeitzone3.setEndMins(Integer.parseInt(textField_8.getText()));
-								showEnterPointsDialog(array.get(j), true, westB, dp.zeitzone3); //Zeitzone 3
-							}
-							else {
-								dp.zeitzone2.setStartHours(Integer.parseInt(textField_6.getText()));
-								dp.zeitzone2.setStartMins(Integer.parseInt(textField_7.getText()));
-								dp.zeitzone2.setEndHours(Integer.parseInt(textField_5.getText()));
-								dp.zeitzone2.setEndMins(Integer.parseInt(textField_4.getText()));
-								showEnterPointsDialog(array.get(j), true, westB, dp.zeitzone2); //Zeitzone 2
-							}
+						else if(zeitzone == 3) {
+							dp.zeitzone3.setStartHours(Integer.parseInt(textField_10.getText()));
+							dp.zeitzone3.setStartMins(Integer.parseInt(textField_11.getText()));
+							dp.zeitzone3.setEndHours(Integer.parseInt(textField_9.getText()));
+							dp.zeitzone3.setEndMins(Integer.parseInt(textField_8.getText()));
+							showEnterPointsDialog(array.get(j), true, westB, dp.zeitzone3); //Zeitzone 3
+						}
+						else if(zeitzone == 2){
+							dp.zeitzone2.setStartHours(Integer.parseInt(textField_6.getText()));
+							dp.zeitzone2.setStartMins(Integer.parseInt(textField_7.getText()));
+							dp.zeitzone2.setEndHours(Integer.parseInt(textField_5.getText()));
+							dp.zeitzone2.setEndMins(Integer.parseInt(textField_4.getText()));
+							showEnterPointsDialog(array.get(j), true, westB, dp.zeitzone2); //Zeitzone 2
 						}
 					}
 					catch(NumberFormatException ex) {
@@ -883,22 +887,37 @@ public class Gui extends JFrame {
 			eastB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int j = 0;
+					int zeitzone = 0;
 					while(!panel_list.get(j).getComponent(2).equals(eastB)) { //findet den index des entsprechenden array-eintrags zum button 
 						j++;
 					}
+					if(debatesPerTime > j) zeitzone = 1;
+					else if(j >= debatesPerTime) {
+						if(j >= debatesPerTime*2) zeitzone = 3;
+						else zeitzone = 2;
+					}
 					try {
-						if(debatesPerTime > j) showEnterPointsDialog(array.get(j), false, eastB,
-								new Zeitzone(Integer.parseInt(txtVon.getText()), Integer.parseInt(textField_3.getText()), 
-										 	 Integer.parseInt(textField.getText()), Integer.parseInt(textField_2.getText()), 1)); //Zeitzone 1
+						if(zeitzone == 1) {
+							dp.zeitzone1.setStartHours(Integer.parseInt(txtVon.getText()));
+							dp.zeitzone1.setStartMins(Integer.parseInt(textField_3.getText()));
+							dp.zeitzone1.setEndHours(Integer.parseInt(textField.getText()));
+							dp.zeitzone1.setEndMins(Integer.parseInt(textField_2.getText()));
+							showEnterPointsDialog(array.get(j), false, eastB, dp.zeitzone1); //Zeitzone 1
+						}
 					
-						else if(j >= debatesPerTime) {
-							if(j >= debatesPerTime*2) showEnterPointsDialog(array.get(j), false, eastB,
-									new Zeitzone(Integer.parseInt(textField_10.getText()), Integer.parseInt(textField_11.getText()), 
-											 	 Integer.parseInt(textField_9.getText()), Integer.parseInt(textField_8.getText()), 3)); //Zeitzone 3
-						
-							else showEnterPointsDialog(array.get(j), false, eastB,
-									new Zeitzone(Integer.parseInt(textField_6.getText()), Integer.parseInt(textField_7.getText()), 
-											 	 Integer.parseInt(textField_5.getText()), Integer.parseInt(textField_4.getText()), 2)); //Zeitzone 2
+						else if(zeitzone == 3) {
+							dp.zeitzone3.setStartHours(Integer.parseInt(textField_10.getText()));
+							dp.zeitzone3.setStartMins(Integer.parseInt(textField_11.getText()));
+							dp.zeitzone3.setEndHours(Integer.parseInt(textField_9.getText()));
+							dp.zeitzone3.setEndMins(Integer.parseInt(textField_8.getText()));
+							showEnterPointsDialog(array.get(j), false, eastB, dp.zeitzone3); //Zeitzone 3
+						}
+						else if(zeitzone == 2){
+							dp.zeitzone2.setStartHours(Integer.parseInt(textField_6.getText()));
+							dp.zeitzone2.setStartMins(Integer.parseInt(textField_7.getText()));
+							dp.zeitzone2.setEndHours(Integer.parseInt(textField_5.getText()));
+							dp.zeitzone2.setEndMins(Integer.parseInt(textField_4.getText()));
+							showEnterPointsDialog(array.get(j), false, eastB, dp.zeitzone2); //Zeitzone 2
 						}
 					}
 					catch(NumberFormatException ex) {
@@ -932,11 +951,19 @@ public class Gui extends JFrame {
 	        	southB.setContentAreaFilled(false);
 	        	southB.setOpaque(true);
 	        }
-	        //Team-Hintergründe werden gelb: es wurde noch keine korrekte Speaker-Zuordnung vorgenommen
-	        westB.setBackground(new Color(255, 243, 153));
+	        //(Team-Hintergründe werden gelb: es wurde noch keine korrekte Speaker-Zuordnung vorgenommen)
+	        int zeitzone = 0;
+	        int k = 0;
+	        while(!panel_list.get(k).getComponent(1).equals(westB)) {
+	        	k++;
+	        }
+	        if(k >= debatesPerTime * 2) zeitzone = 3;
+	        else if(k >= debatesPerTime) zeitzone = 2;
+	        else zeitzone = 1;
+	        westB.setBackground(array.get(i).getTeamPro().getColor(zeitzone));
 	        westB.setContentAreaFilled(false);
 	        westB.setOpaque(true);
-	        eastB.setBackground(new Color(255, 243, 153));
+	        eastB.setBackground(array.get(i).getTeamCon().getColor(zeitzone));
 	        eastB.setContentAreaFilled(false);
 	        eastB.setOpaque(true);
 		}
