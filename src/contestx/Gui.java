@@ -18,6 +18,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.ListCellRenderer;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Rectangle;
 
 import javax.swing.JCheckBox;
@@ -83,6 +84,7 @@ import javax.swing.ScrollPaneConstants;
 public class Gui extends JFrame {
 
 	private static final long serialVersionUID = -7824597793488283555L;
+	private static final int radius = 15;
 	//private ArrayList<Schule> schulen;
 	//private ArrayList<Team> dp.getJuniorTeams();
 	//private ArrayList<Team> dp.getSeniorTeams();
@@ -130,9 +132,11 @@ public class Gui extends JFrame {
 	private final JLabel label_10 = new JLabel("bis:");
 	
 	private int standard_width;
-	private final JButton btnFindBestTeams = new JButton("Find best teams");
-	private DefaultListModel listModel = new DefaultListModel();
+	private final RoundButton btnFindBestTeams = new RoundButton("<html><center>Find best teams</center></html>", radius);
+	private DefaultListModel listModel = new DefaultListModel(); //Hierüber wird auf die Schulen in der Liste zugegriffen
 	private final JList list = new JList(listModel);
+	private DefaultListModel model_judges = new DefaultListModel(); //Hierüber wird auf die Judges in der Liste zugegriffen
+	private final JList list_judges = new JList(model_judges);
 
 	/**
 	 * Launch the application.
@@ -213,6 +217,7 @@ public class Gui extends JFrame {
 		btnTimezone.setBackground(new Color(255, 255, 255));
 		btnTimezone.setContentAreaFilled(false);
 		btnTimezone.setOpaque(true);
+		btnTimezone.setFocusable(false);
 		btnTimezone.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		btnTimezone.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(btnTimezone);
@@ -235,6 +240,7 @@ public class Gui extends JFrame {
 		btnTimezone_1.setBackground(new Color(255, 255, 255));
 		btnTimezone_1.setContentAreaFilled(false);
 		btnTimezone_1.setOpaque(true);
+		btnTimezone_1.setFocusable(false);
 		btnTimezone_1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		btnTimezone_1.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(btnTimezone_1);
@@ -256,6 +262,7 @@ public class Gui extends JFrame {
 		btnTimezone_2.setBackground(new Color(255, 255, 255));
 		btnTimezone_2.setContentAreaFilled(false);
 		btnTimezone_2.setOpaque(true);
+		btnTimezone_2.setFocusable(false);
 		btnTimezone_2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		btnTimezone_2.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(btnTimezone_2);
@@ -273,7 +280,7 @@ public class Gui extends JFrame {
 		
 		
 		//Add-SchoolButton
-		JButton btnAddSchool = new JButton("AddSchool");
+		RoundButton btnAddSchool = new RoundButton("Add School", radius);
 		btnAddSchool.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showEnterSchoolDialog(null);
@@ -281,29 +288,19 @@ public class Gui extends JFrame {
 		});
 		
 		//Add-Judge Button
-		JButton btnAddJudge = new JButton("Add Judge");
+		RoundButton btnAddJudge = new RoundButton("Add Judge", radius);
 		btnAddJudge.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showEnterJudgeDialog();
-				int i = 0;
-			}
-		});
-		
-		//Add-Speaker Button
-		JButton btnAddSpeaker = new JButton("Add Speaker");
-		btnAddSpeaker.setEnabled(false);
-		btnAddSpeaker.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showEnterSpeakerDialog();
+				showEnterJudgeDialog(null);
 			}
 		});
 		
 				
 		btnAddSchool.setEnabled(true);
-		btnAddSchool.setBounds(216, 45, 140, 54);
+		btnAddSchool.setBounds(38, 865, 185, 54);
 		contentPane.add(btnAddSchool);
 		
-		btnAddJudge.setBounds(366, 46, 140, 52);
+		btnAddJudge.setBounds(228, 866, 185, 52);
 		contentPane.add(btnAddJudge);
 		
 		//Implementierung der 3 Panels ohne Border
@@ -432,7 +429,7 @@ public class Gui extends JFrame {
 		
 		contentPane.add(label_10);
 		
-		JButton btnBerechne = new JButton("Calculate schools");
+		RoundButton btnBerechne = new RoundButton("Calculate schools", radius);
 		btnBerechne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(dp.getSchulen().size()>5) {
@@ -488,7 +485,7 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-		btnBerechne.setBounds(671, 45, 209, 54);
+		btnBerechne.setBounds(38, 34, 185, 76);
 		contentPane.add(btnBerechne);
 		
 		JButton btnManage = new JButton("Manage");
@@ -497,13 +494,10 @@ public class Gui extends JFrame {
 				manage();
 			}
 		});
-		btnManage.setBounds(28, 32, 156, 81);
+		btnManage.setBounds(456, 900, 156, 81);
 		contentPane.add(btnManage);
-		btnAddSpeaker.setBounds(516, 47, 140, 51);
 		
-		contentPane.add(btnAddSpeaker);
-		
-		JButton btnNewButton = new JButton("Calculate judges");
+		RoundButton btnNewButton = new RoundButton("Calculate judges", radius);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(dp.judgesZuordnen2()) {
@@ -539,10 +533,10 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-		btnNewButton.setBounds(895, 45, 147, 54);
+		btnNewButton.setBounds(228, 34, 185, 76);
 		contentPane.add(btnNewButton);
 		
-		JButton btnSave = new JButton("Export");
+		RoundButton btnSave = new RoundButton("Export plan", radius);
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SWTdialog d = new SWTdialog(SWT.SAVE);
@@ -551,10 +545,10 @@ public class Gui extends JFrame {
 				if(f != null) imagescreen(f);
 			}
 		});
-		btnSave.setBounds(1057, 45, 130, 54);
+		btnSave.setBounds(1082, 34, 130, 76);
 		contentPane.add(btnSave);
 		
-		JButton btnSavePlan = new JButton("Save plan");
+		RoundButton btnSavePlan = new RoundButton("Save plan", radius);
 		btnSavePlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SWTdialog d = new SWTdialog(SWT.SAVE);
@@ -565,10 +559,10 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-		btnSavePlan.setBounds(1202, 15, 130, 39);
+		btnSavePlan.setBounds(773, 34, 130, 76);
 		contentPane.add(btnSavePlan);
 		
-		JButton btnLoadPlan = new JButton("Load plan");
+		RoundButton btnLoadPlan = new RoundButton("Load plan", radius);
 		btnLoadPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SWTdialog s = new SWTdialog(SWT.OPEN);
@@ -599,6 +593,10 @@ public class Gui extends JFrame {
 						listModel.clear();
 						for(int i = 0; i < dp.getSchulen().size(); i++) { //Schulen-Liste neu berechnen
 							if(!(dp.getSchulen().get(i).getName().equals("other"))) listModel.addElement(dp.getSchulen().get(i));
+						}
+						model_judges.clear();
+						for(int i = 0; i < dp.getJudges().size(); i++) {
+							model_judges.addElement(dp.getJudges().get(i));
 						}
 						
 						btnTimezone.setText("<html><center>" + dp.getMotion(0) + "</center></html>");
@@ -639,10 +637,10 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-		btnLoadPlan.setBounds(1202, 70, 130, 29);
+		btnLoadPlan.setBounds(908, 34, 130, 76);
 		
 		contentPane.add(btnLoadPlan);
-		btnFindBestTeams.setBounds(959, 939, 123, 39);
+		btnFindBestTeams.setBounds(598, 34, 123, 76);
 		btnFindBestTeams.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dp.bestTeams2(true);
@@ -677,7 +675,7 @@ public class Gui extends JFrame {
 		
 		contentPane.add(btnFindBestTeams);
 		
-		JButton btnNewButton_1 = new JButton("Find best speakers");
+		RoundButton btnNewButton_1 = new RoundButton("<html><center>Find best speakers</center></html>", radius);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try
@@ -708,19 +706,22 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-		btnNewButton_1.setBounds(688, 939, 123, 39);
+		btnNewButton_1.setBounds(463, 34, 130, 76);
 		contentPane.add(btnNewButton_1);
-		
-		//listScroller.setPreferredSize(new Dimension(250, 80));
-		//listScroller.setViewportView(list);
 		
 		list.setBounds(38, 139, 375, 721);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list_judges.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
+		list_judges.setLayoutOrientation(JList.VERTICAL);
 		list.setFixedCellHeight(50);
+		list_judges.setFixedCellHeight(50);
 		list.setVisibleRowCount(6);
+		list_judges.setVisibleRowCount(6);
 		list.setBackground(new Color(248, 248, 248));
+		list_judges.setBackground(new Color(248, 248, 248));
 		list.setCellRenderer(new Renderer());
+		list_judges.setCellRenderer(new Renderer());
 		SchoolMenu schoolmenu = new SchoolMenu();
 		
 		MouseListener mouseListener = new MouseListener() {
@@ -729,6 +730,10 @@ public class Gui extends JFrame {
 					list.setSelectedIndex(list.locationToIndex(e.getPoint()));
 					schoolmenu.show(list, e.getX(), e.getY());
 				}
+				else if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) { //left double click
+					Schule schule = (Schule) listModel.get(list.getSelectedIndex());
+					showEnterSchoolDialog(schule);
+				}
 			}
 			public void mouseEntered(MouseEvent e) { }
 			public void mousePressed(MouseEvent e) { }
@@ -736,13 +741,29 @@ public class Gui extends JFrame {
 			public void mouseExited(MouseEvent e) { }
 		};
 		list.addMouseListener(mouseListener);
-		contentPane.add(list);
+		//contentPane.add(list);
 		
-		JScrollPane scrollPane = new JScrollPane(list);
-		scrollPane.setBounds(38, 139, 375, 722);
+		MouseListener judgeListener = new MouseListener() {
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) { //left double click
+					list_judges.setSelectedIndex(list_judges.locationToIndex(e.getPoint()));
+					Judge judge = (Judge) model_judges.get(list_judges.getSelectedIndex());
+					showEnterJudgeDialog(judge);
+				}
+			}
+			public void mouseEntered(MouseEvent e) { }
+			public void mousePressed(MouseEvent e) { }
+			public void mouseReleased(MouseEvent e) { }
+			public void mouseExited(MouseEvent e) { }
+		};
+		list_judges.addMouseListener(judgeListener);
+		contentPane.add(list_judges);
+		
+		JScrollPane scrollPane = new JScrollPane(list_judges);
+		scrollPane.setBounds(38, 191, 375, 670);
 		contentPane.add(scrollPane);
 		
-		JButton btnExportScores = new JButton("<html><center>Export Scores</center></html>");
+		RoundButton btnExportScores = new RoundButton("<html><center>Export Scores</center></html>", radius);
 		btnExportScores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SWTdialog s = new SWTdialog(SWT.OPEN);
@@ -754,10 +775,13 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-		btnExportScores.setBounds(1217, 912, 115, 76);
+		btnExportScores.setBounds(1217, 34, 115, 76);
 		contentPane.add(btnExportScores);
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			if(!(dp.getSchulen().get(i).getName() == "other")) listModel.addElement(dp.getSchulen().get(i));
+		}
+		for(int i = 0; i < dp.getJudges().size(); i++) {
+			model_judges.addElement(dp.getJudges().get(i));
 		}
 		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
@@ -826,6 +850,7 @@ public class Gui extends JFrame {
 			BorderLayout layout = new BorderLayout(1, 1);
 			panel_list.get(i).setLayout(layout); //BorderLayout wird festgelegt
 			JButton northB = new JButton("Room Nr. " + array.get(i).getRaum());
+			northB.setFocusable(false);
 			panel_list.get(i).add(northB, BorderLayout.NORTH);
 			layout.getLayoutComponent(BorderLayout.NORTH).setPreferredSize(new Dimension(width, 22)); 
 			northB.addActionListener(new ActionListener() {
@@ -844,6 +869,7 @@ public class Gui extends JFrame {
 			
 			JButton westB = new JButton("<html><b>Pro</b><br/>" + array.get(i).getTeamPro().getSchule().getName().replaceAll("-", "- ") + "</html>"); //aus "array" wird der Name des Pro-Teams ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
+			westB.setFocusable(false);
 			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
 			while(dp.getPanelWidth(array.get(i).getTeamPro().getSchule().getName(), westB.getFontMetrics(individualF)) == 250) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
@@ -895,6 +921,7 @@ public class Gui extends JFrame {
 			});
 			JButton eastB = new JButton("<html><b>Con</b><br/>" + array.get(i).getTeamCon().getSchule().getName().replaceAll("-", "- ") + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
+			eastB.setFocusable(false);
 			individualF = new Font("Tahoma", Font.PLAIN, 16);
 			while(dp.getPanelWidth(array.get(i).getTeamCon().getSchule().getName(), westB.getFontMetrics(individualF)) == 250) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
@@ -950,6 +977,7 @@ public class Gui extends JFrame {
 				else text = array.get(i).getJudge(j).getName();
 			}
 			JButton southB = new JButton(text);
+			southB.setFocusable(false);
 			panel_list.get(i).add(southB, BorderLayout.SOUTH);
 	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, 22));
 	        
@@ -1083,31 +1111,51 @@ public class Gui extends JFrame {
 	
 
 	
-	public void showEnterJudgeDialog() {
-		JCheckBox[] chckbx = {new JCheckBox("is experienced")};
+	public void showEnterJudgeDialog(Judge judge) {
+		JCheckBox[] chckbx = {new JCheckBox("is experienced"), new JCheckBox("can judge at timezone 1"), new JCheckBox("can judge at timezone 3"), new JCheckBox("can judge at timezone 3")};
 		chckbx[0].setSelected(true);
+		chckbx[1].setSelected(true);
+		chckbx[2].setSelected(true);
+		chckbx[3].setSelected(true);
 		JComboBox combo = new JComboBox();
 
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			combo.addItem(dp.getSchulen().get(i).getName());
 		}
 		Object[] options = {"Select judge's school:", combo, chckbx, "Enter judge's name:"};
-		String s = (String)JOptionPane.showInputDialog(subFrame, options);
-		boolean judgeAlreadyExisting = false;
-		for(int i = 0; i < dp.getJudges().size(); i++) { //prüft ob Judge(-name) schon existiert
-			if(dp.getJudgeAt(i).getName().equals(s)) judgeAlreadyExisting = true;
+		if(judge != null) {
+			chckbx[0].setSelected(judge.getErfahren());
+			chckbx[1].setSelected(judge.getKannZuZZ1());
+			chckbx[2].setSelected(judge.getKannZuZZ2());
+			chckbx[3].setSelected(judge.getKannZuZZ3());
+			combo.setSelectedIndex(dp.getSchulen().indexOf(judge.getSchule()));
+		}
+		String s;
+		if(judge == null) s = (String)JOptionPane.showInputDialog(subFrame, options);
+		else s = (String)JOptionPane.showInputDialog(subFrame, options, judge.getName());
+		boolean nameAlreadyExisting = false;
+		for(int i = 0; i < dp.getJudges().size() && judge == null; i++) { //prüft ob Judgename schon existiert
+			if(dp.getJudgeAt(i).getName().equals(s)) nameAlreadyExisting = true;
 		}
 		
 		int index = combo.getSelectedIndex();
 		if(s!= null) { //wenn nicht auf CLOSE geklickt wurde
-			if(!s.contains(",") && !judgeAlreadyExisting) {
+			if(!s.contains(",") && !nameAlreadyExisting) {
 				if(s.length() > 0) {
-					if(chckbx[0].isSelected()) {
-						dp.addJudge(new Judge(s, dp.getSchulen().get(index), true)); //erfahrener Judge wird hinzugefügt
+					Judge judge_to_add;
+					if(judge != null) {
+						judge_to_add = judge;
+						judge_to_add.setSchule(dp.getSchulen().get(index));
 					}
 					else {
-						dp.addJudge(new Judge(s, dp.getSchulen().get(index), false)); //unerfahrener Judge wird hinzugefügt
-					}			
+						judge_to_add = new Judge(s, dp.getSchulen().get(index), true);
+						model_judges.addElement(judge_to_add);
+					}
+					judge_to_add.setErfahren(chckbx[0].isSelected());
+					judge_to_add.setKannZuZZ1(chckbx[1].isSelected());
+					judge_to_add.setKannZuZZ2(chckbx[2].isSelected());
+					judge_to_add.setKannZuZZ3(chckbx[3].isSelected());
+					if(judge == null) dp.addJudge(judge_to_add); //Judge wird zur Judge-Liste hinzugefügt
 				}
 				try{ 
 					if(s.length() == 0) { //try-catch, da code Exception erzeugt, die aber nicht weiter relevant ist
@@ -1118,28 +1166,12 @@ public class Gui extends JFrame {
 					
 				}
 			}
-			else if(judgeAlreadyExisting) {
+			else if(nameAlreadyExisting) {
 				JOptionPane.showMessageDialog(subFrame, "Judge already exists.", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
 			else if(s.contains(",")) {
 				JOptionPane.showMessageDialog(subFrame, "Judge names can't contain a comma", "Error Message", JOptionPane.ERROR_MESSAGE);
 			}
-		}
-	}
-	
-	public void showEnterSpeakerDialog() {
-		Object[] options = {"Enter speaker name:"};
-		String s = (String)JOptionPane.showInputDialog(subFrame, options);
-		if(s != null && s.length() > 0) {
-			dp.getSpeaker().add(new Speaker(s));
-		}
-		try{ 
-			if(s.length() == 0) { //try/catch, da code Exception erzeugt, die aber nicht weiter relevant ist
-				JOptionPane.showMessageDialog(subFrame, "No speaker name entered.", "Error Message", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-		catch(NullPointerException e) {
-			
 		}
 	}
 	
@@ -1657,6 +1689,18 @@ public class Gui extends JFrame {
 						setForeground(list.getForeground());
 					}
 				}
+				else if(e.getMessage().contains("Judge")) {
+					Judge judge = (Judge) value;
+					setText(judge.getName());
+					if(isSelected) {
+						setBackground(new Color(140, 184, 255));
+						setForeground(list.getSelectionForeground());
+					}
+					else {
+						setBackground(color);
+						setForeground(list.getForeground());
+					}
+				}
 			}
 			setContentAreaFilled(false);
 			setOpaque(true);
@@ -1726,6 +1770,33 @@ public class Gui extends JFrame {
 			for(int i = 0; i < items.length; i++) {
 				add(items[i]);
 			}
+		}
+	}
+	
+	public class RoundButton extends JButton {
+		int radius;
+		public RoundButton(String label, int radius) {
+			super(label);
+			setContentAreaFilled(false);
+			setBackground(new Color(230, 230, 230));
+			setFocusable(false);
+			this.radius = radius;
+		}
+		protected void paintComponent(Graphics g) {
+			if(getModel().isArmed()) {
+				g.setColor(new Color(240, 240, 240));
+			}
+			else if(getModel().isRollover()) {
+				g.setColor(new Color(153, 180, 209));
+			}
+			else {
+				g.setColor(getBackground());
+			}
+			g.fillRoundRect(0, 0, getWidth(), getHeight(), this.radius, this.radius);
+			super.paintComponent(g);
+		}
+		protected void paintBorder(Graphics g) {
+			g.drawRoundRect(0, 0, getWidth(), getHeight(), this.radius, this.radius);
 		}
 	}
 }
