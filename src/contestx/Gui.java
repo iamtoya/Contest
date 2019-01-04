@@ -1215,7 +1215,7 @@ public class Gui extends JFrame {
 						givenPoints[i] = Integer.parseInt(points[i].getText());
 					}
 					catch(NumberFormatException ex) {
-						everytingCorrect false;
+						everythingCorrect = false;
 						givenPoints[i] = 0;
 					}
 				}
