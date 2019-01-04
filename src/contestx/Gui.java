@@ -130,14 +130,7 @@ public class Gui extends JFrame {
 	private final JLabel label_10 = new JLabel("bis:");
 	
 	private int standard_width;
-	
-	private final JButton btnFirstPlace = new JButton("first place");
-	private final JButton btnSecondPlace = new JButton("second place");
-	private final JButton btnNewButton_2 = new JButton("third place");
 	private final JButton btnFindBestTeams = new JButton("Find best teams");
-	private final JButton button_1 = new JButton("first place");
-	private final JButton button_2 = new JButton("second place");
-	private final JButton button_3 = new JButton("third place");
 	private DefaultListModel listModel = new DefaultListModel();
 	private final JList list = new JList(listModel);
 
@@ -649,18 +642,6 @@ public class Gui extends JFrame {
 		btnLoadPlan.setBounds(1202, 70, 130, 29);
 		
 		contentPane.add(btnLoadPlan);
-		
-
-		
-		btnFirstPlace.setBounds(821, 912, 110, 23);
-		
-		contentPane.add(btnFirstPlace);
-		btnSecondPlace.setBounds(821, 939, 110, 23);
-		
-		contentPane.add(btnSecondPlace);
-		btnNewButton_2.setBounds(821, 965, 110, 23);
-		
-		contentPane.add(btnNewButton_2);
 		btnFindBestTeams.setBounds(959, 939, 123, 39);
 		btnFindBestTeams.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -669,6 +650,7 @@ public class Gui extends JFrame {
 				
 				Team[] winnerTeams = dp.getBestTeams(true);
 				JTextArea textField = new JTextArea();
+				textField.setEditable(false);
 				try {
 					textField.append("First junior-team with " + winnerTeams[0].getWinAmount() + " wins and " + winnerTeams[0].getHoechstPunkte() + " maximum points:\n");
 					textField.append("\t" + winnerTeams[0].getSchule().getName() + "\n");
@@ -694,15 +676,6 @@ public class Gui extends JFrame {
 		});
 		
 		contentPane.add(btnFindBestTeams);
-		button_1.setBounds(1092, 912, 110, 23);
-		
-		contentPane.add(button_1);
-		button_2.setBounds(1092, 939, 110, 23);
-		
-		contentPane.add(button_2);
-		button_3.setBounds(1092, 965, 110, 23);
-		
-		contentPane.add(button_3);
 		
 		JButton btnNewButton_1 = new JButton("Find best speakers");
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -710,9 +683,8 @@ public class Gui extends JFrame {
 				try
 				{
 					dp.bestSpeaker2();
-					btnFirstPlace.setText(dp.getErsterSpeaker().get(0).getName());
-					//oder:
 					JTextArea textField = new JTextArea();
+					textField.setEditable(false);
 					textField.append("Speaker with highest score (" + dp.getErsterSpeaker().get(0).getHoechstePunkte() + "):\n");
 					for(int i = 0; i < dp.getErsterSpeaker().size(); i++) {
 						textField.append("\t" + dp.getErsterSpeaker().get(i).getName() + "\n");
