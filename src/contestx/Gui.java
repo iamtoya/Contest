@@ -777,6 +777,18 @@ public class Gui extends JFrame {
 		});
 		btnExportScores.setBounds(1217, 34, 115, 76);
 		contentPane.add(btnExportScores);
+		
+		JRadioButton rdbtnSchools = new JRadioButton("Schools");
+		rdbtnSchools.setBackground(UIManager.getColor("FormattedTextField.selectionForeground"));
+		rdbtnSchools.setFocusable(false);
+		rdbtnSchools.setBounds(68, 139, 100, 29);
+		contentPane.add(rdbtnSchools);
+		
+		JRadioButton rdbtnJudges = new JRadioButton("Judges");
+		rdbtnJudges.setBackground(UIManager.getColor("FormattedTextField.selectionForeground"));
+		rdbtnJudges.setFocusable(false);
+		rdbtnJudges.setBounds(260, 139, 100, 29);
+		contentPane.add(rdbtnJudges);
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			if(!(dp.getSchulen().get(i).getName() == "other")) listModel.addElement(dp.getSchulen().get(i));
 		}
