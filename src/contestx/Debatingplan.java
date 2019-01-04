@@ -124,7 +124,7 @@ public class Debatingplan implements Serializable{
 		judges.add(new Judge("18", schulen.get(0), false));
 		judges.add(new Judge("19", schulen.get(0), false));*/
 		for(int i = 0; i < 24; i++) {
-			judges.add(new Judge("" + i, schulen.get(i % schulen.size()), (i % 2 == 0)));
+			judges.add(new Judge("Frau Kaltenbacher " + i, schulen.get(i % schulen.size()), (i % 2 == 0)));
 		}
 
 		
@@ -1494,8 +1494,13 @@ public class Debatingplan implements Serializable{
 		}
 		else strings.add(s);
 		for(int i = 0; i < strings.size(); i++) {
-			if(rs < fm.stringWidth(strings.get(i))*2 + 50) {
-				rs = fm.stringWidth(strings.get(i))*2 + 50;
+			if(strings.size() <= 2) {
+				if(rs < fm.stringWidth(strings.get(i))*2 + 50) {
+					rs = fm.stringWidth(strings.get(i))*2 + 50;
+				}
+			}
+			else { //es gibt mehr als 1 Trennzeichen
+				
 			}
 		}
 		if(rs < 150) rs = 150; //Mindestgröße

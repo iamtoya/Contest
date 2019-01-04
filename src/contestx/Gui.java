@@ -202,7 +202,7 @@ public class Gui extends JFrame {
 	//	debates.get(0).add(new JButton("Hi"), BorderLayout.SOUTH);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1389, 1060);
+		setBounds(100, 100, 1389, 1080);
 		standard_width = this.getWidth();
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -213,7 +213,7 @@ public class Gui extends JFrame {
 		
 		//Timezone 1-Button impl.
 		btnTimezone.setEnabled(true);
-		btnTimezone.setBounds(446, 139, 137, 99);
+		btnTimezone.setBounds(446, 139, 137, 132);
 		btnTimezone.setBackground(new Color(255, 255, 255));
 		btnTimezone.setContentAreaFilled(false);
 		btnTimezone.setOpaque(true);
@@ -236,7 +236,7 @@ public class Gui extends JFrame {
 		
 		//Timezone 2-Button impl.
 		btnTimezone_1.setEnabled(true);
-		btnTimezone_1.setBounds(446, 392, 137, 100);
+		btnTimezone_1.setBounds(446, 436, 137, 132);
 		btnTimezone_1.setBackground(new Color(255, 255, 255));
 		btnTimezone_1.setContentAreaFilled(false);
 		btnTimezone_1.setOpaque(true);
@@ -258,7 +258,7 @@ public class Gui extends JFrame {
 		
 		//Timezone 3-Button impl.
 		btnTimezone_2.setEnabled(true);
-		btnTimezone_2.setBounds(446, 645, 137, 100);
+		btnTimezone_2.setBounds(446, 733, 137, 132);
 		btnTimezone_2.setBackground(new Color(255, 255, 255));
 		btnTimezone_2.setContentAreaFilled(false);
 		btnTimezone_2.setOpaque(true);
@@ -305,127 +305,127 @@ public class Gui extends JFrame {
 		
 		//Implementierung der 3 Panels ohne Border
 		panel_2.setBorder(null);
-		panel_2.setBounds(598, 645, 734, 100);
+		panel_2.setBounds(598, 733, 734, 132);
 		panel_2.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_2);
 		
 		
 		panel_1.setBorder(null);
-		panel_1.setBounds(598, 392, 734, 100);
+		panel_1.setBounds(598, 436, 734, 132);
 		panel_1.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_1);
 		
 		
 		panel.setBorder(null);
-		panel.setBounds(598, 139, 734, 100);
+		panel.setBounds(598, 139, 734, 132);
 		panel.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel);
 		
 		panel_3.setBorder(null);
-		panel_3.setBounds(598, 255, 734, 100);
+		panel_3.setBounds(598, 277, 734, 132);
 		panel_3.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_3);
 		
 		panel_4.setBorder(null);
-		panel_4.setBounds(598, 508, 734, 100);
+		panel_4.setBounds(598, 574, 734, 132);
 		panel_4.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_4);
 		
 		panel_5.setBorder(null);
-		panel_5.setBounds(598, 761, 734, 100);
+		panel_5.setBounds(598, 871, 734, 132);
 		panel_5.setBackground(new Color(255, 255, 255));
 		contentPane.add(panel_5);
 		
 		txtVon = new JTextField();
-		txtVon.setBounds(492, 254, 36, 20);
+		txtVon.setBounds(497, 277, 36, 20);
 		contentPane.add(txtVon);
 		txtVon.setColumns(10);
 		
 		JLabel lblVon = new JLabel("von:");
-		lblVon.setBounds(456, 254, 46, 14);
+		lblVon.setBounds(461, 277, 46, 14);
 		contentPane.add(lblVon);
 		
 		JLabel lblBis = new JLabel("bis:");
-		lblBis.setBounds(460, 282, 46, 14);
+		lblBis.setBounds(465, 305, 46, 14);
 		contentPane.add(lblBis);
 		
 		textField = new JTextField();
 		textField.setColumns(10);
-		textField.setBounds(492, 282, 36, 20);
+		textField.setBounds(497, 305, 36, 20);
 		contentPane.add(textField);
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
-		textField_2.setBounds(539, 282, 36, 20);
+		textField_2.setBounds(544, 305, 36, 20);
 		contentPane.add(textField_2);
 		
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
-		textField_3.setBounds(539, 254, 36, 20);
+		textField_3.setBounds(544, 277, 36, 20);
 		contentPane.add(textField_3);
-		label.setBounds(548, 257, -13, 14);
+		label.setBounds(553, 280, -13, 14);
 		
 		contentPane.add(label);
-		label_1.setBounds(532, 257, 46, 14);
+		label_1.setBounds(537, 280, 46, 14);
 		
 		contentPane.add(label_1);
-		label_2.setBounds(532, 285, 46, 14);
+		label_2.setBounds(537, 308, 46, 14);
 		
 		contentPane.add(label_2);
 		textField_4.setColumns(10);
-		textField_4.setBounds(544, 536, 36, 20);
+		textField_4.setBounds(544, 602, 36, 20);
 		
 		contentPane.add(textField_4);
-		label_3.setBounds(537, 539, 46, 14);
+		label_3.setBounds(537, 605, 46, 14);
 		
 		contentPane.add(label_3);
 		textField_5.setColumns(10);
-		textField_5.setBounds(497, 536, 36, 20);
+		textField_5.setBounds(497, 602, 36, 20);
 		
 		contentPane.add(textField_5);
 		textField_6.setColumns(10);
-		textField_6.setBounds(497, 508, 36, 20);
+		textField_6.setBounds(497, 574, 36, 20);
 		
 		contentPane.add(textField_6);
 		textField_7.setColumns(10);
-		textField_7.setBounds(544, 508, 36, 20);
+		textField_7.setBounds(544, 574, 36, 20);
 		
 		contentPane.add(textField_7);
-		label_4.setBounds(537, 511, 46, 14);
+		label_4.setBounds(537, 577, 46, 14);
 		
 		contentPane.add(label_4);
-		label_5.setBounds(461, 508, 46, 14);
+		label_5.setBounds(461, 574, 46, 14);
 		
 		contentPane.add(label_5);
-		label_6.setBounds(465, 536, 46, 14);
+		label_6.setBounds(465, 602, 46, 14);
 		
 		contentPane.add(label_6);
 		textField_8.setColumns(10);
-		textField_8.setBounds(544, 789, 36, 20);
+		textField_8.setBounds(544, 899, 36, 20);
 		
 		contentPane.add(textField_8);
-		label_7.setBounds(537, 792, 46, 14);
+		label_7.setBounds(537, 902, 46, 14);
 		
 		contentPane.add(label_7);
 		textField_9.setColumns(10);
-		textField_9.setBounds(497, 789, 36, 20);
+		textField_9.setBounds(497, 899, 36, 20);
 		
 		contentPane.add(textField_9);
 		textField_10.setColumns(10);
-		textField_10.setBounds(497, 761, 36, 20);
+		textField_10.setBounds(497, 871, 36, 20);
 		
 		contentPane.add(textField_10);
 		textField_11.setColumns(10);
-		textField_11.setBounds(544, 761, 36, 20);
+		textField_11.setBounds(544, 871, 36, 20);
 		
 		contentPane.add(textField_11);
-		label_8.setBounds(537, 764, 46, 14);
+		label_8.setBounds(537, 874, 46, 14);
 		
 		contentPane.add(label_8);
-		label_9.setBounds(461, 761, 46, 14);
+		label_9.setBounds(461, 871, 46, 14);
 		
 		contentPane.add(label_9);
-		label_10.setBounds(465, 789, 46, 14);
+		label_10.setBounds(465, 899, 46, 14);
 		
 		contentPane.add(label_10);
 		
@@ -494,7 +494,7 @@ public class Gui extends JFrame {
 				manage();
 			}
 		});
-		btnManage.setBounds(456, 900, 156, 81);
+		btnManage.setBounds(427, 943, 156, 81);
 		contentPane.add(btnManage);
 		
 		RoundButton btnNewButton = new RoundButton("Calculate judges", radius);
@@ -516,14 +516,19 @@ public class Gui extends JFrame {
 						JButton b3 = (JButton) debates.get(i + (2*dpt)).getComponent(3);
 						for(int j = 0; j < 3; j++) {
 							if(j == 0) {
-								b1.setText(b1.getText() + cjudges1[i][j].getName());
-								b2.setText(b2.getText() + cjudges2[i][j].getName());
-								b3.setText(b3.getText() + cjudges3[i][j].getName());
+								b1.setText(cjudges1[i][j].getName());
+								b2.setText(cjudges2[i][j].getName());
+								b3.setText(cjudges3[i][j].getName());
 							}
 							else {
 								b1.setText(b1.getText() + ", " + cjudges1[i][j].getName());
 								b2.setText(b2.getText() + ", " + cjudges2[i][j].getName());
 								b3.setText(b3.getText() + ", " + cjudges3[i][j].getName());
+							}
+							if(j == 2) { //html hinzufügen
+								b1.setText("<html>" + b1.getText() + "</html>");
+								b2.setText("<html>" + b2.getText() + "</html>");
+								b3.setText("<html>" + b3.getText() + "</html>");
 							}
 						}
 					}
@@ -852,7 +857,7 @@ public class Gui extends JFrame {
 		System.out.println(width);
 		//Länge der Panels, in denen die Debates angezeigt werden sollen, wird festgelegt
 		for(int i = 0; i < panels.length; i++) {
-			panels[i].setBounds(panels[i].getX(), panels[i].getY(), debatesPerTime*width, 110);
+			panels[i].setBounds(panels[i].getX(), panels[i].getY(), debatesPerTime*width, 132);
 		}
 		cutPanels(debatesPerTime, panels); //Panels werden in Subpanels zerschnitten
 		ArrayList<JPanel> panel_list = new ArrayList<JPanel>();
@@ -861,25 +866,27 @@ public class Gui extends JFrame {
 			panel_list.get(i).setBorder(new LineBorder(new Color(0, 0, 0))); //Grenzen werden gezeichnet
 			BorderLayout layout = new BorderLayout(1, 1);
 			panel_list.get(i).setLayout(layout); //BorderLayout wird festgelegt
-			JButton northB = new JButton("Room Nr. " + array.get(i).getRaum());
+			JButton northB;
+			if(array.get(i).getRaum() != "?") northB = new JButton("Room:" + array.get(i).getRaum());
+			else northB = new JButton("Add Room");
 			northB.setFocusable(false);
 			panel_list.get(i).add(northB, BorderLayout.NORTH);
 			layout.getLayoutComponent(BorderLayout.NORTH).setPreferredSize(new Dimension(width, 22)); 
 			northB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					String s=JOptionPane.showInputDialog("Room Nr."); //wenn der Button gedrückt wird, öffnet sich ein weiteres FEnster in welches man die Raumnummer eingeben kann
-					if(s=="")
+					String s=JOptionPane.showInputDialog("Enter Room:"); //wenn der Button gedrückt wird, öffnet sich ein weiteres Fenster in welches man die Raumnummer eingeben kann
+					if(s != null && s.length() == 0)
 					{
 						JOptionPane.showMessageDialog(subFrame, "No room entered", "Error Message", JOptionPane.ERROR_MESSAGE);
 					}
-					else
+					else if(s != null && s.length() != 0)
 					{
-						northB.setText("Room Nr. " + s);				
+						northB.setText("Room: " + s);				
 					}
 				}
 			});
 			
-			JButton westB = new JButton("<html><b>Pro</b><br/>" + array.get(i).getTeamPro().getSchule().getName().replaceAll("-", "- ") + "</html>"); //aus "array" wird der Name des Pro-Teams ausgelesen 
+			JButton westB = new JButton("<html><b>Pro</b><br>" + array.get(i).getTeamPro().getSchule().getName().replaceAll("-", "- ") + "</html>"); //aus "array" wird der Name des Pro-Teams ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			westB.setFocusable(false);
 			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
@@ -931,7 +938,7 @@ public class Gui extends JFrame {
 					}
 				}
 			});
-			JButton eastB = new JButton("<html><b>Con</b><br/>" + array.get(i).getTeamCon().getSchule().getName().replaceAll("-", "- ") + "</html>");
+			JButton eastB = new JButton("<html><b>Con</b><br>" + array.get(i).getTeamCon().getSchule().getName().replaceAll("-", "- ") + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			eastB.setFocusable(false);
 			individualF = new Font("Tahoma", Font.PLAIN, 16);
@@ -988,10 +995,10 @@ public class Gui extends JFrame {
 				if(text != "") text = text + ", " + array.get(i).getJudge(j).getName();
 				else text = array.get(i).getJudge(j).getName();
 			}
-			JButton southB = new JButton(text);
+			JButton southB = new JButton("<html>" + text + "</html>");
 			southB.setFocusable(false);
 			panel_list.get(i).add(southB, BorderLayout.SOUTH);
-	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, 22));
+	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, 44));
 	        
 	        //Subpanels werden entsprechend Junior/Senior eingefärbt
 	        if(array.get(i).getTeamPro().getIsJunior()) { //falls es sich um ein Junior-Debate handelt
@@ -1163,6 +1170,7 @@ public class Gui extends JFrame {
 						judge_to_add = new Judge(s, dp.getSchulen().get(index), true);
 						model_judges.addElement(judge_to_add);
 					}
+					judge_to_add.setName(s);
 					judge_to_add.setErfahren(chckbx[0].isSelected());
 					judge_to_add.setKannZuZZ1(chckbx[1].isSelected());
 					judge_to_add.setKannZuZZ2(chckbx[2].isSelected());
