@@ -1211,17 +1211,11 @@ public class Gui extends JFrame {
 				//Punkte eintragen getrennt, da NumberFormatException zum Abbruch zwingen kann
 				for(int i = 0; i < 4; i++) {
 					//Punkte-Reihe
-					if(points[i].getText().length() != 0) {
+					try {
 						givenPoints[i] = Integer.parseInt(points[i].getText());
 					}
-					else {
-						try {
-							givenPoints[i] = Integer.parseInt(points[i].getText());
-						}
-						catch(NumberFormatException ex) {
-							givenPoints[i] = 0;
-						}
-						everythingCorrect = false;
+					catch(NumberFormatException ex) {
+						givenPoints[i] = 0;
 					}
 				}
 				subFrame.dispose(); //resettet subFrame und schließt ihn
