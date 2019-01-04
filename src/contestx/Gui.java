@@ -439,7 +439,7 @@ public class Gui extends JFrame {
 		
 		contentPane.add(label_10);
 		
-		JButton btnBerechne = new JButton("Calculate with insert data");
+		JButton btnBerechne = new JButton("Calculate schools");
 		btnBerechne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(dp.getSchulen().size()>5) {
