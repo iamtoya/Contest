@@ -1477,22 +1477,7 @@ public class Debatingplan implements Serializable{
 	}
 	public int getPanelWidth(String s, FontMetrics fm) {
 		int rs = 0;
-		Pattern pattern1 = Pattern.compile("\\s");
-		Matcher matcher1 = pattern1.matcher(s);
-		Pattern pattern2 = Pattern.compile("-");
-		Matcher matcher2 = pattern2.matcher(s);
-		List<String> strings = new ArrayList<String>();
-		if(matcher1.find()) {
-			strings = Arrays.asList(s.split("\\s"));
-			if(matcher2.find()) {
-				strings = getAllSplits("-", strings);
-			}
-		}
-		else if(matcher2.find()) {
-			strings = Arrays.asList(s.split("-"));
-			if(matcher1.find()) strings = getAllSplits("\\s", strings);
-		}
-		else strings.add(s);
+		List<String> strings = splitString(s);
 		for(int i = 0; i < strings.size(); i++) {
 			if(strings.size() <= 2) {
 				if(rs < fm.stringWidth(strings.get(i))*2 + 50) {
@@ -1517,6 +1502,58 @@ public class Debatingplan implements Serializable{
 			temp.addAll(Arrays.asList(s.get(j).split(regex)));
 		}
 		return temp;
+	}
+	
+	public List<String> splitString(String s) {
+		Pattern pattern1 = Pattern.compile("\\s");
+		Matcher matcher1 = pattern1.matcher(s);
+		Pattern pattern2 = Pattern.compile("-");
+		Matcher matcher2 = pattern2.matcher(s);
+		List<String> strings = new ArrayList<String>();
+		if(matcher1.find()) {
+			strings = Arrays.asList(s.split("\\s"));
+			if(matcher2.find()) {
+				strings = getAllSplits("-", strings);
+			}
+		}
+		else if(matcher2.find()) {
+			strings = Arrays.asList(s.split("-"));
+			if(matcher1.find()) strings = getAllSplits("\\s", strings);
+		}
+		else strings.add(s);
+		return strings;
+	}
+	
+	public String getRecommendedTwoLineString(List<String> strings, FontMetrics fm) {
+		String rs = "";
+		String s1 = "";
+		String s2 = "";
+		int minimalDifference = 0;
+		int indexOfminDif = 0;
+		for(int i = 0; i < strings.size() - 1; i++) {
+			for(int j = 0; j <= i; j++) {
+				s1 += strings.get(j);
+			}
+			for(int j = i + 1; j < strings.size(); j++) {
+				s2 += strings.get(j);
+			}
+			int difference = Math.abs(fm.stringWidth(s1) - fm.stringWidth(s2));
+			if(difference < minimalDifference) {
+				minimalDifference = difference;
+				indexOfminDif = i;
+			}
+			s1 = "";
+			s2 = "";
+		}
+		for(int j = 0; j <= indexOfminDif; j++) {
+			s1 += strings.get(j);
+		}
+		for(int j = indexOfminDif + 1; j < strings.size(); j++) {
+			s2 += strings.get(j);
+		}
+		s1.replaceAll(" ", ""); //TODO muss noch geändert werden
+		s2.replaceAll(" ", "");
+		return s1 + " " + s2;
 	}
 	
 	public Judge[][] getCalculatedJudges(int zeitzone) {

@@ -44,6 +44,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 import java.awt.event.ActionEvent;
@@ -885,8 +886,11 @@ public class Gui extends JFrame {
 					}
 				}
 			});
+			List<String> westBStrings = dp.splitString(array.get(i).getTeamPro().getSchule().getName());
+			String westBtext = dp.getRecommendedTwoLineString(westBStrings, m);
 			
-			JButton westB = new JButton("<html><b>Pro</b><br>" + array.get(i).getTeamPro().getSchule().getName().replaceAll("-", "- ") + "</html>"); //aus "array" wird der Name des Pro-Teams ausgelesen 
+			
+			JButton westB = new JButton("<html><b>Pro</b><br>" + westBtext + "</html>"); //aus "array" wird der Name des Pro-Teams ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			westB.setFocusable(false);
 			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
