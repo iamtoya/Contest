@@ -347,11 +347,11 @@ public class Gui extends JFrame {
 		txtVon.setColumns(10);
 		
 		JLabel lblVon = new JLabel("von:");
-		lblVon.setBounds(461, 277, 46, 14);
+		lblVon.setBounds(461, 280, 46, 14);
 		contentPane.add(lblVon);
 		
 		JLabel lblBis = new JLabel("bis:");
-		lblBis.setBounds(465, 305, 46, 14);
+		lblBis.setBounds(465, 308, 46, 14);
 		contentPane.add(lblBis);
 		
 		textField = new JTextField();
@@ -399,10 +399,10 @@ public class Gui extends JFrame {
 		label_4.setBounds(537, 577, 46, 14);
 		
 		contentPane.add(label_4);
-		label_5.setBounds(461, 574, 46, 14);
+		label_5.setBounds(461, 577, 46, 14);
 		
 		contentPane.add(label_5);
-		label_6.setBounds(465, 602, 46, 14);
+		label_6.setBounds(465, 605, 46, 14);
 		
 		contentPane.add(label_6);
 		textField_8.setColumns(10);
@@ -427,10 +427,10 @@ public class Gui extends JFrame {
 		label_8.setBounds(537, 874, 46, 14);
 		
 		contentPane.add(label_8);
-		label_9.setBounds(461, 871, 46, 14);
+		label_9.setBounds(461, 874, 46, 14);
 		
 		contentPane.add(label_9);
-		label_10.setBounds(465, 899, 46, 14);
+		label_10.setBounds(465, 902, 46, 14);
 		
 		contentPane.add(label_10);
 		
@@ -855,8 +855,9 @@ public class Gui extends JFrame {
 		SCALE_CONSTANT = width/this.getWidth() - 0.1;
 		scale(SCALE_CONSTANT);
 		//this.setExtendedState(MAXIMIZED_BOTH); //Vollbild
+		standard_width = 1600;
 		this.setBounds(getX(), Math.toIntExact(Math.round(SCALE_CONSTANT * 10)), getWidth(), getHeight());
-		standard_width = this.getWidth();
+		
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
 	
@@ -1713,7 +1714,9 @@ public class Gui extends JFrame {
 			java.awt.Component c = this.getContentPane().getComponent(i);
 			System.out.println(c.getClass());
 			if(c.getClass().equals(javax.swing.JPanel.class) ||
-					c.getClass().equals(javax.swing.JButton.class)) {
+					c.getClass().equals(javax.swing.JButton.class) ||
+					c.getClass().equals(javax.swing.JTextField.class) ||
+					c.getClass().equals(javax.swing.JLabel.class)) {
 				System.out.println(c.getClass());
 				Rectangle bounds = c.getBounds();
 				System.out.println(bounds);
@@ -1739,8 +1742,9 @@ public class Gui extends JFrame {
 				}
 			}
 		}
-		this.setBounds(this.getX(), this.getY(), Math.toIntExact(Math.round(this.getWidth() * scale)), Math.toIntExact(Math.round(this.getHeight() * scale)));
-		standard_width = this.getWidth();
+		int width = Math.toIntExact(Math.round(this.getWidth() * scale));
+		if(standard_width > width) width = standard_width; 
+		this.setBounds(this.getX(), this.getY(), width, Math.toIntExact(Math.round(this.getHeight() * scale)));
 	}
 	
 	public void updateDebateBounds() {
@@ -1783,8 +1787,9 @@ public class Gui extends JFrame {
 	
 	public void scaleText() {
 		for(int i = 0; i < this.getContentPane().getComponentCount(); i++) {
-			if(this.getContentPane().getComponent(i).getClass().equals(javax.swing.JPanel.class)) {
-				JPanel p = (JPanel) this.getContentPane().getComponent(i);
+			java.awt.Component c = this.getContentPane().getComponent(i);
+			if(c.getClass().equals(javax.swing.JPanel.class)) {
+				JPanel p = (JPanel) c;
 				for(int j = 0; j < p.getComponentCount(); j++) {
 					JPanel debate = (JPanel) p.getComponent(j);
 					for(int k = 0; k < debate.getComponentCount(); k++) {
@@ -1799,6 +1804,11 @@ public class Gui extends JFrame {
 						b.setFont(font);
 					}
 				}
+			}
+			else if(c.getClass().equals(javax.swing.JButton.class)) {
+				JButton b = (JButton) c;
+				Font font = new Font("Tahoma", Font.PLAIN, FONT_SIZE);
+				b.setFont(font);
 			}
 		}
 	}
