@@ -800,7 +800,7 @@ public class Gui extends JFrame {
 		rdbtnJudges.setBounds(260, 139, 100, 29);
 		contentPane.add(rdbtnJudges);
 		
-		JButton btnScale = new JButton("Scale +");
+		RoundButton btnScale = new RoundButton("Scale +", radius);
 		btnScale.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SCALE_CONSTANT *= 1.05;
@@ -808,10 +808,10 @@ public class Gui extends JFrame {
 				updateDebateBounds();
 			}
 		});
-		btnScale.setBounds(38, 974, 85, 29);
+		btnScale.setBounds(1354, 34, 85, 25);
 		contentPane.add(btnScale);
 		
-		JButton btnScale_1 = new JButton("Scale -");
+		RoundButton btnScale_1 = new RoundButton("Scale -", radius);
 		btnScale_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SCALE_CONSTANT *= 0.95;
@@ -819,27 +819,27 @@ public class Gui extends JFrame {
 				updateDebateBounds();
 			}
 		});
-		btnScale_1.setBounds(124, 974, 85, 29);
+		btnScale_1.setBounds(1440, 34, 85, 25);
 		contentPane.add(btnScale_1);
 		
-		JButton btnIncreaseTextSize = new JButton("Increase Text Size");
+		RoundButton btnIncreaseTextSize = new RoundButton("Increase Text Size", radius);
 		btnIncreaseTextSize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FONT_SIZE += 1;
 				scaleText();
 			}
 		});
-		btnIncreaseTextSize.setBounds(38, 1005, 171, 29);
+		btnIncreaseTextSize.setBounds(1354, 60, 171, 25);
 		contentPane.add(btnIncreaseTextSize);
 		
-		JButton btnDecreaseTextSize = new JButton("Decrease Text Size");
+		RoundButton btnDecreaseTextSize = new RoundButton("Decrease Text Size", radius);
 		btnDecreaseTextSize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FONT_SIZE -= 1;
 				scaleText();
 			}
 		});
-		btnDecreaseTextSize.setBounds(38, 1035, 171, 29);
+		btnDecreaseTextSize.setBounds(1354, 85, 171, 25);
 		contentPane.add(btnDecreaseTextSize);
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			if(!(dp.getSchulen().get(i).getName() == "other")) listModel.addElement(dp.getSchulen().get(i));
@@ -1710,14 +1710,34 @@ public class Gui extends JFrame {
 	
 	public void scale(double scale) {
 		for(int i = 0; i < this.getContentPane().getComponentCount(); i++) {
-			System.out.println(this.getContentPane().getComponent(i).getClass());
-			Rectangle bounds = this.getContentPane().getComponent(i).getBounds();
-			System.out.println(bounds);
-			bounds.x = Math.toIntExact(Math.round(bounds.x * scale));
-			bounds.y = Math.toIntExact(Math.round(bounds.y * scale));
-			bounds.width = Math.toIntExact(Math.round(bounds.width * scale));
-			bounds.height = Math.toIntExact(Math.round(bounds.height * scale));
-			this.getContentPane().getComponent(i).setBounds(bounds);
+			java.awt.Component c = this.getContentPane().getComponent(i);
+			System.out.println(c.getClass());
+			if(c.getClass().equals(javax.swing.JPanel.class) ||
+					c.getClass().equals(javax.swing.JButton.class)) {
+				System.out.println(c.getClass());
+				Rectangle bounds = c.getBounds();
+				System.out.println(bounds);
+				bounds.x = btnTimezone.getX() + Math.toIntExact(Math.round((bounds.x - btnTimezone.getX()) * scale));
+				bounds.y = Math.toIntExact(Math.round(bounds.y * scale));
+				bounds.width = Math.toIntExact(Math.round(bounds.width * scale));
+				bounds.height = Math.toIntExact(Math.round(bounds.height * scale));
+				c.setBounds(bounds);
+			}
+			else if(c.getClass().equals(javax.swing.JScrollPane.class)) {
+				System.out.println(c.getClass());
+				Rectangle bounds = c.getBounds();
+				bounds.height = Math.toIntExact(Math.round(bounds.height * scale));
+				c.setBounds(bounds);
+			}
+			else if(c.getClass().equals(RoundButton.class)) {
+				JButton b = (JButton) c;
+				if(b.getText() == "Add School" || b.getText() == "Add Judge") {
+					Rectangle bounds = c.getBounds();
+					bounds.y = 191 + Math.toIntExact(Math.round((bounds.y - 191) * scale));
+					System.out.println("y: " + bounds.y);
+					b.setBounds(bounds);
+				}
+			}
 		}
 		this.setBounds(this.getX(), this.getY(), Math.toIntExact(Math.round(this.getWidth() * scale)), Math.toIntExact(Math.round(this.getHeight() * scale)));
 		standard_width = this.getWidth();
@@ -1733,12 +1753,6 @@ public class Gui extends JFrame {
 		panel_4.removeAll();
 		panel_5.removeAll();
 		panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
-		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
 		debates.clear();
 		
 		ArrayList<Debate> debatesJ = dp.getJuniorDebates();
@@ -1750,11 +1764,21 @@ public class Gui extends JFrame {
 		panels[0] = panel;
 		panels[1] = panel_1;
 		panels[2] = panel_2;
-		createRelativeSubpanels(dPTjunior, debatesJ, panels);
+		if(dPTjunior != 0) {
+			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+			createRelativeSubpanels(dPTjunior, debatesJ, panels);
+		}
 		panels[0] = panel_3;
 		panels[1] = panel_4;
 		panels[2] = panel_5;
-		createRelativeSubpanels(dPTsenior, debatesS, panels);
+		if(dPTsenior != 0) {
+			panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+			createRelativeSubpanels(dPTsenior, debatesS, panels);
+		}
 	}
 	
 	public void scaleText() {
