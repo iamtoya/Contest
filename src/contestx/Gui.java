@@ -1701,27 +1701,37 @@ public class Gui extends JFrame {
 	}
 	
 	public void updateDebateBounds() {
-		for(int i = 0; i < this.getContentPane().getComponentCount(); i++) {
-			if(this.getContentPane().getComponent(i).getClass().equals(javax.swing.JPanel.class)) {
-				JPanel p = (JPanel) this.getContentPane().getComponent(i);
-				System.out.println("Button texts:");
-				for(int j = 0; j < p.getComponentCount(); j++) {
-					JPanel debate = (JPanel) p.getComponent(j);
-					BorderLayout layout = (BorderLayout) debate.getLayout();
-					System.out.println(debate.getWidth());
-					//westB.setBounds(westB.getX(), westB.getY(), debate.getWidth() / 2, westB.getHeight());
-					//eastB.setBounds(eastB.getX(), eastB.getY(), debate.getWidth() / 2, eastB.getHeight());
-					layout.getLayoutComponent(BorderLayout.NORTH).setPreferredSize(new Dimension(debate.getWidth(), Math.toIntExact(Math.round(22 * SCALE_CONSTANT))));
-					layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(debate.getWidth()/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT))));
-					layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(debate.getWidth()/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT))));
-					layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(debate.getWidth(), Math.toIntExact(Math.round(44 * SCALE_CONSTANT))));
-					
-					//westB.setPreferredSize(new Dimension(debate.getWidth()/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT))));
-					//eastB.setPreferredSize(new Dimension(debate.getWidth()/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT))));
-					//southB.setPreferredSize(new Dimension(debate.getWidth(), Math.toIntExact(Math.round(44 * SCALE_CONSTANT))));
-				}
-			}
-		}
+		
+		//Panels zurücksetzen
+		panel.removeAll();
+		panel_1.removeAll();
+		panel_2.removeAll();
+		panel_3.removeAll();
+		panel_4.removeAll();
+		panel_5.removeAll();
+		panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
+		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+		debates.clear();
+		
+		ArrayList<Debate> debatesJ = dp.getJuniorDebates();
+		ArrayList<Debate> debatesS = dp.getSeniorDebates();
+		int dPTjunior = debatesJ.size() / 3;
+		int dPTsenior = debatesS.size() / 3;
+		//Für separate Panel:
+		JPanel[] panels = new JPanel[3];
+		panels[0] = panel;
+		panels[1] = panel_1;
+		panels[2] = panel_2;
+		createRelativeSubpanels(dPTjunior, debatesJ, panels);
+		panels[0] = panel_3;
+		panels[1] = panel_4;
+		panels[2] = panel_5;
+		createRelativeSubpanels(dPTsenior, debatesS, panels);
 	}
 	
 	
@@ -1874,6 +1884,7 @@ public class Gui extends JFrame {
 	}
 	
 	public class RoundButton extends JButton {
+		private static final long serialVersionUID = 1L;
 		int radius;
 		public RoundButton(String label, int radius) {
 			super(label);
