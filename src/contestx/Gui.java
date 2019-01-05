@@ -802,7 +802,7 @@ public class Gui extends JFrame {
 		JButton btnScale = new JButton("Scale +");
 		btnScale.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				SCALE_CONSTANT += 0.05;
+				SCALE_CONSTANT *= 1.05;
 				scale(1 + 0.05);
 				updateDebateBounds();
 			}
@@ -813,7 +813,7 @@ public class Gui extends JFrame {
 		JButton btnScale_1 = new JButton("Scale -");
 		btnScale_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				SCALE_CONSTANT -= 0.05;
+				SCALE_CONSTANT *= 0.95;
 				scale(1 - 0.05);
 				updateDebateBounds();
 			}
@@ -1697,6 +1697,7 @@ public class Gui extends JFrame {
 			this.getContentPane().getComponent(i).setBounds(bounds);
 		}
 		this.setBounds(this.getX(), this.getY(), Math.toIntExact(Math.round(this.getWidth() * scale)), Math.toIntExact(Math.round(this.getHeight() * scale)));
+		standard_width = this.getWidth();
 	}
 	
 	public void updateDebateBounds() {
