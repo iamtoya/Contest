@@ -89,6 +89,7 @@ public class Gui extends JFrame {
 	private static final long serialVersionUID = -7824597793488283555L;
 	private static final int radius = 15;
 	public double SCALE_CONSTANT = 1;
+	public int FONT_SIZE = 16;
 	//private ArrayList<Schule> schulen;
 	//private ArrayList<Team> dp.getJuniorTeams();
 	//private ArrayList<Team> dp.getSeniorTeams();
@@ -807,7 +808,7 @@ public class Gui extends JFrame {
 				updateDebateBounds();
 			}
 		});
-		btnScale.setBounds(38, 974, 115, 29);
+		btnScale.setBounds(38, 974, 85, 29);
 		contentPane.add(btnScale);
 		
 		JButton btnScale_1 = new JButton("Scale -");
@@ -818,8 +819,28 @@ public class Gui extends JFrame {
 				updateDebateBounds();
 			}
 		});
-		btnScale_1.setBounds(168, 974, 115, 29);
+		btnScale_1.setBounds(124, 974, 85, 29);
 		contentPane.add(btnScale_1);
+		
+		JButton btnIncreaseTextSize = new JButton("Increase Text Size");
+		btnIncreaseTextSize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FONT_SIZE += 1;
+				scaleText();
+			}
+		});
+		btnIncreaseTextSize.setBounds(38, 1005, 171, 29);
+		contentPane.add(btnIncreaseTextSize);
+		
+		JButton btnDecreaseTextSize = new JButton("Decrease Text Size");
+		btnDecreaseTextSize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FONT_SIZE -= 1;
+				scaleText();
+			}
+		});
+		btnDecreaseTextSize.setBounds(38, 1035, 171, 29);
+		contentPane.add(btnDecreaseTextSize);
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			if(!(dp.getSchulen().get(i).getName() == "other")) listModel.addElement(dp.getSchulen().get(i));
 		}
@@ -905,6 +926,7 @@ public class Gui extends JFrame {
 			if(array.get(i).getRaum() != "?") northB = new JButton("Room:" + array.get(i).getRaum());
 			else northB = new JButton("Add Room");
 			northB.setFocusable(false);
+			northB.setFont(new Font("Tahoma", Font.PLAIN, FONT_SIZE));
 			panel_list.get(i).add(northB, BorderLayout.NORTH);
 			layout.getLayoutComponent(BorderLayout.NORTH).setPreferredSize(new Dimension(width, Math.toIntExact(Math.round(22 * SCALE_CONSTANT)))); 
 			northB.addActionListener(new ActionListener() {
@@ -927,7 +949,7 @@ public class Gui extends JFrame {
 			JButton westB = new JButton("<html><b>Pro</b><br>" + westBtext + "</html>"); //aus "array" wird der Name des Pro-Teams ausgelesen 
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			westB.setFocusable(false);
-			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
+			Font individualF = new Font("Tahoma", Font.PLAIN, FONT_SIZE);
 			while(dp.getPanelWidth(westBtext, westB.getFontMetrics(individualF)) == Math.toIntExact(Math.round(250 * SCALE_CONSTANT))) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
@@ -982,7 +1004,7 @@ public class Gui extends JFrame {
 			JButton eastB = new JButton("<html><b>Con</b><br>" + eastBtext + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			eastB.setFocusable(false);
-			individualF = new Font("Tahoma", Font.PLAIN, 16);
+			individualF = new Font("Tahoma", Font.PLAIN, FONT_SIZE);
 			while(dp.getPanelWidth(eastBtext, westB.getFontMetrics(individualF)) == Math.toIntExact(Math.round(250 * SCALE_CONSTANT))) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
@@ -1038,6 +1060,7 @@ public class Gui extends JFrame {
 			}
 			JButton southB = new JButton("<html>" + text + "</html>");
 			southB.setFocusable(false);
+			southB.setFont(new Font("Tahoma", Font.PLAIN, FONT_SIZE));
 			panel_list.get(i).add(southB, BorderLayout.SOUTH);
 	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, Math.toIntExact(Math.round(44 * SCALE_CONSTANT))));
 	        
@@ -1719,6 +1742,28 @@ public class Gui extends JFrame {
 					//westB.setPreferredSize(new Dimension(debate.getWidth()/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT))));
 					//eastB.setPreferredSize(new Dimension(debate.getWidth()/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT))));
 					//southB.setPreferredSize(new Dimension(debate.getWidth(), Math.toIntExact(Math.round(44 * SCALE_CONSTANT))));
+				}
+			}
+		}
+	}
+	
+	public void scaleText() {
+		for(int i = 0; i < this.getContentPane().getComponentCount(); i++) {
+			if(this.getContentPane().getComponent(i).getClass().equals(javax.swing.JPanel.class)) {
+				JPanel p = (JPanel) this.getContentPane().getComponent(i);
+				for(int j = 0; j < p.getComponentCount(); j++) {
+					JPanel debate = (JPanel) p.getComponent(j);
+					for(int k = 0; k < debate.getComponentCount(); k++) {
+						JButton b = (JButton) debate.getComponent(k);
+						Font font = new Font("Tahoma", Font.PLAIN, FONT_SIZE);
+						if(k == 1 || k == 2) {
+							while(dp.getPanelWidth(b.getText().replaceAll("<html><b>Pro</b><br>", "").replaceAll("</html>", "").replaceAll("<html><b>Con</b><br>", ""), 
+									b.getFontMetrics(font)) == Math.toIntExact(Math.round(250 * SCALE_CONSTANT))) {
+								font = new Font("Tahoma", Font.PLAIN, font.getSize()-1);
+							}
+						}
+						b.setFont(font);
+					}
 				}
 			}
 		}
