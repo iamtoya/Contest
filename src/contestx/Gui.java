@@ -795,6 +795,14 @@ public class Gui extends JFrame {
 		rdbtnJudges.setFocusable(false);
 		rdbtnJudges.setBounds(260, 139, 100, 29);
 		contentPane.add(rdbtnJudges);
+		
+		JButton btnScale = new JButton("Scale +");
+		btnScale.setBounds(38, 974, 115, 29);
+		contentPane.add(btnScale);
+		
+		JButton btnScale_1 = new JButton("Scale -");
+		btnScale_1.setBounds(168, 974, 115, 29);
+		contentPane.add(btnScale_1);
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
 			if(!(dp.getSchulen().get(i).getName() == "other")) listModel.addElement(dp.getSchulen().get(i));
 		}
