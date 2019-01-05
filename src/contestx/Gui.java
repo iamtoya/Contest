@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 
 import org.eclipse.swt.SWT;
 
@@ -86,6 +88,7 @@ public class Gui extends JFrame {
 
 	private static final long serialVersionUID = -7824597793488283555L;
 	private static final int radius = 15;
+	public double SCALE_CONSTANT = 1;
 	//private ArrayList<Schule> schulen;
 	//private ArrayList<Team> dp.getJuniorTeams();
 	//private ArrayList<Team> dp.getSeniorTeams();
@@ -204,7 +207,7 @@ public class Gui extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1389, 1080);
-		standard_width = this.getWidth();
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -797,10 +800,24 @@ public class Gui extends JFrame {
 		contentPane.add(rdbtnJudges);
 		
 		JButton btnScale = new JButton("Scale +");
+		btnScale.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				SCALE_CONSTANT += 0.05;
+				scale(1 + 0.05);
+				updateDebateBounds();
+			}
+		});
 		btnScale.setBounds(38, 974, 115, 29);
 		contentPane.add(btnScale);
 		
 		JButton btnScale_1 = new JButton("Scale -");
+		btnScale_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				SCALE_CONSTANT -= 0.05;
+				scale(1 - 0.05);
+				updateDebateBounds();
+			}
+		});
 		btnScale_1.setBounds(168, 974, 115, 29);
 		contentPane.add(btnScale_1);
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
@@ -810,6 +827,15 @@ public class Gui extends JFrame {
 			model_judges.addElement(dp.getJudges().get(i));
 		}
 		
+		//Fenstergröße an Bildschirmauflösung anpassen
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+		SCALE_CONSTANT = width/this.getWidth() - 0.1;
+		scale(SCALE_CONSTANT);
+		//this.setExtendedState(MAXIMIZED_BOTH); //Vollbild
+		this.setBounds(getX(), Math.toIntExact(Math.round(SCALE_CONSTANT * 10)), getWidth(), getHeight());
+		standard_width = this.getWidth();
 	} //IDEE: Debates könnten als JTextPanes angezeigt werden und die Klasse "Debate" die teilnehmenden Teams, Generation, Judges und Raum als String ausgeben, der dort zentriert eingetragen wird.
 	  //2. IDEE: Debates könnten als weiteres Panel im BoxLayout angezeigt werden. Dort hinein könnten dann JButtons gesetzt werden, die beim "hovern" weitere Infos anzeigen..
 	
@@ -866,7 +892,7 @@ public class Gui extends JFrame {
 		System.out.println(width);
 		//Länge der Panels, in denen die Debates angezeigt werden sollen, wird festgelegt
 		for(int i = 0; i < panels.length; i++) {
-			panels[i].setBounds(panels[i].getX(), panels[i].getY(), debatesPerTime*width, 132);
+			panels[i].setBounds(panels[i].getX(), panels[i].getY(), debatesPerTime*width, Math.toIntExact(Math.round(132 * SCALE_CONSTANT)));
 		}
 		cutPanels(debatesPerTime, panels); //Panels werden in Subpanels zerschnitten
 		ArrayList<JPanel> panel_list = new ArrayList<JPanel>();
@@ -880,7 +906,7 @@ public class Gui extends JFrame {
 			else northB = new JButton("Add Room");
 			northB.setFocusable(false);
 			panel_list.get(i).add(northB, BorderLayout.NORTH);
-			layout.getLayoutComponent(BorderLayout.NORTH).setPreferredSize(new Dimension(width, 22)); 
+			layout.getLayoutComponent(BorderLayout.NORTH).setPreferredSize(new Dimension(width, Math.toIntExact(Math.round(22 * SCALE_CONSTANT)))); 
 			northB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					String s=JOptionPane.showInputDialog("Enter Room:"); //wenn der Button gedrückt wird, öffnet sich ein weiteres Fenster in welches man die Raumnummer eingeben kann
@@ -902,12 +928,12 @@ public class Gui extends JFrame {
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			westB.setFocusable(false);
 			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
-			while(dp.getPanelWidth(westBtext, westB.getFontMetrics(individualF)) == 250) {
+			while(dp.getPanelWidth(westBtext, westB.getFontMetrics(individualF)) == Math.toIntExact(Math.round(250 * SCALE_CONSTANT))) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
 			westB.setFont(individualF);
 			panel_list.get(i).add(westB, BorderLayout.WEST);
-			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(width/2, 150)); //die Breite der Buttons wird festgelegt, um Einheitlichkeit zu schaffen
+			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(width/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT)))); //die Breite der Buttons wird festgelegt
 			//TeamPro-button clicked
 			westB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -957,12 +983,12 @@ public class Gui extends JFrame {
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			eastB.setFocusable(false);
 			individualF = new Font("Tahoma", Font.PLAIN, 16);
-			while(dp.getPanelWidth(eastBtext, westB.getFontMetrics(individualF)) == 250) {
+			while(dp.getPanelWidth(eastBtext, westB.getFontMetrics(individualF)) == Math.toIntExact(Math.round(250 * SCALE_CONSTANT))) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
 			eastB.setFont(individualF);
 			panel_list.get(i).add(eastB, BorderLayout.EAST);
-			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(width/2, 150)); 
+			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(width/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT)))); 
 			//TeamCon-button clicked
 			eastB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -1013,7 +1039,7 @@ public class Gui extends JFrame {
 			JButton southB = new JButton("<html>" + text + "</html>");
 			southB.setFocusable(false);
 			panel_list.get(i).add(southB, BorderLayout.SOUTH);
-	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, 44));
+	        layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(width, Math.toIntExact(Math.round(44 * SCALE_CONSTANT))));
 	        
 	        //Subpanels werden entsprechend Junior/Senior eingefärbt
 	        if(array.get(i).getTeamPro().getIsJunior()) { //falls es sich um ein Junior-Debate handelt
@@ -1659,9 +1685,41 @@ public class Gui extends JFrame {
 		out.println();
 	}
 	
-	public void scale(int scale) {
+	public void scale(double scale) {
 		for(int i = 0; i < this.getContentPane().getComponentCount(); i++) {
-			System.out.println(this.getContentPane().getComponent(i).getName());
+			System.out.println(this.getContentPane().getComponent(i).getClass());
+			Rectangle bounds = this.getContentPane().getComponent(i).getBounds();
+			System.out.println(bounds);
+			bounds.x = Math.toIntExact(Math.round(bounds.x * scale));
+			bounds.y = Math.toIntExact(Math.round(bounds.y * scale));
+			bounds.width = Math.toIntExact(Math.round(bounds.width * scale));
+			bounds.height = Math.toIntExact(Math.round(bounds.height * scale));
+			this.getContentPane().getComponent(i).setBounds(bounds);
+		}
+		this.setBounds(this.getX(), this.getY(), Math.toIntExact(Math.round(this.getWidth() * scale)), Math.toIntExact(Math.round(this.getHeight() * scale)));
+	}
+	
+	public void updateDebateBounds() {
+		for(int i = 0; i < this.getContentPane().getComponentCount(); i++) {
+			if(this.getContentPane().getComponent(i).getClass().equals(javax.swing.JPanel.class)) {
+				JPanel p = (JPanel) this.getContentPane().getComponent(i);
+				System.out.println("Button texts:");
+				for(int j = 0; j < p.getComponentCount(); j++) {
+					JPanel debate = (JPanel) p.getComponent(j);
+					BorderLayout layout = (BorderLayout) debate.getLayout();
+					System.out.println(debate.getWidth());
+					//westB.setBounds(westB.getX(), westB.getY(), debate.getWidth() / 2, westB.getHeight());
+					//eastB.setBounds(eastB.getX(), eastB.getY(), debate.getWidth() / 2, eastB.getHeight());
+					layout.getLayoutComponent(BorderLayout.NORTH).setPreferredSize(new Dimension(debate.getWidth(), Math.toIntExact(Math.round(22 * SCALE_CONSTANT))));
+					layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(debate.getWidth()/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT))));
+					layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(debate.getWidth()/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT))));
+					layout.getLayoutComponent(BorderLayout.SOUTH).setPreferredSize(new Dimension(debate.getWidth(), Math.toIntExact(Math.round(44 * SCALE_CONSTANT))));
+					
+					//westB.setPreferredSize(new Dimension(debate.getWidth()/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT))));
+					//eastB.setPreferredSize(new Dimension(debate.getWidth()/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT))));
+					//southB.setPreferredSize(new Dimension(debate.getWidth(), Math.toIntExact(Math.round(44 * SCALE_CONSTANT))));
+				}
+			}
 		}
 	}
 	

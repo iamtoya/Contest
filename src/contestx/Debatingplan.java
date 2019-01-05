@@ -1488,10 +1488,10 @@ public class Debatingplan implements Serializable{
 				
 			}
 		}
-		if(rs < 150) rs = 150; //Mindestgröße
-		if(rs > 250) { //Maximalgröße
+		if(rs < 150 * gui.SCALE_CONSTANT) rs = Math.toIntExact(Math.round(150 * gui.SCALE_CONSTANT)); //Mindestgröße
+		if(rs > 250 * gui.SCALE_CONSTANT) { //Maximalgröße
 			//rs = -1; //Error-Code
-			rs = 250;
+			rs = Math.toIntExact(Math.round(250 * gui.SCALE_CONSTANT));
 		}
 		return rs;
 	}
