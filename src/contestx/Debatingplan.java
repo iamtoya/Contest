@@ -1480,8 +1480,8 @@ public class Debatingplan implements Serializable{
 		List<String> strings = splitStringSpace(s);
 		for(int i = 0; i < strings.size(); i++) {
 			if(strings.size() <= 2) {
-				if(rs < fm.stringWidth(strings.get(i))*2 + Math.toIntExact(Math.round(100 * gui.SCALE_CONSTANT))) {
-					rs = fm.stringWidth(strings.get(i))*2 + Math.toIntExact(Math.round(100 * gui.SCALE_CONSTANT));
+				if(rs < fm.stringWidth(strings.get(i))*2 + Math.toIntExact(Math.round(50 * gui.SCALE_CONSTANT))) {
+					rs = fm.stringWidth(strings.get(i))*2 + Math.toIntExact(Math.round(50 * gui.SCALE_CONSTANT));
 				}
 			}
 			else { //es gibt mehr als 1 Trennzeichen
