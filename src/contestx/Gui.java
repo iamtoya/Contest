@@ -894,7 +894,7 @@ public class Gui extends JFrame {
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			westB.setFocusable(false);
 			Font individualF = new Font("Tahoma", Font.PLAIN, 16);
-			while(dp.getPanelWidth(array.get(i).getTeamPro().getSchule().getName(), westB.getFontMetrics(individualF)) == 250) {
+			while(dp.getPanelWidth(westBtext, westB.getFontMetrics(individualF)) == 250) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
 			westB.setFont(individualF);
@@ -942,11 +942,14 @@ public class Gui extends JFrame {
 					}
 				}
 			});
-			JButton eastB = new JButton("<html><b>Con</b><br>" + array.get(i).getTeamCon().getSchule().getName().replaceAll("-", "- ") + "</html>");
+			List<String> eastBStrings = dp.splitString(array.get(i).getTeamCon().getSchule().getName());
+			String eastBtext = dp.getRecommendedTwoLineString(eastBStrings, m);
+			
+			JButton eastB = new JButton("<html><b>Con</b><br>" + eastBtext + "</html>");
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			eastB.setFocusable(false);
 			individualF = new Font("Tahoma", Font.PLAIN, 16);
-			while(dp.getPanelWidth(array.get(i).getTeamCon().getSchule().getName(), westB.getFontMetrics(individualF)) == 250) {
+			while(dp.getPanelWidth(eastBtext, westB.getFontMetrics(individualF)) == 250) {
 				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
 			}
 			eastB.setFont(individualF);
