@@ -1651,6 +1651,12 @@ public class Gui extends JFrame {
 		out.println();
 	}
 	
+	public void scale(int scale) {
+		for(int i = 0; i < this.getContentPane().getComponentCount(); i++) {
+			System.out.println(this.getContentPane().getComponent(i).getName());
+		}
+	}
+	
 	
 	public class Renderer extends JButton implements ListCellRenderer {
 		public Renderer() {
