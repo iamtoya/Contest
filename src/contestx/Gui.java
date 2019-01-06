@@ -29,6 +29,7 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -792,13 +793,28 @@ public class Gui extends JFrame {
 		rdbtnSchools.setBackground(UIManager.getColor("FormattedTextField.selectionForeground"));
 		rdbtnSchools.setFocusable(false);
 		rdbtnSchools.setBounds(68, 139, 100, 29);
+		rdbtnSchools.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				scrollPane.setViewportView(list);
+			}
+		});
 		contentPane.add(rdbtnSchools);
 		
 		JRadioButton rdbtnJudges = new JRadioButton("Judges");
 		rdbtnJudges.setBackground(UIManager.getColor("FormattedTextField.selectionForeground"));
 		rdbtnJudges.setFocusable(false);
 		rdbtnJudges.setBounds(260, 139, 100, 29);
+		rdbtnJudges.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				scrollPane.setViewportView(list_judges);
+			}
+		});
 		contentPane.add(rdbtnJudges);
+		
+		ButtonGroup bgroup = new ButtonGroup();
+		bgroup.add(rdbtnSchools);
+		bgroup.add(rdbtnJudges);
+		rdbtnSchools.doClick();
 		
 		RoundButton btnScale = new RoundButton("Scale +", radius);
 		btnScale.addActionListener(new ActionListener() {
