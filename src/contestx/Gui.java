@@ -446,12 +446,8 @@ public class Gui extends JFrame {
 					btnAddJudge.setEnabled(true);
 					//chckbxHatJuniorteam.setEnabled(true);
 					//chckbxHatJuniorteam.setEnabled(true);
-					panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-					panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-					panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-					panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
-					panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
-					panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+					
+					
 					
 					ArrayList<Debate> debatesJ = berechne(true, false); //für Junior-Teams berechnen
 					ArrayList<Debate> debatesS = berechne(false, true); //für Senior-Teams berechnen
@@ -463,11 +459,21 @@ public class Gui extends JFrame {
 					panels[0] = panel;
 					panels[1] = panel_1;
 					panels[2] = panel_2;
-					createRelativeSubpanels(dPTjunior, debatesJ, panels);
+					if(dPTjunior != 0) {
+						panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+						createRelativeSubpanels(dPTjunior, debatesJ, panels);
+					}
 					panels[0] = panel_3;
 					panels[1] = panel_4;
 					panels[2] = panel_5;
-					createRelativeSubpanels(dPTsenior, debatesS, panels);
+					if(dPTsenior != 0) {
+						panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+						createRelativeSubpanels(dPTsenior, debatesS, panels);
+					}
 					
 					//Für ein gemeinsames Panel:
 					/*ArrayList<Debate> debatesJS = new ArrayList<Debate>();
@@ -551,7 +557,6 @@ public class Gui extends JFrame {
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SWTdialog d = new SWTdialog(SWT.SAVE);
-				
 				File f = d.setFile();
 				if(f != null) imagescreen(f);
 			}
@@ -562,6 +567,23 @@ public class Gui extends JFrame {
 		RoundButton btnSavePlan = new RoundButton("Save plan", radius);
 		btnSavePlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				try {
+					dp.zeitzone1.setStartHours(Integer.parseInt(txtVon.getText()));
+					dp.zeitzone1.setStartMins(Integer.parseInt(textField_3.getText()));
+					dp.zeitzone1.setEndHours(Integer.parseInt(textField.getText()));
+					dp.zeitzone1.setEndMins(Integer.parseInt(textField_2.getText()));
+					dp.zeitzone3.setStartHours(Integer.parseInt(textField_10.getText()));
+					dp.zeitzone3.setStartMins(Integer.parseInt(textField_11.getText()));
+					dp.zeitzone3.setEndHours(Integer.parseInt(textField_9.getText()));
+					dp.zeitzone3.setEndMins(Integer.parseInt(textField_8.getText()));
+					dp.zeitzone2.setStartHours(Integer.parseInt(textField_6.getText()));
+					dp.zeitzone2.setStartMins(Integer.parseInt(textField_7.getText()));
+					dp.zeitzone2.setEndHours(Integer.parseInt(textField_5.getText()));
+					dp.zeitzone2.setEndMins(Integer.parseInt(textField_4.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
 				SWTdialog d = new SWTdialog(SWT.SAVE);
 				String path = d.open();
 				if(path != null) {
@@ -590,12 +612,7 @@ public class Gui extends JFrame {
 						panel_4.removeAll();
 						panel_5.removeAll();
 						panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
-						panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-						panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-						panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-						panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
-						panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
-						panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+						
 						debates.clear();
 						
 						setDPGui(); //im gespeicherten dp ist ebenfalls ein GUI referenziert, doch es ist nicht dieses hier
@@ -639,11 +656,21 @@ public class Gui extends JFrame {
 						panels[0] = panel;
 						panels[1] = panel_1;
 						panels[2] = panel_2;
-						createRelativeSubpanels(dPTjunior, debatesJ, panels);
+						if(dPTjunior != 0) {
+							panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+							panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+							panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+							createRelativeSubpanels(dPTjunior, debatesJ, panels);
+						}
 						panels[0] = panel_3;
 						panels[1] = panel_4;
 						panels[2] = panel_5;
-						createRelativeSubpanels(dPTsenior, debatesS, panels);
+						if(dPTsenior != 0) {
+							panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+							panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+							panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+							createRelativeSubpanels(dPTsenior, debatesS, panels);
+						}
 					}
 				}
 			}
