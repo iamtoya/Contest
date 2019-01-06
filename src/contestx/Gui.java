@@ -494,14 +494,14 @@ public class Gui extends JFrame {
 		btnBerechne.setBounds(38, 34, 185, 76);
 		contentPane.add(btnBerechne);
 		
-		JButton btnManage = new JButton("Manage");
+		/*JButton btnManage = new JButton("Manage");
 		btnManage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				manage();
 			}
 		});
 		btnManage.setBounds(427, 943, 156, 81);
-		contentPane.add(btnManage);
+		contentPane.add(btnManage);*/
 		
 		RoundButton btnNewButton = new RoundButton("Calculate judges", radius);
 		btnNewButton.addActionListener(new ActionListener() {
@@ -1385,6 +1385,10 @@ public class Gui extends JFrame {
 						win = true;
 					}
 					selectedTeam.setWin(zeitzone.getNumber() - 1, win);
+					if(!(punkte_gegner == 0) && (punkte_gegner > punkte_eigen)) {
+						if(pro) debate.getTeamCon().setWin(zeitzone.getNumber() - 1, true);
+						else debate.getTeamPro().setWin(zeitzone.getNumber(), true);
+					}
 					//selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone, win); //Punkte in den Teams eintragen
 					
 					//Button-Farbe ändern
