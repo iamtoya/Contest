@@ -569,16 +569,71 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					dp.zeitzone1.setStartHours(Integer.parseInt(txtVon.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone1.setStartMins(Integer.parseInt(textField_3.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone1.setEndHours(Integer.parseInt(textField.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone1.setEndMins(Integer.parseInt(textField_2.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone3.setStartHours(Integer.parseInt(textField_10.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone3.setStartMins(Integer.parseInt(textField_11.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone3.setEndHours(Integer.parseInt(textField_9.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone3.setEndMins(Integer.parseInt(textField_8.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone2.setStartHours(Integer.parseInt(textField_6.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone2.setStartMins(Integer.parseInt(textField_7.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone2.setEndHours(Integer.parseInt(textField_5.getText()));
+				}
+				catch(NumberFormatException e) {
+					
+				}
+				try {
 					dp.zeitzone2.setEndMins(Integer.parseInt(textField_4.getText()));
 				}
 				catch(NumberFormatException e) {
