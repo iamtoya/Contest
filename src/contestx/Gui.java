@@ -940,7 +940,7 @@ public class Gui extends JFrame {
 			BorderLayout layout = new BorderLayout(1, 1);
 			panel_list.get(i).setLayout(layout); //BorderLayout wird festgelegt
 			JButton northB;
-			if(array.get(i).getRaum() != "?") northB = new JButton("Room:" + array.get(i).getRaum());
+			if(array.get(i).getRaum().length() != 1) northB = new JButton("Room: " + array.get(i).getRaum());
 			else northB = new JButton("Add Room");
 			northB.setFocusable(false);
 			northB.setFont(new Font("Tahoma", Font.PLAIN, FONT_SIZE));
@@ -949,13 +949,18 @@ public class Gui extends JFrame {
 			northB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					String s=JOptionPane.showInputDialog("Enter Room:"); //wenn der Button gedrückt wird, öffnet sich ein weiteres Fenster in welches man die Raumnummer eingeben kann
+					int j = 0;
+					while(!panel_list.get(j).getComponent(0).equals(northB)) { //findet den index des entsprechenden array-eintrags zum button 
+						j++;
+					}
 					if(s != null && s.length() == 0)
 					{
 						JOptionPane.showMessageDialog(subFrame, "No room entered", "Error Message", JOptionPane.ERROR_MESSAGE);
 					}
 					else if(s != null && s.length() != 0)
 					{
-						northB.setText("Room: " + s);				
+						northB.setText("Room: " + s);
+						array.get(j).setRaum(s);
 					}
 				}
 			});
