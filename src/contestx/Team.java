@@ -175,18 +175,7 @@ public class Team implements Serializable {
 	public ArrayList<Integer> getPunkte() {
 		return punkte;
 	}
-	//funktionierende Methode ohne Teambewertung, gesaved als backup
-	//public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone) {
-	//	for(int i = 0; i < speakers.length; i++) { //i = 1.,2.,3.,Reply-Speaker
-	//		int j = 0;
-	//		while(!speaker.get(j).equals(speakers[i])) {
-	//			j++;
-	//		}
-	//		if(i != 3) speaker.get(j).setPunkteIn(zeitzone.getNumber()-1, punkte[i]); //-1, da speaker nullbasiert, zeitzonenNummer nicht
-	//		else speaker.get(j).setPunkteIn(zeitzone.getNumber()-1+3, punkte[i]);
-	//	  }
-	//	
-	//}
+	
 	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone) {
 		int teampunkteGesamt = 0;					// Variable die Punkte eines Teamsspeichert
 		//Teambewertung tb = new Teambewertung();		// neues Teambewertungsobjekt
@@ -209,17 +198,6 @@ public class Team implements Serializable {
 	public void setPoints(Speaker[] speakers, int[] punkte, Zeitzone zeitzone, boolean win) { //Zeitzonen: 1; 2; 3;
 		setPoints(speakers, punkte, zeitzone);
 		setWin(zeitzone.getNumber() - 1, win);
-		/*
-		tb.setGesamtpunkte(teampunkteGesamt);					// Punkte werden gespeichert in Teambewertung
-		tb.setIsPro(pro);										// das Team ist pro
-		tb.setHaveWon(win);										// das Team hat gewonnen
-		tb.setZeitzone(zeitzone);								// Zeitzone des Teams
-		
-		for(int z = 0; z < speakers.length; z++) {				// Speaker in Teambewertung
-			tb.setSpeakerAt(z, speakers[z]);
-		}
-		this.setTeambewertung(tb);
-		//this.setTeambewertungAt(index, teambewertung); */
 	}
 	
 	
@@ -267,17 +245,4 @@ public class Team implements Serializable {
 		}
 		return new Color(153, 255, 161); //grün
 	}
-/*	
-	public void setTeambewertungAt(int index, Teambewertung teambewertung) {
-		if(index<3) {
-			this.bewertungen.set(index, teambewertung);
-		}
-	}
-	
-	public void setTeambewertung(Teambewertung teambewertung) {
-		this.bewertungen.add(teambewertung);
-	}
-	*///
-
-	
 }

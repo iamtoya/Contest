@@ -91,11 +91,6 @@ public class Gui extends JFrame {
 	private static final int radius = 15;
 	public double SCALE_CONSTANT = 1;
 	public int FONT_SIZE = 16;
-	//private ArrayList<Schule> schulen;
-	//private ArrayList<Team> dp.getJuniorTeams();
-	//private ArrayList<Team> dp.getSeniorTeams();
-	//private ArrayList<Judge> judges;
-	//private ArrayList<Speaker> speaker;
 	private ArrayList<JPanel> debates; //die Debates werden hier vereinfacht als Panels betrachtet; Liste aller im Plan vorkommenden Debates als Panels: JUNIOR VOR SENIOR!!
 	private JPanel contentPane;
 	private Debatingplan dp;
@@ -173,39 +168,19 @@ public class Gui extends JFrame {
 		
 		subFrame = new JFrame();
 		subFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE); //resettet sich beim Schließen
-		
-		//dp.getJuniorTeams() = new ArrayList<Team>();
-		//dp.getSeniorTeams() = new ArrayList<Team>();
-				
-		//breakStringIfTooLong(dp.getJuniorTeams().get(3));
-		//dp.getSeniorTeams() = new ArrayList<Team>();
 		debates = new ArrayList<JPanel>();
 		
 		dp = new Debatingplan(this);
 		verwaltung = new Verwaltung(dp);
 
 		for(int i = 0; i < dp.getSchulen().size(); i++) {
-			//dp.getJuniorTeams().add(new Team(dp.getSchulen().get(i), true));
 			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam(), 1));
 			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam(), 1));
 			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam(), 1));
-			//dp.getSeniorTeams().add(new Team(dp.getSchulen().get(i), false));
 		}
 		//schulen problem gelöst
 		dp.getSchulen().get(2).getJuniorTeam().addSpeaker(new Speaker("Hans", dp.getSchulen().get(2).getJuniorTeam(), 1));
 		dp._speakerDummys(); //fügt Speaker aus Schulen zur >dp.speaker<-Liste hinzu
-		
-//		debates.add(new JPanel());
-	//	debates.get(0).setBorder(new LineBorder(new Color(0, 0, 0)));
-	//	debates.get(0).setLayout(new BorderLayout(2, 2));;
-	//	debates.get(0).setPreferredSize(new Dimension(100, 100));
-	//	debates.get(0).add(new JButton("Hi"), BorderLayout.NORTH);
-	//	JButton testbtn = new JButton();
-	//	testbtn.setPreferredSize(new Dimension(10, 10));
-	//	debates.get(0).add(testbtn, BorderLayout.LINE_END);
-	//	debates.get(0).add(new JButton("Hi"), BorderLayout.LINE_START);
-	//	//debates.get(0).add(new JButton("Hi"), BorderLayout.CENTER);
-	//	debates.get(0).add(new JButton("Hi"), BorderLayout.SOUTH);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1389, 1080);
@@ -442,10 +417,7 @@ public class Gui extends JFrame {
 					btnTimezone.setEnabled(true);
 					btnTimezone_1.setEnabled(true);
 					btnTimezone_2.setEnabled(true);
-					//btnAddSchool.setEnabled(true);
 					btnAddJudge.setEnabled(true);
-					//chckbxHatJuniorteam.setEnabled(true);
-					//chckbxHatJuniorteam.setEnabled(true);
 					
 					
 					
@@ -474,26 +446,6 @@ public class Gui extends JFrame {
 						panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
 						createRelativeSubpanels(dPTsenior, debatesS, panels);
 					}
-					
-					//Für ein gemeinsames Panel:
-					/*ArrayList<Debate> debatesJS = new ArrayList<Debate>();
-					boolean senior = true;
-					for(int i = 0; i < 3; i++) {
-						senior = !senior;
-						if(!senior) {
-							for(int j = 0; j < dPTjunior; j++) {
-								debatesJS.add(debatesJ.get((i * dPTjunior) + j));
-							}
-							i--;
-						}
-						else {
-							for(int j = 0; j < dPTsenior; j++) {
-								debatesJS.add(debatesS.get((i * dPTsenior) + j));
-							}
-						}
-					}
-					int dPT = debatesJS.size() / 3;
-					createRelativeSubpanels(dPT, debatesJS);*/
 				}
 			}
 		});
@@ -512,7 +464,7 @@ public class Gui extends JFrame {
 		RoundButton btnNewButton = new RoundButton("Calculate judges", radius);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(dp.judgesZuordnen2()) {
+				if(dp.judgesZuordnen()) {
 					int dpt = (dp.getJuniorDebates().size()/3) + (dp.getSeniorDebates().size()/3);
 					Judge[][] cjudges1 = dp.getCalculatedJudges(1);
 					Judge[][] cjudges2 = dp.getCalculatedJudges(2);
@@ -544,9 +496,9 @@ public class Gui extends JFrame {
 							}
 						}
 					}
-					System.out.println("zz1 has duplicate " + hasDuplicate(dp.getCalculatedJudges(1))); //should be false
-					System.out.println("zz2 has duplicate " + hasDuplicate(dp.getCalculatedJudges(2))); //should be false
-					System.out.println("zz3 has duplicate " + hasDuplicate(dp.getCalculatedJudges(3))); //should be false
+					//System.out.println("zz1 has duplicate " + hasDuplicate(dp.getCalculatedJudges(1))); //should be false
+					//System.out.println("zz2 has duplicate " + hasDuplicate(dp.getCalculatedJudges(2))); //should be false
+					//System.out.println("zz3 has duplicate " + hasDuplicate(dp.getCalculatedJudges(3))); //should be false
 				}
 			}
 		});
@@ -795,7 +747,6 @@ public class Gui extends JFrame {
 				catch(IndexOutOfBoundsException ind)
 				{
 					throw ind;
-					//JOptionPane.showMessageDialog(null, "Please add Speakers to all teams", "Speakers not found", JOptionPane.ERROR_MESSAGE);;
 				}
 			}
 		});
@@ -999,17 +950,11 @@ public class Gui extends JFrame {
 	}
 	
 	public void createRelativeSubpanels(int debatesPerTime, ArrayList<Debate> array, JPanel[] panels) {
-		System.out.println("Component-Count before: " + panel.getComponentCount());
 		//Länge der 3 großen Panels wird entsprechen der Zahl der Debates
 		//und der empfohlenen Panel-Breite entsprechend des längsten Namens angepasst
 		Font f = new Font("Tahoma", Font.PLAIN, 16);
 		FontMetrics m = btnTimezone.getFontMetrics(f); //nur zufällig btnTimezone gewählt, hätte auch jeder andere Component mit Font-Metrics sein können
 		int width = dp.getRecommendedPanelWidth(m);
-		/*while(width == -1) { //Error Code: String zu lang
-			f = new Font("Tahoma", Font.PLAIN, f.getSize()-1);
-			width = dp.getRecommendedPanelWidth(btnTimezone.getFontMetrics(f));
-		}*/
-		System.out.println(width);
 		//Länge der Panels, in denen die Debates angezeigt werden sollen, wird festgelegt
 		for(int i = 0; i < panels.length; i++) {
 			panels[i].setBounds(panels[i].getX(), panels[i].getY(), debatesPerTime*width, Math.toIntExact(Math.round(132 * SCALE_CONSTANT)));
@@ -1443,12 +1388,6 @@ public class Gui extends JFrame {
 					else button.setBackground(new Color(255, 153, 153));
 					button.setContentAreaFilled(false);
 					button.setOpaque(true);
-					
-					for(int i = 0; i < selectedTeam.getAllSpeaker().size(); i++) { //KonsolenAusgabe
-						for(int j = 0; j < 6; j++) {
-							System.out.println(selectedTeam.getAllSpeaker().get(i).getName() + " " + selectedTeam.getAllSpeaker().get(i).getPunkteIn(j));
-						}
-					}
 				}
 				else {
 					JOptionPane.showMessageDialog(subFrame, "You must select at least 3 different existing Team-Members", "Error Message", JOptionPane.ERROR_MESSAGE);
@@ -1472,7 +1411,6 @@ public class Gui extends JFrame {
 						if(pro) debate.getTeamCon().setWin(zeitzone.getNumber() - 1, true);
 						else debate.getTeamPro().setWin(zeitzone.getNumber(), true);
 					}
-					//selectedTeam.setPoints(takenSpeakers, givenPoints, zeitzone, win); //Punkte in den Teams eintragen
 					
 					//Button-Farbe ändern
 					button.setBackground(new Color(153, 255, 161)); //grün: alles fertig
@@ -1489,15 +1427,6 @@ public class Gui extends JFrame {
 						}
 						index++;
 					}
-					/*if(run) { //es wurde nicht versucht, Punkte einzutragen
-						//gewählte Speaker eintragen
-						selectedTeam.setSpeakersAtTime(zeitzone.getNumber() - 1, takenSpeakers);
-						//Button-Farbe ändern
-						if(debate.getTeamPro().getIsJunior()) button.setBackground(new Color(153, 214, 255)); // rot/blau: noch Punkte einzutragen
-						else button.setBackground(new Color(255, 153, 153));
-						button.setContentAreaFilled(false);
-						button.setOpaque(true);
-					}*/
 				}
 			}
 		});
@@ -1572,9 +1501,6 @@ public class Gui extends JFrame {
 				dp.getSpeaker().removeAll(team.getAllSpeaker());
 				team.setAllSpeaker(speaker);
 				dp.getSpeaker().addAll(speaker);
-				for(int i = 0; i < dp.getSpeaker().size(); i++) {
-					System.out.println(dp.getSpeaker().get(i).getTeam().getSchule().getName() + ": " + dp.getSpeaker().get(i).getName());
-				}
 				subFrame.dispose();
 			}
 		});
@@ -1610,7 +1536,6 @@ public class Gui extends JFrame {
 		c.gridx = 0;
 		c.gridy = 1;
 		cpane.add(sp, c);
-		//cpane.add(speaker_list, c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 0;
 		c.ipady = 50;
@@ -1629,7 +1554,6 @@ public class Gui extends JFrame {
 		for(int i = 0; i < pieces; i++) {
 			if(((i*l) + l) > s.length() - 1) final_string[i] = s.substring(i * l, s.length()) + "<br/>";
 			else final_string[i] = s.substring(i * l, (i*l) + l) + "<br/>";
-			System.out.println(final_string[i]);
 		}
 		final_string[pieces - 1] = final_string[pieces - 1].replaceAll("<br/>", "");
 		final_string[pieces] = "</html>";
@@ -1713,7 +1637,6 @@ public class Gui extends JFrame {
 						return result;
 		}
 		catch (ClassNotFoundException e) {
-			//e.printStackTrace();
 			return null;
 		}
 		catch (FileNotFoundException e) {
@@ -1721,7 +1644,6 @@ public class Gui extends JFrame {
 			return null;
 		}
 		catch (IOException e) {
-			//e.printStackTrace();
 			return null;
 		}
 	}
@@ -1815,14 +1737,11 @@ public class Gui extends JFrame {
 	public void scale(double scale) {
 		for(int i = 0; i < this.getContentPane().getComponentCount(); i++) {
 			java.awt.Component c = this.getContentPane().getComponent(i);
-			System.out.println(c.getClass());
 			if(c.getClass().equals(javax.swing.JPanel.class) ||
 					c.getClass().equals(javax.swing.JButton.class) ||
 					c.getClass().equals(javax.swing.JTextField.class) ||
 					c.getClass().equals(javax.swing.JLabel.class)) {
-				System.out.println(c.getClass());
 				Rectangle bounds = c.getBounds();
-				System.out.println(bounds);
 				bounds.x = btnTimezone.getX() + Math.toIntExact(Math.round((bounds.x - btnTimezone.getX()) * scale));
 				bounds.y = Math.toIntExact(Math.round(bounds.y * scale));
 				bounds.width = Math.toIntExact(Math.round(bounds.width * scale));
@@ -1830,7 +1749,6 @@ public class Gui extends JFrame {
 				c.setBounds(bounds);
 			}
 			else if(c.getClass().equals(javax.swing.JScrollPane.class)) {
-				System.out.println(c.getClass());
 				Rectangle bounds = c.getBounds();
 				bounds.height = Math.toIntExact(Math.round(bounds.height * scale));
 				c.setBounds(bounds);
@@ -1840,7 +1758,6 @@ public class Gui extends JFrame {
 				if(b.getText() == "Add School" || b.getText() == "Add Judge") {
 					Rectangle bounds = c.getBounds();
 					bounds.y = 191 + Math.toIntExact(Math.round((bounds.y - 191) * scale));
-					System.out.println("y: " + bounds.y);
 					b.setBounds(bounds);
 				}
 			}
@@ -1901,10 +1818,6 @@ public class Gui extends JFrame {
 						if(k == 1 || k == 2) {
 							font = dp.getFontForString(b.getText().replaceAll("<html><b>Pro</b><br>", "").replaceAll("</html>", "").replaceAll("<html><b>Con</b><br>", ""),
 									font, b, b.getWidth() - b.getMargin().left - 5);
-							//while(dp.getPanelWidth(b.getText().replaceAll("<html><b>Pro</b><br>", "").replaceAll("</html>", "").replaceAll("<html><b>Con</b><br>", ""), 
-							//		b.getFontMetrics(font)) == Math.toIntExact(Math.round(250 * SCALE_CONSTANT))) {
-							//	font = new Font("Tahoma", Font.PLAIN, font.getSize()-1);
-							//}
 						}
 						b.setFont(font);
 					}
@@ -2095,4 +2008,3 @@ public class Gui extends JFrame {
 		}
 	}
 }
-//NEIN NEIN NEIN NEIN NEIN

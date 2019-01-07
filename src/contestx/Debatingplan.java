@@ -105,25 +105,6 @@ public class Debatingplan implements Serializable{
 		schulen.add(new Schule(true));
 		
 		//Dummy-Judges
-		/*judges.add(new Judge("1", schulen.get(1), true));
-		judges.add(new Judge("2", schulen.get(1), true));
-		judges.add(new Judge("3", schulen.get(1), false));
-		judges.add(new Judge("4", schulen.get(1), false));
-		judges.add(new Judge("5", schulen.get(1), false));
-		judges.add(new Judge("6", schulen.get(0), true));
-		judges.add(new Judge("7", schulen.get(0), true));
-		judges.add(new Judge("8", schulen.get(0), false));
-		judges.add(new Judge("9", schulen.get(0), false));
-		judges.add(new Judge("10", schulen.get(0), false));
-		judges.add(new Judge("11", schulen.get(0), false));
-		judges.add(new Judge("12", schulen.get(0), false));
-		judges.add(new Judge("13", schulen.get(0), false));
-		judges.add(new Judge("14", schulen.get(0), false));
-		judges.add(new Judge("15", schulen.get(0), false));
-		judges.add(new Judge("16", schulen.get(0), false));
-		judges.add(new Judge("17", schulen.get(0), false));
-		judges.add(new Judge("18", schulen.get(0), false));
-		judges.add(new Judge("19", schulen.get(0), false));*/
 		for(int i = 0; i < 24; i++) {
 			judges.add(new Judge("Frau Kaltenbacher " + i, schulen.get(i % schulen.size()), (i % 2 == 0)));
 		}
@@ -189,12 +170,12 @@ public class Debatingplan implements Serializable{
 			}
 		}
 		//an diesem Punkt ist usedComps korrekt gefüllt
-		for(int i = 0; i < usedComps.length; i++) {
+		/*for(int i = 0; i < usedComps.length; i++) {
 			System.out.println(usedComps[i][0]);
 			System.out.println(usedComps[i][1] + "\n");
-		}
+		}*/
 		
-		System.out.println(teamOnEachSide(usedComps, teamNames));
+		//System.out.println(teamOnEachSide(usedComps, teamNames));
 		for(int i = 0; i < dPT*3; i++) {
 			if(junior) {
 				debatesJ.add(new Debate(replaceStringJunior(usedComps[i][0]), replaceStringJunior(usedComps[i][1]))); //Debates werden auf Basis der Teamnamen gebildet
@@ -207,101 +188,7 @@ public class Debatingplan implements Serializable{
 		else return debatesS;
 	}
 	
-	public void judgesZuordnen()
-	{
-		dPTjunior = debatesJ.size()/3;
-		dPTsenior = debatesS.size()/3;
-		for(int i = 0; i < 3; i++) {
-			for (int j = 0; j < dPTjunior; j++) {
-				debatesAll.add(debatesJ.get((i*dPTjunior) + j));
-			}
-			for (int j = 0; j < dPTsenior; j++) {
-				debatesAll.add(debatesS.get((i*dPTsenior) + j));
-			}
-		}
-		//Judge-Button-Texte resetten
-		for(int i = 0; i < gui.getDebates().size(); i++) {
-			JButton b = (JButton) gui.getDebates().get(i).getComponent(3);
-			b.setText("");
-		}
-		//Judges in den Debates zurücksetzen
-		for(int i = 0; i < debatesAll.size(); i++) {
-			debatesAll.get(i).removeAllJudges();
-		}
-		
-		Collections.shuffle(judges);
-		ArrayList<Judge> erfahren = new ArrayList<Judge>();
-		ArrayList<Judge> kannAktuell = new ArrayList<Judge>();
-		//Zeitzone 1
-		for(int i = 0; i < judges.size(); i++)
-		{
-			if(judges.get(i).getKannZuZZ1() && !judges.get(i).getErfahren()) { //alle unerfahrenen werden zu kannAktuell hinzugefügt
-				kannAktuell.add(judges.get(i));
-			}
-			if(judges.get(i).getKannZuZZ1() && judges.get(i).getErfahren()) { //alle erfahrenen werden zu erfahren hinzugefügt
-				erfahren.add(judges.get(i));
-			}
-		}
-		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
-		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		if(!zuordnen(1, erfahren, 0, true)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-		else {
-			for(int i = 0; i < unbenutzt.size(); i++) {
-				kannAktuell.add(unbenutzt.get(i));
-			}
-			if(!zuordnen(1, kannAktuell, 0, false)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		unbenutzt.clear();
-		erfahren.clear();
-		kannAktuell.clear();
-		//Zeitzone 2
-		for(int i = 0; i < judges.size(); i++)
-		{
-			if(judges.get(i).getKannZuZZ2() && !judges.get(i).getErfahren()) {
-				kannAktuell.add(judges.get(i));
-			}
-			if(judges.get(i).getKannZuZZ2() && judges.get(i).getErfahren()) {
-				erfahren.add(judges.get(i));
-			}
-		}
-		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
-		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		if(!zuordnen(2, erfahren, 0, true)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-		else {
-			for(int i = 0; i < unbenutzt.size(); i++) {
-				kannAktuell.add(unbenutzt.get(i));
-			}
-			if(!zuordnen(2, kannAktuell, 0, false)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		unbenutzt.clear();
-		erfahren.clear();
-		kannAktuell.clear();
-		//Zeitzone 3
-		for(int i = 0; i < judges.size(); i++)
-		{
-			if(judges.get(i).getKannZuZZ3() && !judges.get(i).getErfahren()) {
-				kannAktuell.add(judges.get(i));
-			}
-			if(judges.get(i).getKannZuZZ3() && judges.get(i).getErfahren()) {
-				erfahren.add(judges.get(i));
-			}
-		}
-		//erfahren = erfahrenFuellen(erfahren, kannAktuell);
-		//kannAktuell = kannAktuellKuerzen(erfahren, kannAktuell);
-		if(!zuordnen(3, erfahren, 0, true)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-		else {
-			for(int i = 0; i < unbenutzt.size(); i++) {
-				kannAktuell.add(unbenutzt.get(i));
-			}
-			if(!zuordnen(3, kannAktuell, 0, false)) JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		unbenutzt.clear();
-	}
-	
-	public boolean judgesZuordnen2() {
+	public boolean judgesZuordnen() {
 		debatesAll.clear();
 		for(int i = 0; i < 3; i++) { //3 Zeitzonen werden durchlaufen
 			for (int j = 0; j < dPTjunior; j++) {
@@ -315,8 +202,6 @@ public class Debatingplan implements Serializable{
 		for(int i = 0; i < debatesAll.size(); i++) {
 			debatesAll.get(i).removeAllJudges();
 		}
-		
-		
 		
 		dPTjunior = debatesJ.size()/3;
 		dPTsenior = debatesS.size()/3;
@@ -342,36 +227,13 @@ public class Debatingplan implements Serializable{
 			}
 		}
 		
-		//if(!zuordnen2(1, 0, 0, true)) {
-		if(!zuordnen3(0, 1)) {
+		if(!zuordnen(0, 1)) {
 			JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		erfahren.clear();
 		kannAktuell.clear();
-		/*else {
-			for(int i = 0; i < unbenutzt.size(); i++) {
-				kannAktuell1.add(unbenutzt.get(i));
-			}
-			unbenutzt.clear();
-			if(!zuordnen2(1, kannAktuell1, 0, 1)) {
-				JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-				return false;
-			}
-			else {
-				for(int i = 0; i < unbenutzt.size(); i++) {
-					kannAktuell2.add(unbenutzt.get(i));
-				}
-				if(!zuordnen2(1, kannAktuell2, 0, 2)) {
-					JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-					return false;
-				}
-			}
-		}
-		unbenutzt.clear();
-		erfahren.clear();
-		kannAktuell1.clear();
-		kannAktuell2.clear();*/
+		
 		//Zeitzone 2
 		for(int i = 0; i < judges.size(); i++)
 		{
@@ -384,36 +246,13 @@ public class Debatingplan implements Serializable{
 			}
 		}
 
-		//if(!zuordnen2(2, 0, 0, true)) {
-		if(!zuordnen3(0, 2)) {
+		if(!zuordnen(0, 2)) {
 			JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		erfahren.clear();
 		kannAktuell.clear();
-		/*else {
-			for(int i = 0; i < unbenutzt.size(); i++) {
-				kannAktuell1.add(unbenutzt.get(i));
-			}
-			unbenutzt.clear();
-			if(!zuordnen2(2, kannAktuell1, 0, 1)) {
-				JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-				return false;
-			}
-			else {
-				for(int i = 0; i < unbenutzt.size(); i++) {
-					kannAktuell2.add(unbenutzt.get(i));
-				}
-				if(!zuordnen2(2, kannAktuell2, 0, 2)) {
-					JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
-					return false;
-				}
-			}
-		}
-		unbenutzt.clear();
-		erfahren.clear();
-		kannAktuell1.clear();
-		kannAktuell2.clear();*/
+		
 		//Zeitzone 3
 		for(int i = 0; i < judges.size(); i++)
 		{
@@ -426,8 +265,7 @@ public class Debatingplan implements Serializable{
 			}
 		}
 		
-		//if(!zuordnen2(3, 0, 0, true)) {
-		if(!zuordnen3(0, 3)) {
+		if(!zuordnen(0, 3)) {
 			JOptionPane.showMessageDialog(new JFrame(), "Judges couldn't be assigned correctly\nNo matching assignment possible.", "Error Message", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -446,238 +284,7 @@ public class Debatingplan implements Serializable{
 		return true;
 	}
 	
-	private boolean zuordnen(int zeitzone, ArrayList<Judge> kannAktuell, int index, boolean erfahren) { //index steht für das index-te Debate der Zz.
-		boolean letzterDurchlauf = false; //beschreibt, ob sich diese Ausführung im 2. Durchlauf der unerfahrenen Judges befindet (im letzten Durchlauf)
-		ArrayList<Judge> bereitsVersucht = new ArrayList<Judge>();
-		if(erfahren) {
-			if(!(index < dPTjunior + dPTsenior)) { //wenn Limit überschritten, erster Erfolg
-				for(int i = 0; i < kannAktuell.size(); i++) { //unbenutzte erfahrene Judges speichern
-					unbenutzt.add(kannAktuell.get(i));
-				}
-				return true;
-			}
-		}
-		else {
-			if(!(index < 2*(dPTjunior + dPTsenior))) { //wenn Limit überschritten, erster Erfolg
-				return true;
-			}
-			if(index >= (dPTjunior + dPTsenior)) { //wenn bereits beim 2. Durchlauf
-				letzterDurchlauf = true;
-				index = index - dPTjunior - dPTsenior; //index verringern, damit er gleich behandelt werden kann
-			}
-		}
-		
-		JPanel b;
-		Debate d;
-		switch(zeitzone) {
-			case 1: b = this.gui.getDebates().get(index);
-				d = debatesAll.get(index);
-				break;
-			case 2: b = this.gui.getDebates().get(index+dPTjunior+dPTsenior);
-				d = debatesAll.get(dPTjunior + dPTsenior + index);
-				break;
-			case 3: b = this.gui.getDebates().get(2*(dPTjunior+dPTsenior)+index);
-				d = debatesAll.get(2*(dPTjunior + dPTsenior) + index);
-				break;
-			default: b = this.gui.getDebates().get(index);
-				d = debatesAll.get(index);
-				break;
-		}
-		Judge erfahrenerJudge;
-			
-		JButton judge_button = (JButton) b.getComponent(3);
-		JButton x = (JButton) b.getComponent(2);
-		JButton y = (JButton) b.getComponent(1);
-		String x1 = x.getText();
-		x1 = x1.replaceAll("<html>Con<br/>", "");
-		x1 = x1.replaceAll("</html>", "");
-		String y1 = y.getText();
-		y1 = y1.replaceAll("<html>Pro<br/>", "");
-		y1 = y1.replaceAll("</html>", "");
-			
-		erfahrenerJudge = new Judge();
-		int i = 0;
-		while(i < kannAktuell.size() && (kannAktuell.get(i).getSchule().getName().equals(x1) 
-				|| kannAktuell.get(i).getSchule().getName().equals(y1))) { //i erhöhen bis möglicher Judge gefunden, der nicht zu Schule Pro und Schule Con gehört
-			i++;
-		}
-		if(!(i == kannAktuell.size())) { //wenn möglicher Judge gefunden
-			erfahrenerJudge = kannAktuell.get(i);
-			String s = "";
-			if(letzterDurchlauf) {
-				if(containsDoubleComma(judge_button.getText())) {
-					s = judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","));
-					judge_button.setText(s);
-					d.removeJudge(2);
-				}
-			}
-			else {
-				if(judge_button.getText().contains(",")) {
-					judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
-					d.removeJudge(1);
-				}
-			}
-			if(judge_button.getText() != "") {
-				judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
-			}
-			else judge_button.setText(erfahrenerJudge.getName());
-			d.addJudge(erfahrenerJudge);
-			
-			kannAktuell.remove(i); //Liste wird gekürzt, damit der benutzte Judge nicht mehr verwendet werden kann
-			bereitsVersucht.add(erfahrenerJudge); //damit ein Judge nicht mehrmals für dieselbe Position versucht wird
-			Collections.shuffle(kannAktuell); //more randomness
-			if(letzterDurchlauf) index = index + dPTjunior + dPTsenior; //index wieder erhöhen
-			while(!zuordnen(zeitzone, kannAktuell, index+1, erfahren)) { //alle darunterliegenden Äste durchprobieren
-					
-				Judge temp = erfahrenerJudge; //zusätzliche Variable für den verlustfreien Austausch des gewählten Judges
-					
-				int j = 0;
-				while(j < kannAktuell.size() && (kannAktuell.get(j).getSchule().getName().equals(x1) //neuen verfügbaren Judge finden
-						|| kannAktuell.get(j).getSchule().getName().equals(y1)
-						|| bereitsVersucht.contains(kannAktuell.get(j)))) {
-					j++;
-				}
-				if(!(j == kannAktuell.size())) { //wenn gefunden
-					erfahrenerJudge = kannAktuell.get(j);
-					if(letzterDurchlauf) {
-						if(containsDoubleComma(judge_button.getText())) { //Button-Text kürzen wenn zu lang
-							s = judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","));
-							judge_button.setText(s);
-							d.removeJudge(2);
-						}
-					}
-					else { //Button-Text kürzen wenn zu lang
-						if(judge_button.getText().contains(",")) {
-							judge_button.setText(judge_button.getText().substring(0, judge_button.getText().lastIndexOf(","))); //kürzt den String um das zu ersetzende Ende
-							d.removeJudge(1);
-						}
-					}
-					//Judge auf Button schreiben
-					if(judge_button.getText() != "") judge_button.setText(judge_button.getText() + ", " + erfahrenerJudge.getName());
-					else judge_button.setText(erfahrenerJudge.getName());
-					d.addJudge(erfahrenerJudge);
-					kannAktuell.remove(j);
-					bereitsVersucht.add(erfahrenerJudge);
-					kannAktuell.add(temp);
-				}
-				else { //wenn keiner mehr verfügbar
-					kannAktuell.add(temp);
-					return false; //kein Judge kann zugeordnet werden
-				}
-			} //hier konnten alle Judges zugeordnet werden
-			return true;
-		} 
-		else { //wenn kein Judge verfügbar ist
-			return false; //kein Judge kann zugeordnet werden
-		}
-
-	} 
-	
-	public boolean zuordnen2(int zeitzone, int index, int debateNr, boolean erfahren) {
-		if(index > 3*(dPTjunior + dPTsenior) - 1) {
-			return true;
-		}
-		
-		ArrayList<Judge> verfuegbar; //Liste der tatsächlich für dieses Debate verfügbaren Judges
-		if(index >= dPTjunior + dPTsenior) {
-			erfahren = false;
-			for(int i = 0; i < this.erfahren.size(); i++) {
-				kannAktuell.add(this.erfahren.get(i));
-			}
-		}
-		else if(index < dPTjunior + dPTsenior) {
-			erfahren = true;
-			for(int i = 0; i < kannAktuell.size(); i++) {
-				if(kannAktuell.get(i).getErfahren()) {
-					this.erfahren.add(kannAktuell.get(i));
-					kannAktuell.remove(i);
-				}
-			}
-		}
-		if(erfahren) verfuegbar = this.erfahren;
-		else verfuegbar = kannAktuell;
-		
-		JPanel b;
-		Judge[] chosenJudges = new Judge[(dPTjunior + dPTsenior)*3];
-		ArrayList<Judge> bereitsVersucht = new ArrayList<Judge>();
-		switch(zeitzone) {
-			case 1: {
-				b = this.gui.getDebates().get(debateNr);
-				chosenJudges = judgesz1;
-				break;
-			}
-			case 2: {
-				b = this.gui.getDebates().get(debateNr+dPTjunior+dPTsenior);
-				chosenJudges = judgesz2;
-				break;
-			}
-			case 3: {
-				b = this.gui.getDebates().get(2*(dPTjunior+dPTsenior)+debateNr);
-				chosenJudges = judgesz3;
-				break;
-			}
-			default: {
-				b = this.gui.getDebates().get(debateNr);
-				break;
-			}
-		}
-		Judge erfahrenerJudge;
-		JButton x = (JButton) b.getComponent(2);
-		JButton y = (JButton) b.getComponent(1);
-		String x1 = x.getText();
-		x1 = x1.replaceAll("<html>Con<br/>", "");
-		x1 = x1.replaceAll("</html>", "");
-		String y1 = y.getText();
-		y1 = y1.replaceAll("<html>Pro<br/>", "");
-		y1 = y1.replaceAll("</html>", "");
-		if(debateNr < dPTjunior + dPTsenior - 1) {
-			debateNr++;
-		}
-		else {
-			debateNr = 0;
-		}
-		
-		int i = 0;
-		while(i < verfuegbar.size() && (verfuegbar.get(i).getSchule().getName().equals(x1) 
-				|| verfuegbar.get(i).getSchule().getName().equals(y1))) { //i erhöhen bis möglicher Judge gefunden, der nicht zu Schule Pro und Schule Con gehört
-			i++;
-		}
-		
-		if(i != verfuegbar.size()) { //wenn Judge gefunden:
-			erfahrenerJudge = verfuegbar.get(i);
-			verfuegbar.remove(i);
-			bereitsVersucht.add(erfahrenerJudge);
-			chosenJudges[index] = erfahrenerJudge;
-			Collections.shuffle(verfuegbar);
-			while(!zuordnen2(zeitzone, index+1, debateNr, erfahren)) {
-				Judge temp = erfahrenerJudge;
-				
-				int j = 0;
-				while(j < verfuegbar.size() && (verfuegbar.get(j).getSchule().getName().equals(x1) //neuen verfügbaren Judge finden
-						|| verfuegbar.get(j).getSchule().getName().equals(y1)
-						|| bereitsVersucht.contains(verfuegbar.get(j)))) {
-					j++;
-				}
-				if(j != verfuegbar.size()) {
-					erfahrenerJudge = verfuegbar.get(j);
-					verfuegbar.remove(j);
-					bereitsVersucht.add(erfahrenerJudge);
-					chosenJudges[index] = erfahrenerJudge;
-					verfuegbar.add(temp);
-				}
-				else { //kein Ast gibt true zurück
-					verfuegbar.add(temp);
-					return false;
-				}
-			}
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	public boolean zuordnen3(int index, int zeitzone) { 
+	public boolean zuordnen(int index, int zeitzone) { 
 		Judge[] calculated_judges; //zu füllende Liste wird abhängig von der Zeitzone ausgewählt
 		if(zeitzone == 1) calculated_judges = judgesz1;
 		else if(zeitzone == 2) calculated_judges = judgesz2;
@@ -704,9 +311,8 @@ public class Debatingplan implements Serializable{
 		int judge_to_test_index = 0; //iteriert über >available<
 		while(judge_to_test_index < available.size()) {
 			calculated_judges[index] = available.get(judge_to_test_index);
-			if(zuordnen3(index + 1, zeitzone)) return true;
+			if(zuordnen(index + 1, zeitzone)) return true;
 			else judge_to_test_index++; 
-			System.out.println("" + judge_to_test_index);
 		}
 		return false;
 	}
@@ -850,24 +456,18 @@ public class Debatingplan implements Serializable{
 		dritterS.clear();
 		sortSpeaker2();
 		int i = 0;
-		System.out.println("Erste:");
 		while(i < speaker.size() && speaker.get(0).getHoechstePunkte() == speaker.get(i).getHoechstePunkte()) {
 			ersterS.add(speaker.get(i));
-			System.out.println(speaker.get(i).getName());
 			i++;
 		}
 		int j = i;
-		System.out.println("Zweite:");
 		while(j < speaker.size() && speaker.get(i).getHoechstePunkte() == speaker.get(j).getHoechstePunkte()) {
 			zweiterS.add(speaker.get(j));
-			System.out.println(speaker.get(j).getName());
 			j++;
 		}
 		int k = j;
-		System.out.println("Dritte:");
 		while(k < speaker.size() && speaker.get(j).getHoechstePunkte() == speaker.get(k).getHoechstePunkte()) {
 			dritterS.add(speaker.get(k));
-			System.out.println(speaker.get(k).getName());
 			k++;
 		}
 	}
@@ -1298,15 +898,8 @@ public class Debatingplan implements Serializable{
 		ArrayList<Team> t;
 		if(junior) t = teams_junior;
 		else t = teams_senior;
-		System.out.println("Vorher");
-		for(int i = 0; i < t.size(); i++) {
-			System.out.println(t.get(i).getSchule().getName() + " mit Wins: " + t.get(i).getWinAmount() + " und Punkten: " + t.get(i).getHoechstPunkte());
-		}
 		sortTeams2(junior);
-		System.out.println("Nachher");
-		for(int i = 0; i < t.size(); i++) {
-			System.out.println(t.get(i).getSchule().getName() + " mit Wins: " + t.get(i).getWinAmount() + " und Punkten: " + t.get(i).getHoechstPunkte());
-		}
+		
 		try{
 			if(junior) {
 				teamJ1 = teams_junior.get(0);
@@ -1367,15 +960,7 @@ public class Debatingplan implements Serializable{
 	}
 	
 	public void sortSpeaker2() {
-		System.out.println("Speakers:");
-		for(int i = 0; i < speaker.size(); i++) { //works fine
-			System.out.println(speaker.get(i).getHoechstePunkte() + ": " + speaker.get(i).getName());
-		}
 		Collections.sort(speaker, new PunkteComparator());
-		System.out.println("Speakers highscores:");
-		for(int i = 0; i < speaker.size(); i++) { //doesnt work
-			System.out.println(speaker.get(i).getHoechstePunkte() + ": " + speaker.get(i).getName());
-		}
 	}
 	
 	public ArrayList<Speaker> getErsterSpeaker()
