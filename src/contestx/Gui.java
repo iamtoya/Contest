@@ -1054,9 +1054,7 @@ public class Gui extends JFrame {
 			westB.setHorizontalAlignment(SwingConstants.LEFT);
 			westB.setFocusable(false);
 			Font individualF = new Font("Tahoma", Font.PLAIN, FONT_SIZE);
-			while(dp.getPanelWidth(westBtext, westB.getFontMetrics(individualF)) == Math.toIntExact(Math.round(250 * SCALE_CONSTANT))) {
-				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
-			}
+			individualF = dp.getFontForString(westBtext, individualF, westB, width/2 - westB.getMargin().left - 5);
 			westB.setFont(individualF);
 			panel_list.get(i).add(westB, BorderLayout.WEST);
 			layout.getLayoutComponent(BorderLayout.WEST).setPreferredSize(new Dimension(width/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT)))); //die Breite der Buttons wird festgelegt
@@ -1109,9 +1107,7 @@ public class Gui extends JFrame {
 			eastB.setHorizontalAlignment(SwingConstants.LEFT); //Text auf Button soll für maximale Buchstabenaufnahme linksbündig sein (mehrzeilig wird der Anfang der Folgezeilen auf den der obersten gesetzt)
 			eastB.setFocusable(false);
 			individualF = new Font("Tahoma", Font.PLAIN, FONT_SIZE);
-			while(dp.getPanelWidth(eastBtext, westB.getFontMetrics(individualF)) == Math.toIntExact(Math.round(250 * SCALE_CONSTANT))) {
-				individualF = new Font("Tahoma", Font.PLAIN, individualF.getSize()-1);
-			}
+			individualF = dp.getFontForString(eastBtext, individualF, eastB, width/2 - eastB.getMargin().left - 5);
 			eastB.setFont(individualF);
 			panel_list.get(i).add(eastB, BorderLayout.EAST);
 			layout.getLayoutComponent(BorderLayout.EAST).setPreferredSize(new Dimension(width/2, Math.toIntExact(Math.round(150 * SCALE_CONSTANT)))); 
@@ -1903,10 +1899,12 @@ public class Gui extends JFrame {
 						JButton b = (JButton) debate.getComponent(k);
 						Font font = new Font("Tahoma", Font.PLAIN, FONT_SIZE);
 						if(k == 1 || k == 2) {
-							while(dp.getPanelWidth(b.getText().replaceAll("<html><b>Pro</b><br>", "").replaceAll("</html>", "").replaceAll("<html><b>Con</b><br>", ""), 
-									b.getFontMetrics(font)) == Math.toIntExact(Math.round(250 * SCALE_CONSTANT))) {
-								font = new Font("Tahoma", Font.PLAIN, font.getSize()-1);
-							}
+							font = dp.getFontForString(b.getText().replaceAll("<html><b>Pro</b><br>", "").replaceAll("</html>", "").replaceAll("<html><b>Con</b><br>", ""),
+									font, b, b.getWidth() - b.getMargin().left - 5);
+							//while(dp.getPanelWidth(b.getText().replaceAll("<html><b>Pro</b><br>", "").replaceAll("</html>", "").replaceAll("<html><b>Con</b><br>", ""), 
+							//		b.getFontMetrics(font)) == Math.toIntExact(Math.round(250 * SCALE_CONSTANT))) {
+							//	font = new Font("Tahoma", Font.PLAIN, font.getSize()-1);
+							//}
 						}
 						b.setFont(font);
 					}

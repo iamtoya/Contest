@@ -1,4 +1,5 @@
 package contestx;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -1565,6 +1566,21 @@ public class Debatingplan implements Serializable{
 			else s2 += strings.get(j);
 		}
 		return s1 + " " + s2;
+	}
+	
+	public Font getFontForString(String string, Font initialFont, Component c, int space) {
+		int required_space = c.getFontMetrics(initialFont).stringWidth(string);
+		List<String> strings = splitStringSpace(string);
+		String testedString = "";
+		if(strings.size()>1) {
+			if(strings.get(0).length() > strings.get(1).length()) testedString = strings.get(0);
+			else testedString = strings.get(1);
+		}
+		while(required_space > space) {
+			initialFont = new Font("Tahoma", Font.PLAIN, initialFont.getSize()-1); //reduce fontsize
+			required_space = c.getFontMetrics(initialFont).stringWidth(testedString); //get new width
+		}
+		return initialFont;
 	}
 	
 	public Judge[][] getCalculatedJudges(int zeitzone) {
