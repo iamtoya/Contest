@@ -1207,10 +1207,14 @@ public class Gui extends JFrame {
 			if(chckbxs[0].isSelected() && !school_param.getHasJuniorTeam()) { //wenn es vorher KEIN juniorteam gab
 				Team teamjunior = new Team(school_param, true);
 				dp.getJuniorTeams().add(teamjunior);
+				school_param.setHasJuniorTeam(true);
+				school_param.setJuniorTeam(teamjunior);
 			}
 			if(chckbxs[1].isSelected() && !school_param.getHasSeniorTeam()) { //wenn es vorher KEIN seniorteam gab
 				Team teamsenior = new Team(school_param, false);
 				dp.getSeniorTeams().add(teamsenior);
+				school_param.setHasSeniorTeam(true);
+				school_param.setSeniorTeam(teamsenior);
 			}
 			if(s != school_param.getName()) { //wenn der Schulname geändert wurde
 				school_param.setName(s);
