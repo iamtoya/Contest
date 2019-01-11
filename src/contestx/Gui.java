@@ -695,22 +695,22 @@ public class Gui extends JFrame {
 				JTextArea textField = new JTextArea();
 				textField.setEditable(false);
 				try {
-					textField.append("First junior-team with " + winnerTeams[0].getWinAmount() + " wins and " + winnerTeams[0].getHoechstPunkte() + " maximum points:\n");
+					textField.append("First junior-team with " + winnerTeams[0].getWinAmount() + " wins and " + winnerTeams[0].getTotalPoints() + " total points:\n");
 					textField.append("\t" + winnerTeams[0].getSchule().getName() + "\n");
-					textField.append("Second junior-team with " + winnerTeams[1].getWinAmount() + " wins and " + winnerTeams[1].getHoechstPunkte() + " maximum points:\n");
+					textField.append("Second junior-team with " + winnerTeams[1].getWinAmount() + " wins and " + winnerTeams[1].getTotalPoints() + " total points:\n");
 					textField.append("\t" + winnerTeams[1].getSchule().getName() + "\n");
-					textField.append("Third junior-team with " + winnerTeams[2].getWinAmount() + " wins and " + winnerTeams[2].getHoechstPunkte() + " maximum points:\n");
+					textField.append("Third junior-team with " + winnerTeams[2].getWinAmount() + " wins and " + winnerTeams[2].getTotalPoints() + " total points:\n");
 					textField.append("\t" + winnerTeams[2].getSchule().getName() + "\n");
 					
 					winnerTeams = dp.getBestTeams(false);
-					textField.append("First senior-team with " + winnerTeams[0].getWinAmount() + " wins and " + winnerTeams[0].getHoechstPunkte() + " maximum points:\n");
+					textField.append("First senior-team with " + winnerTeams[0].getWinAmount() + " wins and " + winnerTeams[0].getTotalPoints() + " total points:\n");
 					textField.append("\t" + winnerTeams[0].getSchule().getName() + "\n");
-					textField.append("Second senior-team with " + winnerTeams[1].getWinAmount() + " wins and " + winnerTeams[1].getHoechstPunkte() + " maximum points:\n");
+					textField.append("Second senior-team with " + winnerTeams[1].getWinAmount() + " wins and " + winnerTeams[1].getTotalPoints() + " total points:\n");
 					textField.append("\t" + winnerTeams[1].getSchule().getName() + "\n");
-					textField.append("Third senior-team with " + winnerTeams[2].getWinAmount() + " wins and " + winnerTeams[2].getHoechstPunkte() + " maximum points:\n");
+					textField.append("Third senior-team with " + winnerTeams[2].getWinAmount() + " wins and " + winnerTeams[2].getTotalPoints() + " total points:\n");
 					textField.append("\t" + winnerTeams[2].getSchule().getName() + "\n");
 					JScrollPane sp = new JScrollPane(textField);
-					JOptionPane.showMessageDialog(subFrame, sp, "Best Speaker", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(subFrame, sp, "Best Teams", JOptionPane.INFORMATION_MESSAGE);
 				}
 				catch(NullPointerException ex) {
 					JOptionPane.showMessageDialog(null, "Please first calculate teams.", "Error: No teams found", JOptionPane.ERROR_MESSAGE);
