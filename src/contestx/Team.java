@@ -245,4 +245,12 @@ public class Team implements Serializable {
 		}
 		return new Color(153, 255, 161); //grün
 	}
+	
+	public int getTotalPoints() {
+		int x = 0;
+		for(int i = 0; i < punkte.size(); i++) {
+			x += punkte.get(i);
+		}
+		return x;
+	}
 }

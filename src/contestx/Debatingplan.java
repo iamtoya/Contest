@@ -1241,11 +1241,13 @@ public class Debatingplan implements Serializable{
 			else if(team1.getWinAmount() < team2.getWinAmount()) {
 				return 1;
 			}
-			else {
-				if(team1.getHoechstPunkte() > team2.getHoechstPunkte()) {
+			else { //gleich viele Wins
+				int team1Punkte = team1.getTotalPoints();
+				int team2Punkte = team2.getTotalPoints();
+				if(team1Punkte > team2Punkte) {
 					return -1;
 				}
-				else if(team1.getHoechstPunkte() < team2.getHoechstPunkte()) {
+				else if(team1Punkte < team2Punkte) {
 					return 1;
 				}
 				else return 0;
