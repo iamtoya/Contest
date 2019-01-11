@@ -172,8 +172,9 @@ public class Gui extends JFrame {
 		
 		dp = new Debatingplan(this);
 		verwaltung = new Verwaltung(dp);
-
-		for(int i = 0; i < dp.getSchulen().size(); i++) {
+		
+		//Dummies:
+		/*for(int i = 0; i < dp.getSchulen().size(); i++) {
 			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Tim", dp.getSchulen().get(i).getJuniorTeam(), 1));
 			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Joe", dp.getSchulen().get(i).getJuniorTeam(), 1));
 			dp.getSchulen().get(i).getJuniorTeam().addSpeaker(new Speaker("Ann", dp.getSchulen().get(i).getJuniorTeam(), 1));
@@ -181,6 +182,7 @@ public class Gui extends JFrame {
 		//schulen problem gelöst
 		dp.getSchulen().get(2).getJuniorTeam().addSpeaker(new Speaker("Hans", dp.getSchulen().get(2).getJuniorTeam(), 1));
 		dp._speakerDummys(); //fügt Speaker aus Schulen zur >dp.speaker<-Liste hinzu
+		*/
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1389, 1080);

@@ -94,7 +94,7 @@ public class Debatingplan implements Serializable{
 		zeitzone3 = new Zeitzone(3);
 		
 		//Dummy-Schulen
-		schulen.add(new Schule("1", true, true));
+		/*schulen.add(new Schule("1", true, true));
 		schulen.add(new Schule("2", true, true));
 		schulen.add(new Schule("3", true, true));
 		schulen.add(new Schule("4", true, true));
@@ -102,12 +102,12 @@ public class Debatingplan implements Serializable{
 		schulen.add(new Schule("6", true, true));
 		schulen.add(new Schule("7", true, true));
 		schulen.add(new Schule("8", true, true));
-		schulen.add(new Schule(true));
+		schulen.add(new Schule(true));*/
 		
 		//Dummy-Judges
-		for(int i = 0; i < 24; i++) {
+		/*for(int i = 0; i < 24; i++) {
 			judges.add(new Judge("Frau Kaltenbacher " + i, schulen.get(i % schulen.size()), (i % 2 == 0)));
-		}
+		}*/
 
 		
 	}
