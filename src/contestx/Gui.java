@@ -133,7 +133,7 @@ public class Gui extends JFrame {
 	private final JLabel label_10 = new JLabel("bis:");
 	
 	private int standard_width;
-	private final RoundButton btnFindBestTeams = new RoundButton("<html><center>Find best teams</center></html>", radius);
+	private final Win10DesignButton btnFindBestTeams = new Win10DesignButton("<html><center>Find best teams</center></html>");
 	private DefaultListModel listModel = new DefaultListModel(); //Hierüber wird auf die Schulen in der Liste zugegriffen
 	private final JList list = new JList(listModel);
 	private DefaultListModel model_judges = new DefaultListModel(); //Hierüber wird auf die Judges in der Liste zugegriffen
@@ -263,7 +263,7 @@ public class Gui extends JFrame {
 		
 		
 		//Add-SchoolButton
-		RoundButton btnAddSchool = new RoundButton("Add School", radius);
+		Win10DesignButton btnAddSchool = new Win10DesignButton("Add School");
 		btnAddSchool.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showEnterSchoolDialog(null);
@@ -271,7 +271,7 @@ public class Gui extends JFrame {
 		});
 		
 		//Add-Judge Button
-		RoundButton btnAddJudge = new RoundButton("Add Judge", radius);
+		Win10DesignButton btnAddJudge = new Win10DesignButton("Add Judge");
 		btnAddJudge.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showEnterJudgeDialog(null);
@@ -412,7 +412,7 @@ public class Gui extends JFrame {
 		
 		contentPane.add(label_10);
 		
-		RoundButton btnBerechne = new RoundButton("Calculate schools", radius);
+		Win10DesignButton btnBerechne = new Win10DesignButton("Calculate schools");
 		btnBerechne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(dp.getSchulen().size()>5) {
@@ -463,7 +463,7 @@ public class Gui extends JFrame {
 		btnManage.setBounds(427, 943, 156, 81);
 		contentPane.add(btnManage);*/
 		
-		RoundButton btnNewButton = new RoundButton("Calculate judges", radius);
+		Win10DesignButton btnNewButton = new Win10DesignButton("Calculate judges");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(dp.judgesZuordnen()) {
@@ -507,7 +507,7 @@ public class Gui extends JFrame {
 		btnNewButton.setBounds(228, 34, 185, 76);
 		contentPane.add(btnNewButton);
 		
-		RoundButton btnSave = new RoundButton("Export plan", radius);
+		Win10DesignButton btnSave = new Win10DesignButton("Export plan");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SWTdialog d = new SWTdialog(SWT.SAVE);
@@ -518,7 +518,7 @@ public class Gui extends JFrame {
 		btnSave.setBounds(1082, 34, 130, 76);
 		contentPane.add(btnSave);
 		
-		RoundButton btnSavePlan = new RoundButton("Save plan", radius);
+		Win10DesignButton btnSavePlan = new Win10DesignButton("Save plan");
 		btnSavePlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -604,7 +604,7 @@ public class Gui extends JFrame {
 		btnSavePlan.setBounds(773, 34, 130, 76);
 		contentPane.add(btnSavePlan);
 		
-		RoundButton btnLoadPlan = new RoundButton("Load plan", radius);
+		Win10DesignButton btnLoadPlan = new Win10DesignButton("Load plan");
 		btnLoadPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SWTdialog s = new SWTdialog(SWT.OPEN);
@@ -722,7 +722,7 @@ public class Gui extends JFrame {
 		
 		contentPane.add(btnFindBestTeams);
 		
-		RoundButton btnNewButton_1 = new RoundButton("<html><center>Find best speakers</center></html>", radius);
+		Win10DesignButton btnNewButton_1 = new Win10DesignButton("<html><center>Find best speakers</center></html>");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try
@@ -809,7 +809,7 @@ public class Gui extends JFrame {
 		scrollPane.setBounds(38, 191, 375, 670);
 		contentPane.add(scrollPane);
 		
-		RoundButton btnExportScores = new RoundButton("<html><center>Export Scores</center></html>", radius);
+		Win10DesignButton btnExportScores = new Win10DesignButton("<html><center>Export Scores</center></html>");
 		btnExportScores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SWTdialog s = new SWTdialog(SWT.OPEN);
@@ -851,7 +851,7 @@ public class Gui extends JFrame {
 		bgroup.add(rdbtnJudges);
 		rdbtnSchools.doClick();
 		
-		RoundButton btnScale = new RoundButton("Scale +", radius);
+		Win10DesignButton btnScale = new Win10DesignButton("Scale +");
 		btnScale.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SCALE_CONSTANT *= 1.05;
@@ -862,7 +862,7 @@ public class Gui extends JFrame {
 		btnScale.setBounds(1354, 34, 85, 25);
 		contentPane.add(btnScale);
 		
-		RoundButton btnScale_1 = new RoundButton("Scale -", radius);
+		Win10DesignButton btnScale_1 = new Win10DesignButton("Scale -");
 		btnScale_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				SCALE_CONSTANT *= 0.95;
@@ -873,7 +873,7 @@ public class Gui extends JFrame {
 		btnScale_1.setBounds(1440, 34, 85, 25);
 		contentPane.add(btnScale_1);
 		
-		RoundButton btnIncreaseTextSize = new RoundButton("Increase Text Size", radius);
+		Win10DesignButton btnIncreaseTextSize = new Win10DesignButton("Increase Text Size");
 		btnIncreaseTextSize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FONT_SIZE += 1;
@@ -883,7 +883,7 @@ public class Gui extends JFrame {
 		btnIncreaseTextSize.setBounds(1354, 60, 171, 25);
 		contentPane.add(btnIncreaseTextSize);
 		
-		RoundButton btnDecreaseTextSize = new RoundButton("Decrease Text Size", radius);
+		Win10DesignButton btnDecreaseTextSize = new Win10DesignButton("Decrease Text Size");
 		btnDecreaseTextSize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FONT_SIZE -= 1;
@@ -1759,7 +1759,7 @@ public class Gui extends JFrame {
 				bounds.height = Math.toIntExact(Math.round(bounds.height * scale));
 				c.setBounds(bounds);
 			}
-			else if(c.getClass().equals(RoundButton.class)) {
+			else if(c.getClass().equals(Win10DesignButton.class)) {
 				JButton b = (JButton) c;
 				if(b.getText() == "Add School" || b.getText() == "Add Judge") {
 					Rectangle bounds = c.getBounds();
@@ -2011,6 +2011,20 @@ public class Gui extends JFrame {
 		}
 		protected void paintBorder(Graphics g) {
 			g.drawRoundRect(0, 0, getWidth(), getHeight(), this.radius, this.radius);
+		}
+	}
+	
+	public class Win10DesignButton extends JButton {
+		//private static final long serialVersionUID = 1L;    WOZU???
+		public Win10DesignButton(String label) {
+			super(label);
+			setContentAreaFilled(false);
+			setOpaque(true);
+			setBackground(new Color(0, 191, 255));
+			setForeground(new Color(255, 255, 255));
+			setFocusable(false);
+			setFocusPainted(false);
+			setBorderPainted(false);
 		}
 	}
 }
