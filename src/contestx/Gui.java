@@ -415,7 +415,10 @@ public class Gui extends JFrame {
 		Win10DesignButton btnBerechne = new Win10DesignButton("Calculate schools");
 		btnBerechne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(dp.getSchulen().size()>5) {
+				if(!namenVerschieden(dp.getSchulen())) {
+					JOptionPane.showMessageDialog(subFrame, "Multiple schools have the same name.\nPlease give your schools varying names", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				else if(dp.getSchulen().size()>2) {
 					btnTimezone.setEnabled(true);
 					btnTimezone_1.setEnabled(true);
 					btnTimezone_2.setEnabled(true);
@@ -901,8 +904,8 @@ public class Gui extends JFrame {
 		
 		//Fenstergröße an Bildschirmauflösung anpassen
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		int width = gd.getDisplayMode().getWidth();
-		int height = gd.getDisplayMode().getHeight();
+		double width = gd.getDisplayMode().getWidth();
+		double height = gd.getDisplayMode().getHeight();
 		SCALE_CONSTANT = width/this.getWidth() - 0.1;
 		scale(SCALE_CONSTANT);
 		//this.setExtendedState(MAXIMIZED_BOTH); //Vollbild
@@ -1667,6 +1670,24 @@ public class Gui extends JFrame {
 			  }
 		  }
 	  return false;
+	}
+	
+	public boolean namenVerschieden(ArrayList<Schule> schulen) {
+		ArrayList<String> vorhandeneNamen = new ArrayList<String>();
+		for(int i = 0; i <  schulen.size(); i++) {
+			if(!beinhaltet(vorhandeneNamen, schulen.get(i).getName())) {
+				vorhandeneNamen.add(schulen.get(i).getName());
+			}
+			else return false;
+		}
+		return true;
+	}
+	
+	public boolean beinhaltet(ArrayList<String> list, String s) {
+		for(int i = 0; i < list.size(); i++) {
+			if(list.get(i).equals(s)) return true;
+		}
+		return false;
 	}
 	
 	public void refresh() {
