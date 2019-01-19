@@ -1161,6 +1161,7 @@ public class Debatingplan implements Serializable{
 			if(strings.get(0).length() > strings.get(1).length()) testedString = strings.get(0);
 			else testedString = strings.get(1);
 		}
+		else testedString = strings.get(0);
 		while(required_space > space) {
 			initialFont = new Font("Tahoma", Font.PLAIN, initialFont.getSize()-1); //reduce fontsize
 			required_space = c.getFontMetrics(initialFont).stringWidth(testedString); //get new width
