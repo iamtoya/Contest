@@ -61,6 +61,8 @@ import javax.swing.JTextArea;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -283,7 +285,7 @@ public class Gui extends JFrame {
 		btnAddSchool.setBounds(38, 865, 185, 54);
 		contentPane.add(btnAddSchool);
 		
-		btnAddJudge.setBounds(228, 866, 185, 52);
+		btnAddJudge.setBounds(228, 865, 185, 54);
 		contentPane.add(btnAddJudge);
 		
 		//Implementierung der 3 Panels ohne Border
@@ -513,9 +515,15 @@ public class Gui extends JFrame {
 		Win10DesignButton btnSave = new Win10DesignButton("Export plan");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				SWTdialog d = new SWTdialog(SWT.SAVE);
-				File f = d.setFile();
-				if(f != null) imagescreen(f);
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileFilter(new FileNameExtensionFilter("png", "png"));
+				fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("jpg", "jpg"));
+				if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = new File(fileChooser.getSelectedFile() + "." + fileChooser.getFileFilter().getDescription());
+					if(file != null) imagescreen(file);
+				}
+				//SWTdialog d = new SWTdialog(SWT.SAVE);
+				//File f = d.setFile();
 			}
 		});
 		btnSave.setBounds(1082, 34, 130, 76);
@@ -596,12 +604,22 @@ public class Gui extends JFrame {
 				catch(NumberFormatException e) {
 					
 				}
-				SWTdialog d = new SWTdialog(SWT.SAVE);
-				String path = d.open();
-				if(path != null) {
+				//SWTdialog d = new SWTdialog(SWT.SAVE);
+				//String path = d.open();
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileFilter(new FileNameExtensionFilter("ser", "ser"));
+				if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = new File(fileChooser.getSelectedFile() + "." + fileChooser.getFileFilter().getDescription());
+					if(file != null) {
+						String path = file.getAbsolutePath();
+						writeToFile(dp, path);
+						refresh();
+					}
+				}
+				/*if(path != null) {
 					writeToFile(dp, path);
 					refresh();
-				}
+				}*/
 			}
 		});
 		btnSavePlan.setBounds(773, 34, 130, 76);
@@ -610,8 +628,17 @@ public class Gui extends JFrame {
 		Win10DesignButton btnLoadPlan = new Win10DesignButton("Load plan");
 		btnLoadPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				SWTdialog s = new SWTdialog(SWT.OPEN);
-				String path = s.open();
+				//SWTdialog s = new SWTdialog(SWT.OPEN);
+				//String path = s.open();
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileFilter(new FileNameExtensionFilter("ser", "ser"));
+				String path = null;
+				if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = fileChooser.getSelectedFile();
+					if(file != null) {
+						path = file.getAbsolutePath();
+					}
+				}
 				
 				if(path != null) {
 					dp = (Debatingplan) readFromFile(path);
@@ -815,10 +842,19 @@ public class Gui extends JFrame {
 		Win10DesignButton btnExportScores = new Win10DesignButton("<html><center>Export Scores</center></html>");
 		btnExportScores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SWTdialog s = new SWTdialog(SWT.OPEN);
-				String path = s.open();
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileFilter(new FileNameExtensionFilter("csv", "csv"));
+				String path = null;
+				if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = new File(fileChooser.getSelectedFile() + "." + fileChooser.getFileFilter().getDescription());
+					if(file != null) {
+						path = file.getAbsolutePath();
+					}
+				}
+				//SWTdialog s = new SWTdialog(SWT.OPEN);
+				//String path = s.open();
 				try {
-					exportScores(path);
+					if(path != null) exportScores(path);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -906,7 +942,7 @@ public class Gui extends JFrame {
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		double width = gd.getDisplayMode().getWidth();
 		double height = gd.getDisplayMode().getHeight();
-		SCALE_CONSTANT = width/this.getWidth() - 0.1;
+		SCALE_CONSTANT = height/this.getHeight() - 0.1;
 		scale(SCALE_CONSTANT);
 		//this.setExtendedState(MAXIMIZED_BOTH); //Vollbild
 		standard_width = 1600;
@@ -958,7 +994,7 @@ public class Gui extends JFrame {
 		//Länge der 3 großen Panels wird entsprechen der Zahl der Debates
 		//und der empfohlenen Panel-Breite entsprechend des längsten Namens angepasst
 		Font f = new Font("Tahoma", Font.PLAIN, 16);
-		FontMetrics m = btnTimezone.getFontMetrics(f); //nur zufällig btnTimezone gewählt, hätte auch jeder andere Component mit Font-Metrics sein können
+		FontMetrics m = panels[0].getFontMetrics(f); //nur zufällig btnTimezone gewählt, hätte auch jeder andere Component mit Font-Metrics sein können
 		int width = dp.getRecommendedPanelWidth(m);
 		//Länge der Panels, in denen die Debates angezeigt werden sollen, wird festgelegt
 		for(int i = 0; i < panels.length; i++) {
@@ -1770,9 +1806,10 @@ public class Gui extends JFrame {
 					c.getClass().equals(javax.swing.JLabel.class)) {
 				Rectangle bounds = c.getBounds();
 				bounds.x = btnTimezone.getX() + Math.toIntExact(Math.round((bounds.x - btnTimezone.getX()) * scale));
-				bounds.y = Math.toIntExact(Math.round(bounds.y * scale));
+				bounds.y = btnTimezone.getY() + Math.toIntExact(Math.round((bounds.y - btnTimezone.getY()) * scale));
 				bounds.width = Math.toIntExact(Math.round(bounds.width * scale));
 				bounds.height = Math.toIntExact(Math.round(bounds.height * scale));
+				System.out.println(c.getClass().toString() + ": " + bounds.height + "x" + bounds.width);
 				c.setBounds(bounds);
 			}
 			else if(c.getClass().equals(javax.swing.JScrollPane.class)) {
@@ -1789,6 +1826,7 @@ public class Gui extends JFrame {
 				}
 			}
 		}
+		System.out.println("with " + scale + "\n");
 		int width = Math.toIntExact(Math.round(this.getWidth() * scale));
 		if(standard_width > width) width = standard_width; 
 		this.setBounds(this.getX(), this.getY(), width, Math.toIntExact(Math.round(this.getHeight() * scale)));
