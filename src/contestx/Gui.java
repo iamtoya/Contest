@@ -83,7 +83,7 @@ import javax.swing.ScrollPaneConstants;
  * Panels und Berechnen nur für Junior-Teams
  * judgeZuordnen: erfahrene Zuordnung und restl. Zuordnung kommunizieren nicht!
  * Daten Speichern und Laden (außer das Bild des Plans) 
- * @author Games, Andi, Jupp
+ * @author Games, Andi, Jupp :)
  *
  */
 
