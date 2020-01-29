@@ -112,6 +112,18 @@ public class Debatingplan implements Serializable{
 		
 	}
 	
+	public void addDebate(boolean junior, Debate debate)
+	{
+		if(junior)
+		{
+			debatesJ.add(debate);
+		}
+		else
+		{
+			debatesS.add(debate);
+		}
+	}
+	
 	public void _speakerDummys()
 	{
 		for(int i=0;i<schulen.size();i++)
@@ -177,6 +189,41 @@ public class Debatingplan implements Serializable{
 		
 		//System.out.println(teamOnEachSide(usedComps, teamNames));
 		for(int i = 0; i < dPT*3; i++) {
+			if(junior) {
+				debatesJ.add(new Debate(replaceStringJunior(usedComps[i][0]), replaceStringJunior(usedComps[i][1]))); //Debates werden auf Basis der Teamnamen gebildet
+			}
+			else {
+				debatesS.add(new Debate(replaceStringSenior(usedComps[i][0]), replaceStringSenior(usedComps[i][1]))); //Debates werden auf Basis der Teamnamen gebildet
+			}
+		}
+		if(junior) return debatesJ;
+		else return debatesS;
+	}
+	
+	
+	public ArrayList<Debate> erstelle(boolean junior, boolean avoid_reset, ArrayList<String> teamnamesPro1, ArrayList<String> teamnamesCon1) {
+		if(!avoid_reset)reset();
+		String[][] usedComps;
+		if(junior) {
+			usedComps = new String[teamnamesPro1.size()][2];
+		}
+		else {
+			usedComps = new String[teamnamesPro1.size()][2];;
+		}
+		for(int i = 0; i < teamnamesPro1.size(); i++) { //Timezone 1
+				//Teams, die gegeneinander spielen sollen werden in usedComps gespeichert
+				usedComps[i][0] = teamnamesPro1.get(i); //"[i-1]", da i in for-schleife um 1 größer; "(2*i)-1" = Index der zugewiesenen Schule, immer: s1+s2;s3+s4...
+				usedComps[i][1] = teamnamesCon1.get(i);
+				
+		}
+		//an diesem Punkt ist usedComps korrekt gefüllt
+		/*for(int i = 0; i < usedComps.length; i++) {
+			System.out.println(usedComps[i][0]);
+			System.out.println(usedComps[i][1] + "\n");
+		}*/
+		
+		//System.out.println(teamOnEachSide(usedComps, teamNames));
+		for(int i = 0; i < teamnamesPro1.size(); i++) {
 			if(junior) {
 				debatesJ.add(new Debate(replaceStringJunior(usedComps[i][0]), replaceStringJunior(usedComps[i][1]))); //Debates werden auf Basis der Teamnamen gebildet
 			}
@@ -372,18 +419,25 @@ public class Debatingplan implements Serializable{
 	}
 	public Team replaceStringJunior(String s) { //findet das zum Teamnamen zugehörige Team
 		int i = 0;
-		while(!teams_junior.get(i).getSchule().getName().equals(s)) {
+		int j=teams_junior.size();
+		while(i<teams_junior.size()&&!teams_junior.get(i).getSchule().getName().equals(s)) {
 			i++;
+			j--;
 		}
-		return teams_junior.get(i);
+		if(j==0) { return null;}
+		else {return teams_junior.get(i);}
+		
 	}
 	
 	public Team replaceStringSenior(String s) { //findet das zum Teamnamen zugehörige Team
 		int i = 0;
-		while(!teams_senior.get(i).getSchule().getName().equals(s)) {
+		int j = teams_senior.size();
+		while(i<teams_senior.size()&&!teams_senior.get(i).getSchule().getName().equals(s)) {
 			i++;
+			j--;
 		}
-		return teams_senior.get(i);
+		if(j==0) { return null;}
+		else {return teams_senior.get(i);}
 	}
 	public void reset() {
 		//Zurücksetzen der Listen
@@ -980,6 +1034,17 @@ public class Debatingplan implements Serializable{
 	
 	public ArrayList<Schule> getSchulen() {
 		return schulen;
+	}
+	
+	public Schule getSchule(String n)
+	{
+		Schule s= null;
+		for(int i=0;0<schulen.size()-1;i++)
+		{
+			if(schulen.get(i).getName()==n)
+			s=schulen.get(i);
+		}
+		return s;
 	}
 	
 	public Judge getJudgeAt(int index)

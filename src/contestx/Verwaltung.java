@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 
-import com.sun.glass.events.KeyEvent;
+//import com.sun.glass.events.KeyEvent;
 
 import javax.swing.JRadioButton;
 
@@ -231,7 +231,7 @@ public class Verwaltung extends JFrame {
 		
 		//von jedem Component aus kann per ENTER (KeyListener) die change()-Methode aufgerufen werden
 		for(int i = 0; i < jcomps.size(); i++) {
-			jcomps.get(i).getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "doSomething");
+			//jcomps.get(i).getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "doSomething");
 			jcomps.get(i).getActionMap().put("doSomething", new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
 					change();

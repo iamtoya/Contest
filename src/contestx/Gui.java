@@ -109,6 +109,7 @@ public class Gui extends JFrame {
 	private final JPanel panel_5 = new JPanel();
 	
 	private JFrame subFrame; //für alle möglichen Dialogfelder
+	//private JFrame manualFrame;
 	
 	private JTextField txtVon;
 	private JTextField textField;
@@ -122,6 +123,8 @@ public class Gui extends JFrame {
 	private final JTextField textField_9 = new JTextField();
 	private final JTextField textField_10 = new JTextField();
 	private final JTextField textField_11 = new JTextField();
+	/*private final JRadioButton manualRB = new JRadioButton();
+	private final JLabel manual = new JLabel("insert Debatingplan manually");*/
 	private final JLabel label = new JLabel(":");
 	private final JLabel label_1 = new JLabel(":");
 	private final JLabel label_2 = new JLabel(":");
@@ -167,7 +170,11 @@ public class Gui extends JFrame {
 	 * Create the frame.
 	 */
 	public Gui() {
-		
+		/*manualFrame = new JFrame("Manual SchoolChoosing");
+		manual.setLocation(50, 60);
+		manualFrame.add(manual);
+		manualRB.setLocation(300, 60);
+		manualFrame.add(manualRB);*/
 		subFrame = new JFrame();
 		subFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE); //resettet sich beim Schließen
 		debates = new ArrayList<JPanel>();
@@ -417,45 +424,48 @@ public class Gui extends JFrame {
 		Win10DesignButton btnBerechne = new Win10DesignButton("Calculate schools");
 		btnBerechne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(!namenVerschieden(dp.getSchulen())) {
-					JOptionPane.showMessageDialog(subFrame, "Multiple schools have the same name.\nPlease give your schools varying names", "Error", JOptionPane.ERROR_MESSAGE);
-				}
-				else if(dp.getSchulen().size()>2) {
-					btnTimezone.setEnabled(true);
-					btnTimezone_1.setEnabled(true);
-					btnTimezone_2.setEnabled(true);
-					btnAddJudge.setEnabled(true);
-					
-					
-					
-					ArrayList<Debate> debatesJ = berechne(true, false); //für Junior-Teams berechnen
-					ArrayList<Debate> debatesS = berechne(false, true); //für Senior-Teams berechnen
-					int dPTjunior = debatesJ.size() / 3;
-					int dPTsenior = debatesS.size() / 3;
-					
-					//Für separate Panel:
-					JPanel[] panels = new JPanel[3];
-					panels[0] = panel;
-					panels[1] = panel_1;
-					panels[2] = panel_2;
-					if(dPTjunior != 0) {
-						panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-						panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-						panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-						createRelativeSubpanels(dPTjunior, debatesJ, panels);
+				/*manualFrame.setSize(500, 120);
+				manualFrame.setLocationRelativeTo(null);
+				manualFrame.setVisible(true);*/
+					if(!namenVerschieden(dp.getSchulen())) {
+						JOptionPane.showMessageDialog(subFrame, "Multiple schools have the same name.\nPlease give your schools varying names", "Error", JOptionPane.ERROR_MESSAGE);
 					}
-					panels[0] = panel_3;
-					panels[1] = panel_4;
-					panels[2] = panel_5;
-					if(dPTsenior != 0) {
-						panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
-						panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
-						panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
-						createRelativeSubpanels(dPTsenior, debatesS, panels);
+					else if(dp.getSchulen().size()>2) {
+						btnTimezone.setEnabled(true);
+						btnTimezone_1.setEnabled(true);
+						btnTimezone_2.setEnabled(true);
+						btnAddJudge.setEnabled(true);
+						
+						
+						
+						ArrayList<Debate> debatesJ = berechne(true, false); //für Junior-Teams berechnen
+						ArrayList<Debate> debatesS = berechne(false, true); //für Senior-Teams berechnen
+						int dPTjunior = debatesJ.size() / 3;
+						int dPTsenior = debatesS.size() / 3;
+						
+						//Für separate Panel:
+						JPanel[] panels = new JPanel[3];
+						panels[0] = panel;
+						panels[1] = panel_1;
+						panels[2] = panel_2;
+						if(dPTjunior != 0) {
+							panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+							panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+							panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+							createRelativeSubpanels(dPTjunior, debatesJ, panels);
+						}
+						panels[0] = panel_3;
+						panels[1] = panel_4;
+						panels[2] = panel_5;
+						if(dPTsenior != 0) {
+							panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+							panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+							panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+							createRelativeSubpanels(dPTsenior, debatesS, panels);
+						}
 					}
 				}
-			}
-		});
+			});
 		btnBerechne.setBounds(38, 34, 185, 76);
 		contentPane.add(btnBerechne);
 		
@@ -938,6 +948,186 @@ public class Gui extends JFrame {
 			model_judges.addElement(dp.getJudges().get(i));
 		}
 		
+		Win10DesignButton btnCreateDebatingPlan = new Win10DesignButton("Insert Debating Plan");
+		btnCreateDebatingPlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int NrOfDebatesJ;
+				int NrOfDebatesS;
+				boolean fehler=false;
+				ArrayList<String> conTeamsJ1=new ArrayList<String>();
+				ArrayList<String> conTeamsS1=new ArrayList<String>();
+				ArrayList<String> proTeamsJ1=new ArrayList<String>();
+				ArrayList<String> proTeamsS1=new ArrayList<String>();
+				NrOfDebatesJ = dp.getJuniorTeams().size()/2;
+				NrOfDebatesS = dp.getSeniorTeams().size()/2;
+				for(int i=1; i<=NrOfDebatesJ; i++)
+				{
+					if(!fehler) {
+						String p=(String) showEnterDebateDialog(true, true, 1, i);
+						if(dp.replaceStringJunior(p)!=null) {
+							proTeamsJ1.add(p);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}
+					if(!fehler) {
+						String c=(String) showEnterDebateDialog(false, true, 1, i);
+						if(dp.replaceStringJunior(c)!=null) {
+							conTeamsJ1.add(c);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}
+				}
+					
+				for(int i=1; i<=NrOfDebatesS; i++)
+				{
+					if(!fehler) {
+						String p=(String) showEnterDebateDialog(true, false, 1, i);
+						if(dp.replaceStringSenior(p)!=null) {
+							proTeamsS1.add(p);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}
+					if(!fehler) {
+						String c=(String) showEnterDebateDialog(false, false, 1, i);
+						if(dp.replaceStringSenior(c)!=null) {
+							conTeamsS1.add(c);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}
+				}
+				
+				for(int i=1; i<=NrOfDebatesJ; i++)
+				{
+					if(!fehler) {
+						String p=(String) showEnterDebateDialog(true, true, 2, i);
+						if(dp.replaceStringJunior(p)!=null) {
+							proTeamsJ1.add(p);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}
+					if(!fehler) {
+						String c=(String) showEnterDebateDialog(false, true, 2, i);
+						if(dp.replaceStringJunior(c)!=null) {
+							conTeamsJ1.add(c);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}
+				}
+				
+				for(int i=1; i<=NrOfDebatesS; i++)
+				{
+					if(!fehler) {
+						String p=(String) showEnterDebateDialog(true, false, 2, i);
+						if(dp.replaceStringSenior(p)!=null) {
+							proTeamsS1.add(p);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}
+					if(!fehler) {
+						String c=(String) showEnterDebateDialog(false, false, 2, i);
+							if(dp.replaceStringSenior(c)!=null) {
+								conTeamsS1.add(c);}
+							else {
+								JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+								fehler=true;	
+							}		
+					}
+				}		
+				
+				for(int i=1; i<=NrOfDebatesJ; i++)
+				{
+					if(!fehler) {
+						String p=(String) showEnterDebateDialog(true, true, 3, i);
+						if(dp.replaceStringJunior(p)!=null) {
+							proTeamsJ1.add(p);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}
+					if(!fehler) {
+						String c=(String) showEnterDebateDialog(false, true, 3, i);
+						if(dp.replaceStringJunior(c)!=null) {
+							conTeamsJ1.add(c);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}
+				}
+				
+				for(int i=1; i<=NrOfDebatesS; i++)
+				{
+					if(!fehler) {
+						String p=(String) showEnterDebateDialog(true, false, 3, i);
+						if(dp.replaceStringSenior(p)!=null) {
+							proTeamsS1.add(p);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}
+					if(!fehler) {
+						String c=(String) showEnterDebateDialog(false, false, 3, i);
+						if(dp.replaceStringSenior(c)!=null) {
+							conTeamsS1 .add(c);}
+						else {
+							JOptionPane.showMessageDialog(subFrame, "please enter a valid school");
+							fehler=true;
+						}
+					}	
+				}		
+				if(!	fehler ) {		
+					btnTimezone.setEnabled(true);
+					btnTimezone_1.setEnabled(true);
+					btnTimezone_2.setEnabled(true);
+					btnAddJudge.setEnabled(true);
+					
+					ArrayList<Debate> debatesJ = erstelle(true, false, proTeamsJ1, conTeamsJ1);
+					ArrayList<Debate> debatesS = erstelle(false, true, proTeamsS1, conTeamsS1);
+					int dPTjunior = debatesJ.size() / 3;
+					int dPTsenior = debatesS.size() / 3;
+					
+					//Für separate Panel:
+					JPanel[] panels = new JPanel[3];
+					panels[0] = panel;
+					panels[1] = panel_1;
+					panels[2] = panel_2;
+					if(dPTjunior != 0) {
+						panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+						createRelativeSubpanels(dPTjunior, debatesJ, panels);
+					}
+					panels[0] = panel_3;
+					panels[1] = panel_4;
+					panels[2] = panel_5;
+					if(dPTsenior != 0) {
+						panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+						panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+						createRelativeSubpanels(dPTsenior, debatesS, panels);
+					}
+				}	
+			}
+		});
+		btnCreateDebatingPlan.setBounds(1565, 34, 130, 76);
+		contentPane.add(btnCreateDebatingPlan);
+					
 		//Fenstergröße an Bildschirmauflösung anpassen
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		double width = gd.getDisplayMode().getWidth();
@@ -1195,6 +1385,20 @@ public class Gui extends JFrame {
 		for(int i = 0; i < panels.length; i++) {
 			panels[i].setBorder(null);
 		}
+	}
+	
+	public String showEnterDebateDialog(boolean pro, boolean junior, int timezone, int debate)
+	{
+		String team;
+		if(junior&&pro) {
+		team = (String)JOptionPane.showInputDialog(subFrame, "Enter junior proside team for debate"+debate+" in timezone"+timezone);}
+		else if(!junior&&pro) {
+			team = (String)JOptionPane.showInputDialog(subFrame, "Enter senior proside team for debate"+debate+" in timezone"+timezone);}
+		else if(junior&&!pro) {
+			team = (String)JOptionPane.showInputDialog(subFrame, "Enter junior conside team for debate"+debate+" in timezone"+timezone);}
+		else {
+			team = (String)JOptionPane.showInputDialog(subFrame, "Enter senior conside team for debate"+debate+" in timezone"+timezone);}
+		return team;
 	}
 	
 	public void showEnterSchoolDialog(Schule school_param) {
@@ -1640,6 +1844,34 @@ public class Gui extends JFrame {
 		}
 		//berechnen lassen
 		ArrayList<Debate> array = dp.berechne(junior, avoid_reset);
+		return array;
+	}
+	
+	public ArrayList<Debate> erstelle(boolean junior, boolean avoid_reset, ArrayList<String> teamnamesPro1, ArrayList<String> teamnamesCon1) {
+		//Panels zurücksetzen(mehrfaches drücken)
+		if(!avoid_reset) {
+			panel.removeAll();
+			panel_1.removeAll();
+			panel_2.removeAll();
+			panel_3.removeAll();
+			panel_4.removeAll();
+			panel_5.removeAll();
+			panel.setBorder(null); //der WICHTIGSTE Befehl überhaupt!!!!!!! MUSS UNBEDINGT DA BLEIBEN!!!
+			panel_1.setBorder(null);
+			panel_2.setBorder(null);
+			panel_3.setBorder(null);
+			panel_4.setBorder(null);
+			panel_5.setBorder(null);
+			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+			debates.clear();
+		}
+		//berechnen lassen
+		ArrayList<Debate> array = dp.erstelle(junior, avoid_reset, teamnamesPro1, teamnamesCon1);
 		return array;
 	}
 	
