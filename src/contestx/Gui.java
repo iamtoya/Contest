@@ -1393,7 +1393,7 @@ public class Gui extends JFrame {
 		if(junior&&pro) {
 		team = (String)JOptionPane.showInputDialog(subFrame, "Enter junior proside team for debate"+debate+" in timezone"+timezone);}
 		else if(!junior&&pro) {
-			team = (String)JOptionPane.showInputDialog(subFrame, "Enter senior proside team for debate"+debate+" in timezone"+timezone);}
+			team = (String)JOptionPane.showInputDialog(subFrame, "Enter senior proside team for debate "+debate+" in timezone "+timezone);}
 		else if(junior&&!pro) {
 			team = (String)JOptionPane.showInputDialog(subFrame, "Enter junior conside team for debate"+debate+" in timezone"+timezone);}
 		else {

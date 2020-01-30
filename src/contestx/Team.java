@@ -74,7 +74,6 @@ public class Team implements Serializable {
 			z=z+this.getSpeaker(i).getPunkteIn(timeperiod+3);
 		}
 		this.punkte.set(timeperiod, z);
-		
 	}
 	//
 	public int getHoechstPunkte()
